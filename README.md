@@ -12,12 +12,18 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-Este es el esqueleto validado: compila, genera el `.aar` y la publicación
-Maven necesaria para JitPack. Solo trae **un componente de ejemplo**
-(`SmallOutlinedButtonMF`) más el tema base (`Color.kt`, `Fonts.kt`,
-`UiKitTheme.kt`) para probar el pipeline completo. El resto de los ~80+
-componentes portables de MypeFact (los que no dependen de ViewModels,
-entidades de Room ni pantallas propias) quedan pendientes de migrar aquí.
+Wave 1 en progreso (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+
+- Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
+- `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`.
+- `items/`: `ItemEmptyList`, `RadioButtonWithBorder`.
+- `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`.
+- `select/`: `SelectMF`.
+
+Quedan pendientes ~95 componentes de MypeFact (ver el mapa de prioridad en
+`MIGRATION_STRATEGY.md`: siguiente parada es terminar Wave 1 con `SelectDialogMF`,
+`TextFieldDate`, `FieldSearchNumDoc`, `SwitchMF`, etc., luego Wave 2 —shell de
+restaurante—).
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -53,6 +59,13 @@ host), a `data.*` (entidades propias) o a ViewModels/pantallas de MypeFact.
 4. **ViewModels / navegación / Hilt** (caso `ToolBarHome`): separar en un
    componente genérico (título, ícono, acciones vía lambdas) + la lógica de
    negocio se queda en cada app armando esos callbacks.
+5. **Íconos decorativos que NUNCA fueron parámetro en el original** (ej. la
+   lupa fija de `EditTextSearch`, la flecha de `SelectMF`): esos SÍ se
+   bundlean como recurso propio de la librería (`uikit_ic_*`), no se
+   convierten en parámetro nuevo — no era un punto de personalización en el
+   diseño original, así que agregarlo sería scope creep. Solo se vuelve
+   parámetro (`Painter`, regla 2) un ícono que YA era `Int`/`@DrawableRes`
+   configurable en el componente original.
 
 ## Build local
 

@@ -1,0 +1,10 @@
+<resources>
+    <!--
+        Strings con valor por defecto. Un proyecto consumidor puede
+        sobrescribir cualquiera de estos definiendo un recurso con el
+        mismo nombre en su propio módulo (no hace falta tocar Kotlin).
+    -->
+    <string name="uikit_field_required_error">Este campo es obligatorio</string>
+    <string name="uikit_empty_list">No se encontraron coincidencias en la búsqueda realizada</string>
+    <string name="uikit_search_placeholder">Buscar…</string>
+</resources>
