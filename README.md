@@ -4,6 +4,12 @@ Librería de componentes de Jetpack Compose (botones, diálogos, toolbars, etc.)
 extraída de MypeFact para poder reusarse entre varios proyectos Android sin
 copiar y pegar carpetas.
 
+## Estrategia de migración
+
+Ver [MIGRATION_STRATEGY.md](MIGRATION_STRATEGY.md) para el mapa completo de
+qué componentes migrar primero (modo restaurante + entrada de datos), las
+reglas de genericidad y el orden de oleadas.
+
 ## Estado actual
 
 Este es el esqueleto validado: compila, genera el `.aar` y la publicación
