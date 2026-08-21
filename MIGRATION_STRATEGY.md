@@ -226,14 +226,53 @@ descripción fija ("¿Está seguro de cerrar sesión?") — portarlo hubiera sid
 duplicar un componente que ya existe en el kit desde Wave 2. La recomendación
 para consumidores queda documentada en el catálogo del README.
 
-Siguiente: **Wave 4b** — resto de uso general no atado a facturación
-(`card/` restante: `CardDetails`, `CardDetailsQuotesOrdersList`,
-`CardInventory`, `CardList`, `CardListClient`, `CardListSimple`; `items/`
-restante: `ItemAddProduct`, `ItemCircleReport`, `ItemReportDashboard`;
-gráficos/sueltos de la raíz: `CountSlider`, `CustomLineChart`,
-`ItemLineReport`, `NavigationBottomBar`; `dialog/` restante sin auditar
-acoplamiento todavía: `CreateBillDialog`, `OpenSalesBoxDialog`,
-`ReportsDialog`, `SendEmailDialog`, `StateTypeDialog`, `UbigeoDialog`,
-`WhatsappDialog`). `CalendarDialog`/`CalendarDialogSelection` siguen
-confirmados como código muerto (candidatos a borrar en MypeFact, no a
-migrar).
+✅ **Wave 4b completa** — resto de componentes de uso general con caller
+real confirmado (verificado por import, no solo por estar en la carpeta):
+
+| Componente | Depende de | Nota |
+|---|---|---|
+| `CardInventory` | nada (usa `SmallIconButton`, ya migrado) | íconos bundleados con override opcional (`inputIcon`/`moveIcon`/`adjustmentIcon`) |
+| `CardList` (+ `InfoRow`) | nada | migrado tal cual |
+| `CardListClient` | nada | íconos `Int` → `Painter` (`editIcon`/`deleteIcon` ahora requeridos) |
+| `CardListSimple` | `R.string.label_available_stock` | el string con formato de negocio se quitó — ahora es un `trailingText: String?` que arma la app |
+| `CardDetails` | Filtraba acciones comparando identidad de `R.drawable` contra `isAccept`/`isRegistered`/`isEnabledDispatch`; abría un `WhatsappDialog` propio al tocar el ícono de WhatsApp | Rediseño real: `List<CardDetailsAction>` con `showWhenCollapsed: Boolean` reemplaza la comparación de íconos; se quitaron `isAccept`/`isRegistered`/`isEnabledDispatch`/`showWhatsappDialog`/`onWhatsappConfirmation` — la app pre-filtra las acciones y maneja sus propios diálogos vía `onClick` |
+| `ItemCircleReport` | `ItemsCircleReport` | nuevo modelo `UiKitCircleReportItem` (se sacó el `Modifier` del modelo, ahora es parámetro del composable) |
+| `ItemReportDashboard` | `ItemCardDashboard` | nuevo modelo `UiKitDashboardCard`, íconos `Int` → `Painter` |
+| `CountSlider` | Texto "Cantidad de mesas:" y rango `1f..50f` hardcodeados | ahora `label: String` y `valueRange: IntRange = 1..50` son parámetros |
+| `NavigationBottomBar` | `Utils.navigationItems`, `NavigationBottomBarRouter` (5 pantallas fijas de MypeFact) | nuevo modelo `UiKitNavItem`; la app arma su propia lista en vez de un sealed class fijo |
+| `OpenSalesBoxDialog` | `isValidNumberInput()` (extension propia), `R.string.cash` | validación decimal inlineada; el label de moneda ahora es `currencyLabel: String`; el modo "solo confirmar" se activa con `readOnlyMessage != null` en vez de comparar `texDialog.isEmpty()` |
+| `SingleTextInputDialog` (antes `SendEmailDialog`) | nada | renombrado — no tenía nada específico de email, es un input de una línea genérico |
+| `StateTypeDialog<T>` | nada | ya era genérico — migrado tal cual, con `selectLabel` parametrizado |
+| `PhoneNumberDialog` (antes `WhatsappDialog`) | Validación de 9 dígitos y mensaje de error hardcodeados | `phoneLength: Int = 9` y `invalidPhoneMessage` ahora son parámetros |
+
+Modelos nuevos: `UiKitCircleReportItem`, `UiKitDashboardCard`, `UiKitNavItem`;
+más `CardDetailsAction` (definido junto a `CardDetails`, no en `model/`, por
+ser específico de ese componente — mismo criterio que `LotWithSeries` en
+Wave 4a). Íconos nuevos: `uikit_ic_arrow_up`, `uikit_ic_input_inventory`,
+`uikit_ic_move_inventory`, `uikit_ic_adjustment_inventory`. Sin
+dependencias nuevas.
+
+**No migrados — evaluados y descartados por ser demasiado específicos de
+MypeFact** (quedan como candidatos si algún día se necesitan, pero requieren
+más rediseño del que vale la pena sin un caso de uso real):
+- `CardDetailsQuotesOrdersList`: hardcodea 7 etiquetas contables en español
+  ("Comprobante", "Notas de venta", "Importe Gravado", etc.) directo en
+  `Text()`, sin parametrizar, y depende de `TableProductDispatch` (pantalla
+  de la app) + `ProductEntity`.
+- `ReportsDialog`: 5 botones fijos para tipos de reporte PDF específicos de
+  MypeFact (`onClickPdfA4`, `onClickPdfTicket`, `onClickPdfIncome`,
+  `onClickProductsPdfA4`, `onClickProductsPdfTicket`) — es un formulario de
+  negocio, no un componente de UI reutilizable.
+- `UbigeoDialog`: selector cascada departamento/provincia/distrito atado a
+  `BaseDispatchViewModel` + `DepartmentEntity`/`ProvinceEntity`/
+  `DistrictEntity` + `TaxDomicileResponse` — sistema de ubigeo específico de
+  Perú/SUNAT con lógica de formato de dirección incrustada.
+
+Código muerto confirmado (cero imports reales, candidatos a borrar en
+MypeFact, no a migrar): `ItemAddProduct`, `CustomLineChart`,
+`ItemLineReport`, `CreateBillDialog`, `CalendarDialog`,
+`CalendarDialogSelection`.
+
+Con Waves 1–5 y 4a–4b completas, prácticamente todo lo reutilizable de
+`ui/components/` ya está en la librería. Lo único que falta es lo
+explícitamente descartado arriba por ser demasiado específico.

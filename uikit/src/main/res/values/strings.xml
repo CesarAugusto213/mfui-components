@@ -109,6 +109,11 @@
     <string name="uikit_profile_label_domain">Dominio</string>
     <string name="uikit_profile_value_unavailable">No disponible</string>
 
+    <!-- StateTypeDialog / PhoneNumberDialog -->
+    <string name="uikit_state_type_select_label">Nuevo estado</string>
+    <string name="uikit_phone_field_label">Número de teléfono</string>
+    <string name="uikit_invalid_phone_message">Ingresa %1$d dígitos sin espacios</string>
+
     <string-array name="uikit_month_abbreviations">
         <item>Ene</item>
         <item>Feb</item>

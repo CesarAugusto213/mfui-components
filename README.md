@@ -12,7 +12,7 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-**Waves 1, 2, 3, 4a y 5 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Waves 1, 2, 3, 4a, 4b y 5 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
 - `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
@@ -59,16 +59,37 @@ Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
   incrustados directo. Ya no depende de ninguno de los tres.
 - `dialog/`: `ProfileDialog` (rediseñado, recibe `logoUri` en vez de leer
   una ruta fija).
+- **Wave 4b — resto de uso general** (ver sección
+  [Cards y reportes](#cards-y-reportes-uicomponentscard-uicomponentsitems-uicomponents)
+  en el catálogo): `CardInventory`, `CardList`, `CardListClient`,
+  `CardListSimple`, `CardDetails` (rediseñado), `ItemCircleReport`,
+  `ItemReportDashboard`, `CountSlider`, `NavigationBottomBar`,
+  `OpenSalesBoxDialog`, `SingleTextInputDialog` (antes `SendEmailDialog`),
+  `StateTypeDialog`, `PhoneNumberDialog` (antes `WhatsappDialog`). Modelo
+  genérico nuevo: `UiKitCircleReportItem`, `UiKitDashboardCard`,
+  `UiKitNavItem`, `CardDetailsAction`.
+
+Código muerto original que Wave 4a terminó migrando de todos modos porque
+sí tenía un caller real (`PaymentCashDialog`): `SelectSmallMF` — la nota de
+"cero imports" de las primeras oleadas quedó desactualizada para este caso.
+Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
+`TextFieldPrefix`, `TextFieldPassword`, `SelectSearchMF`, `CheckboxMF`,
+`ItemAddProduct`, `CustomLineChart`, `ItemLineReport`, `CreateBillDialog`,
+`CalendarDialog`, `CalendarDialogSelection`.
+
+No migrados de Wave 4b por ser demasiado específicos de MypeFact (evaluados,
+no es que falten — ver detalle en `MIGRATION_STRATEGY.md`):
+`CardDetailsQuotesOrdersList`, `ReportsDialog`, `UbigeoDialog`.
 
 Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
 (validación/formato de teléfono) y `androidx.activity:activity-compose`
-(selector de imagen en `TextFieldWithCenteredImage`). Wave 2 y Wave 3 no
-agregaron dependencias nuevas. Wave 4a agregó `androidx.exifinterface:exifinterface`
-(orientación de fotos en `ImagePickerComponent`). Wave 5 no agregó
-dependencias nuevas.
+(selector de imagen en `TextFieldWithCenteredImage`). Wave 2, Wave 3, Wave 4b
+y Wave 5 no agregaron dependencias nuevas. Wave 4a agregó
+`androidx.exifinterface:exifinterface` (orientación de fotos en
+`ImagePickerComponent`).
 
-Siguiente parada: **Wave 4b** — resto de uso general no atado a facturación
-(`card/` restante, `dialog/` restante, `items/` restante, gráficos sueltos).
+Con Waves 1–5 y 4a–4b completas, prácticamente todo lo reutilizable de
+`ui/components/` de MypeFact ya está en la librería.
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -126,7 +147,7 @@ necesitar emulador ni dispositivo:
 ```
 
 Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
-(63 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
+(76 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
 Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
 como referencia visual — el catálogo de abajo los muestra directo.
 
@@ -1273,6 +1294,261 @@ data class UiKitCatalogProduct(
 // tipos de afectación IGV) donde no vale la pena un modelo dedicado.
 data class UiKitOption(val id: String, val description: String)
 ```
+
+### Cards y reportes (`ui.components.card`, `ui.components.items`, `ui.components`)
+
+Resto de uso general (Wave 4b) — no atados a restaurante ni facturación.
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardInventory_card_cardinventory.png" width="420">
+
+**`CardInventory`**
+
+```kotlin
+CardInventory(
+    title = producto.nombre,
+    stock = producto.stock.toString(),
+    subtitleText = "Ingreso - Salida",
+    onInputInventory = { },
+    onMoveInventory = { },
+    onAdjustmentInventory = { }
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardList_card_cardlist.png" width="420">
+
+**`CardList`** (+ `InfoRow`)
+
+```kotlin
+CardList(
+    badgeColor = Color.Red,
+    badgeText = "Cerrado",
+    headerText = "Estado",
+    footerLeftText = "Acción 1",
+    footerRightText = "Acción 2",
+    onFooterLeftClick = { },
+    onFooterRightClick = { }
+) {
+    Column {
+        InfoRow(leftText = "Abrió caja", rightText = "Julio Martínez")
+        InfoRow(leftText = "Fecha", rightText = "12/12/2021")
+    }
+}
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardListClient_card_cardlistclient.png" width="420">
+
+**`CardListClient`**
+
+```kotlin
+CardListClient(
+    title = cliente.nombre,
+    subtitle = cliente.documento,
+    checked = cliente.activo,
+    onCheckedChange = { },
+    editIcon = painterResource(R.drawable.ic_edit),
+    deleteIcon = painterResource(R.drawable.ic_delete),
+    onEditClick = { },
+    onDeleteClick = { }
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardListSimple_card_cardlistsimple.png" width="420">
+
+**`CardListSimple`**
+
+```kotlin
+CardListSimple(
+    title = item.nombre,
+    subtitle = item.detalle,
+    editIcon = painterResource(R.drawable.ic_edit),
+    deleteIcon = painterResource(R.drawable.ic_delete)
+)
+```
+
+
+<sub>⚠️ Con <code>options = false</code>, en vez de los íconos muestra <code>trailingText</code> (ej. "Disponible: 10.00") — antes era un <code>number: Double</code> con un string de negocio bundleado.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardDetails_card_carddetails.png" width="420">
+
+**`CardDetails`**
+
+```kotlin
+CardDetails(
+    headerText = "F001-123",
+    titleText = documento.cliente,
+    subtitleText = documento.numero,
+    badgeText = "Enviado",
+    calendarIcon = painterResource(R.drawable.ic_calendar),
+    dateTimeText = documento.fecha,
+    additionalSubtitle = documento.detalle,
+    actions = listOf(
+        CardDetailsAction("print", painterResource(R.drawable.ic_print), showWhenCollapsed = true, onClick = { }),
+        CardDetailsAction("whatsapp", painterResource(R.drawable.ic_wsp), onClick = { /* tu propio diálogo */ })
+    )
+)
+```
+
+
+<sub>⚠️ El más rediseñado de este grupo: el original filtraba qué acciones mostrar comparando el <code>R.drawable</code> exacto contra 3 flags de negocio (<code>isAccept</code>/<code>isRegistered</code>/<code>isEnabledDispatch</code>), y abría un diálogo de WhatsApp propio al detectar ese ícono. Ahora cada <code>CardDetailsAction</code> ya viene resuelta por la app — <code>showWhenCollapsed</code> decide si aparece en la fila visible con la card cerrada o solo al expandir.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemCircleReport_items_itemcirclereport.png" width="420">
+
+**`ItemCircleReport`**
+
+```kotlin
+ItemCircleReport(
+    item = UiKitCircleReportItem(
+        title = "Cuentas por Cobrar",
+        percentage = BigDecimal(80),
+        primaryText = "Margen bruto",
+        primaryColor = Color(0xFFE53935),
+        secondaryText = "Costo de producto",
+        secondaryColor = Color(0xFFFEC6C6),
+        number = "150"
+    )
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemReportDashboard_items_itemreportdashboard.png" width="420">
+
+**`ItemReportDashboard`**
+
+```kotlin
+ItemReportDashboard(
+    UiKitDashboardCard(
+        icon = painterResource(R.drawable.ic_bill),
+        trailingIcon = painterResource(R.drawable.logo_sunat), // opcional
+        title = "Boletas y Facturas",
+        value = "S/ 1400"
+    )
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_countSlider_countslider.png" width="420">
+
+**`CountSlider`**
+
+```kotlin
+CountSlider(
+    label = "Cantidad de mesas:",
+    value = cantidad,
+    valueRange = 1..50,
+    onValueChange = { cantidad = it }
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_navigationBottomBar_navigationbottombar.png" width="420">
+
+**`NavigationBottomBar`**
+
+```kotlin
+NavigationBottomBar(
+    items = listOf(
+        UiKitNavItem("home", "Inicio", painterResource(R.drawable.ic_home)),
+        UiKitNavItem("new", "Nuevo", painterResource(R.drawable.ic_new)),
+        UiKitNavItem("list", "Lista", painterResource(R.drawable.ic_list))
+    ),
+    selectedRoute = rutaActual,
+    onItemClick = { item -> navController.navigate(item.route) }
+)
+```
+
+
+<sub>⚠️ El original traía 5 pantallas de MypeFact hardcodeadas en un sealed class (<code>NavigationBottomBarRouter</code>) leído de <code>Utils.navigationItems</code> — acá tu app arma su propia lista de <code>UiKitNavItem</code>.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_openSalesBoxDialog_dialog_opensalesboxdialog.png" width="420">
+
+**`OpenSalesBoxDialog`**
+
+```kotlin
+OpenSalesBoxDialog(
+    title = "Abrir caja",
+    inputLabel = "Monto inicial",
+    currencyLabel = "Efectivo",
+    // readOnlyMessage = "¿Seguro que deseas cerrar la caja?" — modo "solo confirmar", sin campo de monto
+    buttonClose = "No",
+    buttonSave = "Sí",
+    onDismissRequest = { },
+    onConfirmation = { monto -> }
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_singleTextInputDialog_dialog_singletextinputdialog.png" width="420">
+
+**`SingleTextInputDialog`**
+
+```kotlin
+SingleTextInputDialog(
+    description = "Ingresa tu correo",
+    onDismissRequest = { },
+    onConfirmation = { texto -> }
+)
+```
+
+
+<sub>⚠️ Antes se llamaba <code>SendEmailDialog</code> — no tenía nada específico de email (ni validación, ni teclado de email), así que se renombró a algo que describe lo que realmente hace.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_stateTypeDialog_dialog_statetypedialog.png" width="420">
+
+**`StateTypeDialog<T>`**
+
+```kotlin
+StateTypeDialog(
+    title = "Actualizar estado",
+    options = estados,
+    label = estadoActual,
+    optionLabel = { it.nombre },
+    onOptionSelected = { nuevoEstado = it },
+    onDismissRequest = { },
+    onConfirmation = { /* guardar nuevoEstado */ }
+)
+```
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_phoneNumberDialog_dialog_phonenumberdialog.png" width="420">
+
+**`PhoneNumberDialog`**
+
+```kotlin
+PhoneNumberDialog(
+    title = "Enviar por WhatsApp",
+    onDismissRequest = { },
+    onConfirmation = { numero -> }
+)
+```
+
+
+<sub>⚠️ Antes se llamaba <code>WhatsappDialog</code> con 9 dígitos fijos; <code>phoneLength</code> (default 9, como en Perú) ahora es parámetro.</sub>
+
+**No migrados de esta oleada** (evaluados y descartados por ser demasiado
+específicos de MypeFact — ver detalle en `MIGRATION_STRATEGY.md`):
+`CardDetailsQuotesOrdersList` (hardcodea 7 etiquetas contables), `ReportsDialog`
+(5 botones fijos de tipos de reporte PDF), `UbigeoDialog` (selector cascada
+departamento/provincia/distrito atado a un ViewModel + entidades de
+ubigeo de Perú/SUNAT).
 
 ## Build local
 

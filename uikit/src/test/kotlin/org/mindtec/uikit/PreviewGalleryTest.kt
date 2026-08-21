@@ -23,8 +23,10 @@ import com.android.ide.common.rendering.api.SessionParams
 import org.junit.Rule
 import org.junit.Test
 import org.mindtec.uikit.ui.components.WidgetCounter
+import org.mindtec.uikit.ui.components.CountSlider
 import org.mindtec.uikit.ui.components.CustomTable
 import org.mindtec.uikit.ui.components.ImagePickerComponent
+import org.mindtec.uikit.ui.components.NavigationBottomBar
 import org.mindtec.uikit.ui.components.TableProductList
 import org.mindtec.uikit.ui.components.TableRestaurantProductList
 import org.mindtec.uikit.ui.components.alerts.AlertDialog
@@ -39,8 +41,15 @@ import org.mindtec.uikit.ui.components.button.OutlinedButtonMF
 import org.mindtec.uikit.ui.components.button.SmallIconButton
 import org.mindtec.uikit.ui.components.button.SmallOutlinedButtonMF
 import org.mindtec.uikit.ui.components.button.ToggleSelector2
+import org.mindtec.uikit.ui.components.card.CardDetails
+import org.mindtec.uikit.ui.components.card.CardDetailsAction
+import org.mindtec.uikit.ui.components.card.CardInventory
+import org.mindtec.uikit.ui.components.card.CardList
+import org.mindtec.uikit.ui.components.card.CardListClient
+import org.mindtec.uikit.ui.components.card.CardListSimple
 import org.mindtec.uikit.ui.components.card.CardPriceMultiple
 import org.mindtec.uikit.ui.components.card.DataClient
+import org.mindtec.uikit.ui.components.card.InfoRow
 import org.mindtec.uikit.ui.components.card.SearchButton
 import org.mindtec.uikit.ui.components.country_code_picker.Country
 import org.mindtec.uikit.ui.components.country_code_picker.CountryCodePicker
@@ -53,22 +62,31 @@ import org.mindtec.uikit.ui.components.dialog.ListPriceDialog
 import org.mindtec.uikit.ui.components.dialog.LotWithSeries
 import org.mindtec.uikit.ui.components.dialog.LotsSelectionType
 import org.mindtec.uikit.ui.components.dialog.NullDialog
+import org.mindtec.uikit.ui.components.dialog.OpenSalesBoxDialog
 import org.mindtec.uikit.ui.components.dialog.PaymentCashDialog
 import org.mindtec.uikit.ui.components.dialog.PaymentInstallmentsDialog
+import org.mindtec.uikit.ui.components.dialog.PhoneNumberDialog
 import org.mindtec.uikit.ui.components.dialog.ProfileDialog
+import org.mindtec.uikit.ui.components.dialog.SingleTextInputDialog
+import org.mindtec.uikit.ui.components.dialog.StateTypeDialog
 import org.mindtec.uikit.ui.components.dialog.TableDialog
 import org.mindtec.uikit.ui.components.dialog.TableRestaurantDialog
 import org.mindtec.uikit.ui.components.dialog.WarningDialog
+import org.mindtec.uikit.ui.components.items.ItemCircleReport
 import org.mindtec.uikit.ui.components.items.ItemEmptyList
 import org.mindtec.uikit.ui.components.items.ItemProduct
 import org.mindtec.uikit.ui.components.items.ItemProductRestaurantList
+import org.mindtec.uikit.ui.components.items.ItemReportDashboard
 import org.mindtec.uikit.ui.components.items.RadioButtonWithBorder
 import org.mindtec.uikit.ui.components.items.SelectableCard
 import org.mindtec.uikit.ui.components.model.UiKitCashPayment
 import org.mindtec.uikit.ui.components.model.UiKitCatalogProduct
+import org.mindtec.uikit.ui.components.model.UiKitCircleReportItem
 import org.mindtec.uikit.ui.components.model.UiKitComment
+import org.mindtec.uikit.ui.components.model.UiKitDashboardCard
 import org.mindtec.uikit.ui.components.model.UiKitInstallment
 import org.mindtec.uikit.ui.components.model.UiKitLotGroup
+import org.mindtec.uikit.ui.components.model.UiKitNavItem
 import org.mindtec.uikit.ui.components.model.UiKitOption
 import org.mindtec.uikit.ui.components.model.UiKitPaymentDestination
 import org.mindtec.uikit.ui.components.model.UiKitPaymentMethod
@@ -861,6 +879,172 @@ class PreviewGalleryTest {
             email = "juan.perez@mypefact.com",
             domain = "miempresa",
             onDismissRequest = {}
+        )
+    }
+
+    // ==================== Wave 4b — resto de uso general ====================
+
+    @Test
+    fun cardInventory() = snapshot("card_CardInventory") {
+        CardInventory(
+            title = "Product Name",
+            stock = "1234.43",
+            subtitleText = "Subtitle Text",
+            onInputInventory = {},
+            onMoveInventory = {},
+            onAdjustmentInventory = {}
+        )
+    }
+
+    @Test
+    fun cardList() = snapshot("card_CardList") {
+        CardList(
+            badgeColor = androidx.compose.ui.graphics.Color(0xFFE53935),
+            badgeText = "Cerrado",
+            headerText = "Estado",
+            footerLeftText = "Acción 1",
+            footerRightText = "Acción 2",
+            onFooterLeftClick = { },
+            onFooterRightClick = { }
+        ) {
+            androidx.compose.foundation.layout.Column {
+                InfoRow(leftText = "Abrio caja", rightText = "Julio Martinez")
+                InfoRow(leftText = "Fecha", rightText = "12/12/2021")
+            }
+        }
+    }
+
+    @Test
+    fun cardListClient() = snapshot("card_CardListClient") {
+        CardListClient(
+            title = "Client Title",
+            subtitle = "Client Subtitle",
+            checked = false,
+            onCheckedChange = {},
+            editIcon = painterResource(R.drawable.uikit_ic_edit),
+            deleteIcon = painterResource(R.drawable.uikit_ic_delete)
+        )
+    }
+
+    @Test
+    fun cardListSimple() = snapshot("card_CardListSimple") {
+        CardListSimple(
+            title = "Client Title",
+            subtitle = "Client Subtitle",
+            editIcon = painterResource(R.drawable.uikit_ic_edit),
+            deleteIcon = painterResource(R.drawable.uikit_ic_delete)
+        )
+    }
+
+    @Test
+    fun cardDetails() = snapshot("card_CardDetails") {
+        CardDetails(
+            headerText = "Encabezado",
+            titleText = "Título del Card",
+            subtitleText = "123456789",
+            badgeText = "Enviado",
+            calendarIcon = painterResource(R.drawable.uikit_ic_arrow_down),
+            dateTimeText = "2026-08-19 14:30",
+            additionalTitle = "Título Adicional",
+            additionalSubtitle = "Subtítulo Adicional",
+            actions = listOf(
+                CardDetailsAction("print", painterResource(R.drawable.uikit_ic_edit), showWhenCollapsed = true, onClick = {}),
+                CardDetailsAction("share", painterResource(R.drawable.uikit_ic_arrow_right), onClick = {}),
+                CardDetailsAction("delete", painterResource(R.drawable.uikit_ic_delete), onClick = {})
+            )
+        )
+    }
+
+    @Test
+    fun itemCircleReport() = snapshot("items_ItemCircleReport") {
+        ItemCircleReport(
+            item = UiKitCircleReportItem(
+                title = "Cuentas por Cobrar",
+                percentage = java.math.BigDecimal(80),
+                primaryText = "Margen bruto",
+                primaryColor = androidx.compose.ui.graphics.Color(0xFFE53935),
+                secondaryText = "Costo de producto",
+                secondaryColor = androidx.compose.ui.graphics.Color(0xFFFEC6C6),
+                number = "150"
+            )
+        )
+    }
+
+    @Test
+    fun itemReportDashboard() = snapshot("items_ItemReportDashboard") {
+        ItemReportDashboard(
+            UiKitDashboardCard(
+                icon = painterResource(R.drawable.uikit_ic_image),
+                trailingIcon = painterResource(R.drawable.uikit_ic_image),
+                title = "Boletas y Facturas",
+                value = "S/ 1400"
+            )
+        )
+    }
+
+    @Test
+    fun countSlider() = snapshot("CountSlider") {
+        CountSlider(
+            label = "Cantidad de mesas:",
+            value = 10,
+            onValueChange = {}
+        )
+    }
+
+    @Test
+    fun navigationBottomBar() = snapshot("NavigationBottomBar") {
+        NavigationBottomBar(
+            items = listOf(
+                UiKitNavItem("home", "Inicio", painterResource(R.drawable.uikit_ic_image)),
+                UiKitNavItem("new", "Nuevo", painterResource(R.drawable.uikit_ic_add)),
+                UiKitNavItem("list", "Lista", painterResource(R.drawable.uikit_ic_checkbox))
+            ),
+            selectedRoute = "home",
+            onItemClick = {}
+        )
+    }
+
+    @Test
+    fun openSalesBoxDialog() = snapshot("dialog_OpenSalesBoxDialog") {
+        OpenSalesBoxDialog(
+            title = "Abrir caja",
+            inputLabel = "Monto inicial",
+            currencyLabel = "Efectivo",
+            buttonClose = "No",
+            buttonSave = "Sí",
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun singleTextInputDialog() = snapshot("dialog_SingleTextInputDialog") {
+        SingleTextInputDialog(
+            description = "Ingresa tu correo",
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun stateTypeDialog() = snapshot("dialog_StateTypeDialog") {
+        StateTypeDialog(
+            title = "Actualizar estado",
+            options = listOf("Registrado", "Enviado", "Aceptado", "Observado"),
+            label = "Aceptado",
+            optionLabel = { it },
+            onDismissRequest = {},
+            onConfirmation = {},
+            onOptionSelected = {}
+        )
+    }
+
+    @Test
+    fun phoneNumberDialog() = snapshot("dialog_PhoneNumberDialog") {
+        PhoneNumberDialog(
+            title = "Enviar por WhatsApp",
+            onDismissRequest = {},
+            onConfirmation = {}
         )
     }
 }
