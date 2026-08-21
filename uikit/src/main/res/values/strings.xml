@@ -41,6 +41,67 @@
     <string name="uikit_comment_input_hint">Agregue una coma \',\' para agregar más de una nota</string>
     <string name="uikit_comment_empty_elements">No tiene elementos</string>
     <string name="uikit_comment_add_note">Agregue una nota </string>
+    <!-- CustomTable / genéricos de mensajes -->
+    <string name="uikit_empty_table">No hay datos</string>
+    <string name="uikit_total_label">Total</string>
+    <string name="uikit_choose_your_client">Selecciona tu cliente</string>
+    <string name="uikit_please_wait">Espere un momento…</string>
+    <string name="uikit_message_dialog_alert_incomplete">Por favor completa todos los campos</string>
+
+    <!-- ImagePickerComponent -->
+    <string name="uikit_image_picker_select_image">Seleccionar imagen</string>
+    <string name="uikit_image_picker_camera_permission_denied">Permiso de cámara denegado</string>
+    <string name="uikit_image_picker_product_image">Imagen del producto</string>
+    <string name="uikit_image_picker_change_image">Cambiar imagen</string>
+    <string name="uikit_image_picker_take_photo">Tomar foto</string>
+    <string name="uikit_image_picker_take_photo_description">Usa la cámara para tomar una nueva foto</string>
+    <string name="uikit_image_picker_gallery">Elegir de la galería</string>
+    <string name="uikit_image_picker_gallery_description">Selecciona una imagen existente</string>
+
+    <!-- DialogFormFreeProduct -->
+    <string name="uikit_add_free_product">Agregar producto libre</string>
+    <string name="uikit_product_name">Nombre del producto</string>
+    <string name="uikit_quantity_sale">Cantidad</string>
+    <string name="uikit_label_sale_price">Precio de venta</string>
+    <string name="uikit_label_igv">IGV</string>
+    <string name="uikit_placeholder_unit_measurement">Unidad de medida</string>
+    <string name="uikit_label_type">Tipo</string>
+    <string name="uikit_label_type_desc">Tipo de afectación</string>
+    <string name="uikit_label_add_item">Agregar item</string>
+    <string name="uikit_empty_product_label">Los productos libres no afectan el stock del catálogo</string>
+
+    <!-- DialogItemLots -->
+    <string name="uikit_select_series">SELECCIONAR SERIES</string>
+    <string name="uikit_select_lots">SELECCIONAR LOTES</string>
+    <string name="uikit_select_lots_and_series">SELECCIONAR LOTES Y SERIES</string>
+    <string name="uikit_selected_series">Series seleccionadas: %1$d</string>
+    <string name="uikit_selected_quantity">Cantidad total: %1$d</string>
+    <string name="uikit_series_label">Serie: %1$s</string>
+    <string name="uikit_series_date">Fecha: %1$s</string>
+    <string name="uikit_lot_label">Lote: %1$s</string>
+    <string name="uikit_lot_series_summary">Series: %1$d | Seleccionadas: %2$d</string>
+    <string name="uikit_lot_due_date">Vence: %1$s</string>
+    <string name="uikit_lot_available_summary">Disponible: %1$s | Vence: %2$s</string>
+
+    <!-- ListPriceDialog -->
+    <string name="uikit_label_list_price">LISTA DE PRECIOS</string>
+    <string name="uikit_label_single_price">Este producto tiene un único precio</string>
+    <string name="uikit_table_header_und">Und</string>
+    <string name="uikit_table_header_desc">Descripción</string>
+    <string name="uikit_table_header_factor">Factor</string>
+    <string name="uikit_table_header_price">Precio</string>
+
+    <!-- PaymentCashDialog / PaymentInstallmentsDialog -->
+    <string name="uikit_payment_method">Método de pago</string>
+    <string name="uikit_destination">Destino</string>
+    <string name="uikit_payment_amount">Monto</string>
+    <string name="uikit_add_payment">Agregar pago</string>
+    <string name="uikit_total_to_pay_colon">Total a pagar:</string>
+    <string name="uikit_total_paying_colon">Total pagando:</string>
+    <string name="uikit_payment_total_mismatch">El total de pagos debe coincidir con el monto total</string>
+    <string name="uikit_date">Fecha</string>
+    <string name="uikit_add_installment">Agregar cuota</string>
+
     <string-array name="uikit_month_abbreviations">
         <item>Ene</item>
         <item>Feb</item>

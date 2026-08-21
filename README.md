@@ -12,7 +12,7 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-**Waves 1, 2 y 3 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Waves 1, 2, 3 y 4a completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
 - `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
@@ -38,19 +38,31 @@ reglas de genericidad y el orden de oleadas.
   `ExpandedUiKitProduct` — el modelo genérico que reemplaza a
   `ProductEntity`/`RestaurantNote`/`ProductCommentGroup` (detalle en el
   catálogo, sección Restaurante).
+- **Wave 4a — facturación de restaurante** (ver sección
+  [Facturación de restaurante](#facturación-de-restaurante-uicomponents-uicomponentscard-uicomponentsitems-uicomponentsdialog-uicomponentsalerts)
+  en el catálogo): `ItemProduct`, `DialogFormFreeProduct`, `DialogItemLots`,
+  `ListPriceDialog`, `PaymentCashDialog`, `PaymentInstallmentsDialog`,
+  `CustomTable`, `OutlineIconButtonMF`, `SelectableCard`, `CardPriceMultiple`,
+  `DataClient`, `SearchButton`, `SelectSmallMF`, `LoaderProgressDialog`,
+  `ImagePickerComponent`. Modelo genérico nuevo: `UiKitPriceOption`,
+  `UiKitSeries`/`UiKitLotGroup`, `UiKitPaymentMethod`/`UiKitPaymentDestination`/
+  `UiKitCashPayment`/`UiKitInstallment`, `UiKitCatalogProduct`, `UiKitOption`.
 
-Código muerto detectado y **no migrado a propósito** (cero imports en todo
-MypeFact — candidatos a borrar allá): `TextFieldPrefix`, `TextFieldPassword`,
-`SelectSmallMF`, `SelectSearchMF`, `CheckboxMF`.
+Código muerto original que Wave 4a terminó migrando de todos modos porque
+sí tenía un caller real (`PaymentCashDialog`): `SelectSmallMF` — la nota de
+"cero imports" de las primeras oleadas quedó desactualizada para este caso.
+Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
+`TextFieldPrefix`, `TextFieldPassword`, `SelectSearchMF`, `CheckboxMF`.
 
 Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
 (validación/formato de teléfono) y `androidx.activity:activity-compose`
 (selector de imagen en `TextFieldWithCenteredImage`). Wave 2 y Wave 3 no
-agregaron dependencias nuevas.
+agregaron dependencias nuevas. Wave 4a agregó `androidx.exifinterface:exifinterface`
+(orientación de fotos en `ImagePickerComponent`).
 
-Siguiente parada: **Wave 4** — resto de uso general (`card/`, `alerts/`
-restante, `dialog/` restante, `items/` restante) — y **Wave 5**:
-`ToolBarHome` (el único caso con Hilt + navegación directos).
+Siguiente parada: **Wave 4b** — resto de uso general no atado a facturación
+(`card/` restante, `alerts/` restante, `dialog/` restante, `items/` restante)
+— y **Wave 5**: `ToolBarHome` (el único caso con Hilt + navegación directos).
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -108,7 +120,7 @@ necesitar emulador ni dispositivo:
 ```
 
 Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
-(37 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
+(61 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
 Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
 como referencia visual — el catálogo de abajo los muestra directo.
 
@@ -957,6 +969,367 @@ fun MyProductEntity.toUiKitProduct() = UiKitProduct(
     imageUrl = image,
     commentGroups = comment?.let { json.decodeFromString(it) } ?: emptyList()
 )
+```
+
+### Facturación de restaurante (`ui.components`, `ui.components.card`, `ui.components.items`, `ui.components.dialog`, `ui.components.alerts`)
+
+El flujo real de MypeFact es: mesa/take away → `TableManagementViewModel.generatePayment()`
+→ pantallas "genéricas" de facturación (`GenericCreateScreen`,
+`GenericSearchProductScreen`, `GenericSearchClientScreen`,
+`GenericAddProductScreen`). Estos componentes son los que ese flujo usa
+para armar y cobrar el documento — reemplazan `ProductEntity`,
+`ItemTypesEntity`, `ItemLotsEntity`/`LotsGroupEntity`,
+`PaymentMethodEntity`/`PaymentDestinationsEntity` y los `UiState` que los
+envolvían (`ItemProductsUiState`, `ListPriceDialogUiState`,
+`DataPaymentMethodUiState`, `LoaderUiState`) por modelos genéricos — ver
+[Modelos de facturación](#modelos-de-facturación) más abajo.
+
+<table>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProduct_items_itemproduct.png" width="300"></td>
+<td>
+
+**`ItemProduct`**
+
+```kotlin
+ItemProduct(
+    product = producto, // UiKitCatalogProduct
+    currentCost = precioActual,
+    isChecked = seleccionado,
+    quantity = cantidad,
+    stockControl = true,
+    isEditPriceEnabled = true,
+    showInputDialog = { },
+    showListPrice = { id -> },
+    showCommentDialog = { producto, categoria -> },
+    showPriceDialog = { },
+    showQuantityByPrice = { },
+    showItemLotsDialog = { },
+    onCheckedChange = { },
+    onClickedMinus = { },
+    onClickedPlus = { }
+)
+```
+
+
+<sub>⚠️ Card de un producto de catálogo/grilla de selección (distinto de <code>ItemProductList</code>, que muestra una línea ya agregada). Los 4 íconos del footer (editar, comentario, granel, precio por lista) son decorativos y vienen bundleados — no son parámetro, igual que en el original.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogFormFreeProduct_dialog_dialogformfreeproduct.png" width="300"></td>
+<td>
+
+**`DialogFormFreeProduct`**
+
+```kotlin
+DialogFormFreeProduct(
+    show = mostrar,
+    unitOptions = unidadesDeMedida,       // List<UiKitOption>
+    affectationOptions = tiposAfectacion, // List<UiKitOption>
+    defaultAffectationId = "10",
+    onAddProduct = { resultado -> /* mapear a tu propia entidad */ },
+    onDismissRequest = { }
+)
+```
+
+
+<sub>⚠️ Antes construía un <code>ProductEntity</code> completo internamente (moneda fija, prefijo de id, etc.); ahora devuelve un <code>FreeProductFormResult</code> con lo que el usuario ingresó, y tu app arma su propia entidad con eso.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsSeriesOnly_dialog_dialogitemlots_series.png" width="300"><br>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsLotsOnly_dialog_dialogitemlots_lots.png" width="300"><br>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsWithSeries_dialog_dialogitemlots_lotswithseries.png" width="300"></td>
+<td>
+
+**`DialogItemLots`**
+
+```kotlin
+DialogItemLots(
+    show = mostrar,
+    selectionType = LotsSelectionType.LOTS_WITH_SERIES,
+    itemLots = series,           // List<UiKitSeries>
+    lotsGroup = lotes,           // List<UiKitLotGroup>
+    lotsWithSeries = lotesConSeries, // List<LotWithSeries>
+    onConfirmation = { resultado -> /* LotsSelectionResult */ },
+    onDismissRequest = { }
+)
+```
+
+
+<sub>⚠️ 3 modos según cómo el producto rastrea su stock: solo series, solo lotes, o lotes con series anidadas. A diferencia del original (que recibía y devolvía un <code>ItemProductsUiState</code> completo), acá solo maneja la selección — tu app ya sabe para qué producto abrió el diálogo.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_listPriceDialog_dialog_listpricedialog.png" width="300"></td>
+<td>
+
+**`ListPriceDialog`**
+
+```kotlin
+ListPriceDialog(
+    show = mostrar,
+    options = presentaciones, // List<UiKitPriceOption>
+    originalPrice = precioOriginal,
+    originalUnitType = "NIU",
+    currentPrice = precioActual,
+    onSelectItem = { seleccion -> /* SelectedPriceParam */ },
+    onDismissRequest = { }
+)
+```
+
+
+<sub>⚠️ El original elegía entre <code>price1</code>/<code>price2</code>/<code>price3</code> según un <code>priceDefault</code>; acá cada <code>UiKitPriceOption</code> ya trae un único <code>price</code> resuelto — esa selección la hace tu app al mapear.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentCashDialog_dialog_paymentcashdialog.png" width="300"></td>
+<td>
+
+**`PaymentCashDialog`**
+
+```kotlin
+PaymentCashDialog(
+    title = "PAGO EN EFECTIVO",
+    listPayment = metodosDePago,       // List<UiKitPaymentMethod>
+    listDestination = destinos,        // List<UiKitPaymentDestination>
+    currentPaymentMethod = null,
+    currentPaymentDestinations = null,
+    total = totalDelDocumento,
+    methodLabel = "Efectivo",
+    saveCashPayment = { pagos, etiqueta -> },
+    onDismissRequest = { },
+    onConfirmation = { }
+)
+```
+
+
+<sub>⚠️ Reparte el total automáticamente entre las filas de pago que agregues. El original filtraba destinos según si el método era "Transferencia" (lógica de negocio específica) — eso se quitó; tu app filtra <code>listDestination</code> antes de pasarla si lo necesita.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentInstallmentsDialog_dialog_paymentinstallmentsdialog.png" width="300"></td>
+<td>
+
+**`PaymentInstallmentsDialog`**
+
+```kotlin
+PaymentInstallmentsDialog(
+    title = "PAGO A CRÉDITO",
+    total = totalDelDocumento,
+    methodLabel = "Crédito",
+    saveInstallmentsPayment = { cuotas, etiqueta -> },
+    onDismissRequest = { },
+    onConfirmation = { }
+)
+```
+
+
+<sub>⚠️ Reparte el total entre cuotas automáticamente; cada cuota nueva sugiere la fecha del mes siguiente. <code>dateFormatPattern</code> (default <code>dd/MM/yyyy</code>) es configurable si tu app usa otro formato.</sub>
+</td>
+</tr>
+<tr>
+<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_customTable_customtable.png" width="180"></td>
+<td>
+
+**`CustomTable<T>`**
+
+```kotlin
+CustomTable(
+    headers = listOf("Producto", "Cant.", "Precio"),
+    weights = listOf(2f, 1f, 1f),
+    items = filas,
+    rowContent = { fila -> /* tu Row */ }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlineIconButtonMF_button_outlineiconbuttonmf.png" width="180"></td>
+<td>
+
+**`OutlineIconButtonMF`**
+
+```kotlin
+OutlineIconButtonMF(
+    icon = painterResource(R.drawable.mi_icono),
+    onClick = { }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectableCard_items_selectablecard.png" width="300"></td>
+<td>
+
+**`SelectableCard`**
+
+```kotlin
+SelectableCard(
+    title = cliente.nombre,
+    subTitle = cliente.documento,
+    isSelected = seleccionado == cliente,
+    onClick = { seleccionado = cliente }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardPriceMultiple_card_cardpricemultiple.png" width="300"></td>
+<td>
+
+**`CardPriceMultiple`**
+
+```kotlin
+CardPriceMultiple(
+    titles = listOf("Valor de Venta" to "IGV 18%"),
+    subtitles = listOf("S/ 150" to "S/ 27"),
+    total = "S/ 177"
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dataClient_card_dataclient.png" width="300"></td>
+<td>
+
+**`DataClient`**
+
+```kotlin
+DataClient(
+    userName = cliente.nombre,
+    userAddress = cliente.direccion,
+    onUserChange = { },
+    onAddressChange = { direccion -> },
+    onEditUser = { /* abrir buscador de cliente */ }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchButton_card_searchbutton.png" width="300"></td>
+<td>
+
+**`SearchButton`**
+
+```kotlin
+SearchButton(
+    textButton = "Buscar Clientes",
+    onClick = { }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectSmallMF_select_selectsmallmf.png" width="300"></td>
+<td>
+
+**`SelectSmallMF<T>`**
+
+```kotlin
+SelectSmallMF(
+    options = metodosDePago,
+    selectedOption = seleccion?.description,
+    onOptionSelected = { seleccion = it },
+    optionLabel = { it.description }
+)
+```
+
+
+<sub>⚠️ Versión compacta de <code>SelectMF</code> sin título ni buscador — la usan las filas de <code>PaymentCashDialog</code>.</sub>
+</td>
+</tr>
+<tr>
+<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderProgressDialog_alerts_loaderprogressdialog.png" width="180"></td>
+<td>
+
+**`LoaderProgressDialog`**
+
+```kotlin
+LoaderProgressDialog(
+    isVisible = subiendo,
+    progress = progreso, // 0f..1f
+    description = "Subiendo imagen..."
+)
+```
+
+
+<sub>⚠️ El original recibía un <code>LoaderUiState</code> completo; acá los 3 campos van directo por parámetro.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_imagePickerComponent_imagepickercomponent.png" width="300"></td>
+<td>
+
+**`ImagePickerComponent`**
+
+```kotlin
+ImagePickerComponent(
+    currentImageUrl = producto.imagen,
+    onImageSelected = { archivoOptimizado -> }
+)
+```
+
+
+<sub>⚠️ Optimiza la foto (resize + orientación EXIF) antes de devolverla. Para tomar foto con cámara tu app necesita declarar su propio <code>FileProvider</code> en el manifest — ver el KDoc del componente. <code>fileProviderAuthority</code> es opcional si no usas la convención <code>"${'$'}{packageName}.fileprovider"</code>.</sub>
+</td>
+</tr>
+</table>
+
+#### Modelos de facturación
+
+```kotlin
+// Reemplaza ItemTypesEntity (ListPriceDialog) — el precio ya llega resuelto,
+// no los 3 price1/2/3 + priceDefault del original.
+data class UiKitPriceOption(
+    val id: String,
+    val unitTypeId: String,
+    val description: String,
+    val quantityUnit: String,
+    val price: BigDecimal
+)
+
+// Reemplazan ItemLotsEntity / LotsGroupEntity (DialogItemLots).
+data class UiKitSeries(val id: Int, val series: String, val date: String)
+data class UiKitLotGroup(
+    val id: Int,
+    val code: String,
+    val quantity: BigDecimal,
+    val dateOfDue: String,
+    val selectedQuantity: Int = 0 // antes: auxQuantity: String?
+)
+
+// Reemplazan PaymentMethodEntity / PaymentDestinationsEntity / CashState / QuotasState.
+data class UiKitPaymentMethod(val id: String, val description: String)
+data class UiKitPaymentDestination(val id: String, val description: String)
+data class UiKitCashPayment(
+    val payment: UiKitPaymentMethod? = null,
+    val destination: UiKitPaymentDestination? = null,
+    val payWith: String? = null
+)
+data class UiKitInstallment(val date: String? = null, val amount: String? = null)
+
+// Reemplaza ProductEntity para ItemProduct (grilla de catálogo — distinto
+// de UiKitProduct, que es una línea ya agregada a un documento).
+data class UiKitCatalogProduct(
+    val id: String,
+    val description: String,
+    val imageUrl: String? = null,
+    val stock: BigDecimal = BigDecimal.ZERO,
+    val currencySymbol: String = "S/",
+    val category: String? = null,
+    val calculateQuantity: Boolean = false
+)
+
+// Opción simple id/descripción para selects genéricos (unidades de medida,
+// tipos de afectación IGV) donde no vale la pena un modelo dedicado.
+data class UiKitOption(val id: String, val description: String)
 ```
 
 ## Build local

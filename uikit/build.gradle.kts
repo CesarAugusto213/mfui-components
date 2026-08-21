@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.libphonenumber.android)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.exifinterface)
 }
 
 // Publicación local del artefacto "release" (AAR + sources jar).

@@ -182,7 +182,38 @@ migrados sobre el modelo genérico `UiKitProduct`/`UiKitComment`/`UiKitCommentGr
 hizo falta un `UiKitWarehouse` — `FilterDialogMF<T>` resultó ser ya
 genérico. `DialogInputComment` quedó completamente libre de ViewModel.
 
-Siguiente: **Wave 4** — resto de uso general (`card/` 9 archivos, `alerts/`
-y `dialog/` restantes, `items/` restante) y **Wave 5** — `ToolBarHome`
-(el único caso con Hilt + navegación directos, requiere separarse en un
-`AppTopBar` genérico + lógica de negocio en cada app).
+✅ **Wave 4a completa** — componentes que el flujo real de facturación de
+restaurante usa (`TableManagementViewModel.generatePayment()` →
+`GenericCreateScreen`/`GenericSearchProductScreen`/`GenericSearchClientScreen`/
+`GenericAddProductScreen`), verificado por import real, no solo por estar en
+`ui/screens/generic/`:
+
+| Componente | Depende de | Nota |
+|---|---|---|
+| `CustomTable<T>` | nada | ya era genérico — migrado tal cual |
+| `OutlineIconButtonMF` | — | icono `Int` → `Painter` |
+| `SelectableCard` | nada | migrado tal cual |
+| `CardPriceMultiple` | nada | migrado tal cual |
+| `DataClient` | nada | iconos bundleados (`uikit_ic_client`/`uikit_ic_edit`/`uikit_ic_local`) |
+| `SearchButton` | nada | icono `Int?` → `Painter?` |
+| `SelectSmallMF<T>` | nada | ya era genérico — **no era código muerto**, lo usa `PaymentCashDialog` |
+| `LoaderProgressDialog` | `LoaderUiState` | estado aplanado a 3 parámetros directos |
+| `ImagePickerComponent` | `FileUtils` (parcial) | `optimizeImageForUpload`/`createImageFile` portados a `utils.ImageUtils` (sin Crashlytics/Constants); requiere que la app declare su propio `FileProvider` |
+| `ItemProduct` | `ProductEntity` | nuevo modelo `UiKitCatalogProduct`; 4 íconos de footer bundleados (decorativos, no eran parámetro en el original) |
+| `DialogFormFreeProduct` | `ProductEntity`, `UnitType`, `Constants.listTypeAffectationTypes` | ya no construye la entidad — devuelve `FreeProductFormResult`; catálogos de unidad/afectación entran por parámetro (`List<UiKitOption>`) |
+| `DialogItemLots` (+ `LotsDialogComponents.kt`) | `ItemLotsEntity`, `LotsGroupEntity`, `ItemProductsUiState` | nuevo modelo `UiKitSeries`/`UiKitLotGroup`; ya no recibe/devuelve `ItemProductsUiState` — solo maneja la selección |
+| `ListPriceDialog` (+ `DialogListPriceContent`/`TableListPrice`/`TableRow`) | `ItemTypesEntity`, `ItemProductsUiState`, `ListPriceDialogUiState` | nuevo modelo `UiKitPriceOption` (precio ya resuelto, sin `price1/2/3`+`priceDefault`); estado aplanado, sin wrapper `ListPriceDialogUiState` |
+| `PaymentCashDialog` | `PaymentMethodEntity`, `PaymentDestinationsEntity`, `CashState`, `DataPaymentMethodUiState` | nuevo modelo `UiKitPaymentMethod`/`UiKitPaymentDestination`/`UiKitCashPayment`; se quitó el filtro "Transferencia → solo BANCO" (lógica de negocio específica) |
+| `PaymentInstallmentsDialog` | `QuotasState`, `DataPaymentMethodUiState` | nuevo modelo `UiKitInstallment`; `dateFormatPattern` configurable (antes usaba `Constants.DATE_FORMAT` fijo) |
+
+Modelos nuevos en `ui.components.model`: `UiKitPriceOption`, `UiKitSeries`,
+`UiKitLotGroup`, `UiKitPaymentMethod`, `UiKitPaymentDestination`,
+`UiKitCashPayment`, `UiKitInstallment`, `UiKitCatalogProduct`, `UiKitOption`.
+Nueva dependencia: `androidx.exifinterface:exifinterface` (orientación EXIF
+en `ImagePickerComponent`).
+
+Siguiente: **Wave 4b** — resto de uso general no atado a facturación
+(`card/` restante, `alerts/` y `dialog/` restantes, `items/` restante) y
+**Wave 5** — `ToolBarHome` (el único caso con Hilt + navegación directos,
+requiere separarse en un `AppTopBar` genérico + lógica de negocio en cada
+app).

@@ -23,35 +23,61 @@ import com.android.ide.common.rendering.api.SessionParams
 import org.junit.Rule
 import org.junit.Test
 import org.mindtec.uikit.ui.components.WidgetCounter
+import org.mindtec.uikit.ui.components.CustomTable
+import org.mindtec.uikit.ui.components.ImagePickerComponent
 import org.mindtec.uikit.ui.components.TableProductList
 import org.mindtec.uikit.ui.components.TableRestaurantProductList
 import org.mindtec.uikit.ui.components.alerts.AlertDialog
 import org.mindtec.uikit.ui.components.alerts.LoaderDialog
+import org.mindtec.uikit.ui.components.alerts.LoaderProgressDialog
 import org.mindtec.uikit.ui.components.button.ButtonCountProduct
 import org.mindtec.uikit.ui.components.button.ButtonMF
 import org.mindtec.uikit.ui.components.button.ButtonOptions
 import org.mindtec.uikit.ui.components.button.IconButtonMF
+import org.mindtec.uikit.ui.components.button.OutlineIconButtonMF
 import org.mindtec.uikit.ui.components.button.OutlinedButtonMF
 import org.mindtec.uikit.ui.components.button.SmallIconButton
 import org.mindtec.uikit.ui.components.button.SmallOutlinedButtonMF
 import org.mindtec.uikit.ui.components.button.ToggleSelector2
+import org.mindtec.uikit.ui.components.card.CardPriceMultiple
+import org.mindtec.uikit.ui.components.card.DataClient
+import org.mindtec.uikit.ui.components.card.SearchButton
 import org.mindtec.uikit.ui.components.country_code_picker.Country
 import org.mindtec.uikit.ui.components.country_code_picker.CountryCodePicker
 import org.mindtec.uikit.ui.components.dialog.ConfirmDialog
+import org.mindtec.uikit.ui.components.dialog.DialogFormFreeProduct
 import org.mindtec.uikit.ui.components.dialog.DialogInputComment
+import org.mindtec.uikit.ui.components.dialog.DialogItemLots
 import org.mindtec.uikit.ui.components.dialog.FilterDialogMF
+import org.mindtec.uikit.ui.components.dialog.ListPriceDialog
+import org.mindtec.uikit.ui.components.dialog.LotWithSeries
+import org.mindtec.uikit.ui.components.dialog.LotsSelectionType
 import org.mindtec.uikit.ui.components.dialog.NullDialog
+import org.mindtec.uikit.ui.components.dialog.PaymentCashDialog
+import org.mindtec.uikit.ui.components.dialog.PaymentInstallmentsDialog
 import org.mindtec.uikit.ui.components.dialog.TableDialog
 import org.mindtec.uikit.ui.components.dialog.TableRestaurantDialog
 import org.mindtec.uikit.ui.components.dialog.WarningDialog
 import org.mindtec.uikit.ui.components.items.ItemEmptyList
+import org.mindtec.uikit.ui.components.items.ItemProduct
 import org.mindtec.uikit.ui.components.items.ItemProductRestaurantList
 import org.mindtec.uikit.ui.components.items.RadioButtonWithBorder
+import org.mindtec.uikit.ui.components.items.SelectableCard
+import org.mindtec.uikit.ui.components.model.UiKitCashPayment
+import org.mindtec.uikit.ui.components.model.UiKitCatalogProduct
 import org.mindtec.uikit.ui.components.model.UiKitComment
+import org.mindtec.uikit.ui.components.model.UiKitInstallment
+import org.mindtec.uikit.ui.components.model.UiKitLotGroup
+import org.mindtec.uikit.ui.components.model.UiKitOption
+import org.mindtec.uikit.ui.components.model.UiKitPaymentDestination
+import org.mindtec.uikit.ui.components.model.UiKitPaymentMethod
+import org.mindtec.uikit.ui.components.model.UiKitPriceOption
 import org.mindtec.uikit.ui.components.model.UiKitProduct
+import org.mindtec.uikit.ui.components.model.UiKitSeries
 import org.mindtec.uikit.ui.components.select.SearchDropdownMenu
 import org.mindtec.uikit.ui.components.select.SelectDialogMF
 import org.mindtec.uikit.ui.components.select.SelectMF
+import org.mindtec.uikit.ui.components.select.SelectSmallMF
 import org.mindtec.uikit.ui.components.text_field.EditTextSearch
 import org.mindtec.uikit.ui.components.text_field.FieldSearchNumDoc
 import org.mindtec.uikit.ui.components.text_field.FieldWidget
@@ -548,6 +574,247 @@ class PreviewGalleryTest {
             onDismissRequest = {},
             onRequestNewComment = { _, _ -> },
             onConfirm = { _, _ -> }
+        )
+    }
+
+    // ==================== Flujo de restaurante -> facturación ====================
+
+    @Test
+    fun customTable() = snapshot("CustomTable") {
+        CustomTable(
+            headers = listOf("Producto", "Cant.", "Precio"),
+            weights = listOf(2f, 1f, 1f),
+            items = listOf("Hamburguesa" to "S/ 18.50", "Gaseosa" to "S/ 5.00"),
+            rowContent = { (name, price) ->
+                androidx.compose.foundation.layout.Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                ) {
+                    androidx.compose.material3.Text(name, modifier = Modifier.weight(3f))
+                    androidx.compose.material3.Text(price, modifier = Modifier.weight(1f))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun outlineIconButtonMF() = snapshot("button_OutlineIconButtonMF") {
+        OutlineIconButtonMF(
+            icon = painterResource(R.drawable.uikit_ic_edit),
+            onClick = {}
+        )
+    }
+
+    @Test
+    fun selectableCard() = snapshot("items_SelectableCard") {
+        SelectableCard(
+            title = "Cliente EIRL",
+            subTitle = "1234567890",
+            isSelected = true,
+            onClick = {}
+        )
+    }
+
+    @Test
+    fun cardPriceMultiple() = snapshot("card_CardPriceMultiple") {
+        CardPriceMultiple(
+            titles = listOf("Valor de Venta" to "IGV 18%"),
+            subtitles = listOf("S/ 150" to "S/ 27"),
+            total = "S/ 177"
+        )
+    }
+
+    @Test
+    fun dataClient() = snapshot("card_DataClient") {
+        DataClient(
+            userName = "Nombre del usuario",
+            userAddress = "Benavides 247 - Miraflores",
+            onUserChange = {},
+            onAddressChange = {},
+            onEditUser = {}
+        )
+    }
+
+    @Test
+    fun searchButton() = snapshot("card_SearchButton") {
+        SearchButton(
+            textButton = "Buscar Clientes",
+            onClick = {}
+        )
+    }
+
+    @Test
+    fun selectSmallMF() = snapshot("select_SelectSmallMF") {
+        SelectSmallMF(
+            options = listOf("Efectivo", "Tarjeta", "Transferencia"),
+            selectedOption = "Efectivo",
+            onOptionSelected = {},
+            optionLabel = { it }
+        )
+    }
+
+    @Test
+    fun loaderProgressDialog() = snapshot("alerts_LoaderProgressDialog") {
+        LoaderProgressDialog(
+            isVisible = true,
+            progress = 0.6f,
+            description = "Cargando la información..."
+        )
+    }
+
+    @Test
+    fun imagePickerComponent() = snapshot("ImagePickerComponent") {
+        ImagePickerComponent(
+            modifier = Modifier.fillMaxWidth(),
+            currentImageUrl = null,
+            onImageSelected = {}
+        )
+    }
+
+    private val sampleCatalogProduct = UiKitCatalogProduct(
+        id = "1",
+        description = "GASEOSA 500ML",
+        stock = BigDecimal(20),
+        currencySymbol = "S/",
+        category = "Bebidas",
+        calculateQuantity = false
+    )
+
+    @Test
+    fun itemProduct() = snapshot("items_ItemProduct") {
+        ItemProduct(
+            modifier = Modifier.fillMaxWidth(),
+            product = sampleCatalogProduct,
+            currentCost = BigDecimal("5.00"),
+            isChecked = true,
+            isEditPriceEnabled = true,
+            quantity = BigDecimal(2),
+            stockControl = true,
+            showInputDialog = {},
+            showCommentDialog = { _, _ -> },
+            showPriceDialog = {},
+            showQuantityByPrice = {},
+            showItemLotsDialog = {},
+            showListPrice = {},
+            onCheckedChange = {},
+            onClickedPlus = {},
+            onClickedMinus = {}
+        )
+    }
+
+    @Test
+    fun dialogFormFreeProduct() = snapshot("dialog_DialogFormFreeProduct") {
+        DialogFormFreeProduct(
+            show = true,
+            unitOptions = listOf(UiKitOption("NIU", "Unidades"), UiKitOption("ZZ", "Servicio")),
+            affectationOptions = listOf(
+                UiKitOption("10", "Gravado"),
+                UiKitOption("20", "Exonerado")
+            ),
+            defaultAffectationId = "10",
+            onAddProduct = {},
+            onDismissRequest = {}
+        )
+    }
+
+    @Test
+    fun dialogItemLotsSeriesOnly() = snapshot("dialog_DialogItemLots_series") {
+        DialogItemLots(
+            show = true,
+            selectionType = LotsSelectionType.SERIES_ONLY,
+            itemLots = listOf(
+                UiKitSeries(id = 1, series = "SERIE-001-ABC", date = "05/01/2026"),
+                UiKitSeries(id = 2, series = "SERIE-002-DEF", date = "06/01/2026")
+            ),
+            lotsGroup = emptyList(),
+            lotsWithSeries = emptyList(),
+            onConfirmation = {},
+            onDismissRequest = {}
+        )
+    }
+
+    @Test
+    fun dialogItemLotsLotsOnly() = snapshot("dialog_DialogItemLots_lots") {
+        DialogItemLots(
+            show = true,
+            selectionType = LotsSelectionType.LOTS_ONLY,
+            itemLots = emptyList(),
+            lotsGroup = listOf(
+                UiKitLotGroup(id = 47, code = "LOTE-A", quantity = BigDecimal("11.0000"), dateOfDue = "23/05/2026"),
+                UiKitLotGroup(id = 48, code = "LOTE-B", quantity = BigDecimal("25.0000"), dateOfDue = "30/04/2026", selectedQuantity = 2)
+            ),
+            lotsWithSeries = emptyList(),
+            onConfirmation = {},
+            onDismissRequest = {}
+        )
+    }
+
+    @Test
+    fun dialogItemLotsWithSeries() = snapshot("dialog_DialogItemLots_lotsWithSeries") {
+        DialogItemLots(
+            show = true,
+            selectionType = LotsSelectionType.LOTS_WITH_SERIES,
+            itemLots = emptyList(),
+            lotsGroup = emptyList(),
+            lotsWithSeries = listOf(
+                LotWithSeries(
+                    lot = UiKitLotGroup(id = 52, code = "LOTE-PRINCIPAL", quantity = BigDecimal("5.0000"), dateOfDue = "27/08/2026"),
+                    series = listOf(
+                        UiKitSeries(id = 99, series = "LP-SERIE-001", date = "05/01/2026"),
+                        UiKitSeries(id = 100, series = "LP-SERIE-002", date = "05/01/2026")
+                    ),
+                    isExpanded = true
+                )
+            ),
+            onConfirmation = {},
+            onDismissRequest = {}
+        )
+    }
+
+    @Test
+    fun listPriceDialog() = snapshot("dialog_ListPriceDialog") {
+        ListPriceDialog(
+            show = true,
+            options = listOf(
+                UiKitPriceOption(id = "1", unitTypeId = "NIU", description = "Unidad", quantityUnit = "1", price = BigDecimal("18.50")),
+                UiKitPriceOption(id = "2", unitTypeId = "CJA", description = "Caja x12", quantityUnit = "12", price = BigDecimal("200.00"))
+            ),
+            originalPrice = BigDecimal("18.50"),
+            originalUnitType = "NIU",
+            currentPrice = BigDecimal("18.50"),
+            onSelectItem = {},
+            onDismissRequest = {}
+        )
+    }
+
+    @Test
+    fun paymentCashDialog() = snapshot("dialog_PaymentCashDialog") {
+        PaymentCashDialog(
+            title = "PAGO EN EFECTIVO",
+            listPayment = listOf(UiKitPaymentMethod("cash", "Efectivo"), UiKitPaymentMethod("card", "Tarjeta")),
+            listDestination = listOf(UiKitPaymentDestination("caja1", "Caja General")),
+            currentPaymentMethod = null,
+            currentPaymentDestinations = null,
+            total = BigDecimal("100.00"),
+            methodLabel = "Efectivo",
+            saveCashPayment = { _, _ -> },
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun paymentInstallmentsDialog() = snapshot("dialog_PaymentInstallmentsDialog") {
+        PaymentInstallmentsDialog(
+            title = "PAGO A CRÉDITO",
+            initialInstallments = listOf(
+                UiKitInstallment(date = "21/09/2026", amount = "50.00"),
+                UiKitInstallment(date = "21/10/2026", amount = "50.00")
+            ),
+            total = BigDecimal("100.00"),
+            methodLabel = "Crédito",
+            saveInstallmentsPayment = { _, _ -> },
+            onDismissRequest = {},
+            onConfirmation = {}
         )
     }
 }
