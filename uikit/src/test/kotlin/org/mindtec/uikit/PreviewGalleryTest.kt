@@ -1,5 +1,8 @@
 package org.mindtec.uikit
 
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.ActivityResultRegistryOwner
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -35,9 +40,13 @@ import org.mindtec.uikit.ui.components.text_field.SearchSection
 import org.mindtec.uikit.ui.components.text_field.SwitchMF
 import org.mindtec.uikit.ui.components.text_field.TextFieldCountry
 import org.mindtec.uikit.ui.components.text_field.TextFieldDate
+import org.mindtec.uikit.ui.components.text_field.TextFieldDateTime
 import org.mindtec.uikit.ui.components.text_field.TextFieldMF
+import org.mindtec.uikit.ui.components.text_field.TextFieldMonth
+import org.mindtec.uikit.ui.components.text_field.TextFieldPhoneNumberByCountry
 import org.mindtec.uikit.ui.components.text_field.TextFieldPlate
 import org.mindtec.uikit.ui.components.text_field.TextFieldWithButton
+import org.mindtec.uikit.ui.components.text_field.TextFieldWithCenteredImage
 import org.mindtec.uikit.ui.theme.white
 import java.math.BigDecimal
 
@@ -56,15 +65,33 @@ class PreviewGalleryTest {
         renderingMode = SessionParams.RenderingMode.SHRINK,
     )
 
+    // Paparazzi no hostea una Activity real, así que componentes que usan
+    // rememberLauncherForActivityResult (ej. TextFieldWithCenteredImage)
+    // necesitan un owner aunque sea de mentira para no crashear al renderizar.
+    private val noOpActivityResultRegistryOwner = object : ActivityResultRegistryOwner {
+        override val activityResultRegistry = object : ActivityResultRegistry() {
+            override fun <I, O> onLaunch(
+                requestCode: Int,
+                contract: ActivityResultContract<I, O>,
+                input: I,
+                options: androidx.core.app.ActivityOptionsCompat?
+            ) { /* no-op: no hay launch real en un screenshot estático */ }
+        }
+    }
+
     private fun snapshot(name: String, content: @androidx.compose.runtime.Composable () -> Unit) {
         paparazzi.snapshot(name = name) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(white)
-                    .padding(16.dp)
+            CompositionLocalProvider(
+                LocalActivityResultRegistryOwner provides noOpActivityResultRegistryOwner
             ) {
-                content()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(white)
+                        .padding(16.dp)
+                ) {
+                    content()
+                }
             }
         }
     }
@@ -158,6 +185,47 @@ class PreviewGalleryTest {
             onChangeValue = {},
             icon = painterResource(id = R.drawable.uikit_ic_arrow_down),
             enabled = true
+        )
+    }
+
+    @Test
+    fun textFieldDateTime() = snapshot("text_field_TextFieldDateTime") {
+        TextFieldDateTime(
+            title = "Fecha y hora",
+            defaultValue = "21/08/2026 09:30:00",
+            onChangeValue = {},
+            icon = painterResource(id = R.drawable.uikit_ic_arrow_down),
+            enabled = true
+        )
+    }
+
+    @Test
+    fun textFieldMonth() = snapshot("text_field_TextFieldMonth") {
+        TextFieldMonth(
+            title = "Mes y año",
+            defaultValue = "2026-08",
+            onChangeValue = {},
+            icon = painterResource(id = R.drawable.uikit_ic_arrow_down),
+            enabled = true
+        )
+    }
+
+    @Test
+    fun textFieldWithCenteredImage() = snapshot("text_field_TextFieldWithCenteredImage") {
+        TextFieldWithCenteredImage(
+            title = "Logo",
+            imageUri = null,
+            onImageSelected = {}
+        )
+    }
+
+    @Test
+    fun textFieldPhoneNumberByCountry() = snapshot("text_field_TextFieldPhoneNumberByCountry") {
+        TextFieldPhoneNumberByCountry(
+            title = "Teléfono",
+            code = "+51",
+            value = "987654321",
+            onValueChange = {}
         )
     }
 

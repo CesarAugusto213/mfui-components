@@ -90,13 +90,13 @@ fun TextFieldPhoneNumberByCountry(
             showSheet = true,
             selectedCountry = country
         )
-    }
 
-    if (showError) {
-        Text(
-            text = stringResource(R.string.uikit_field_required_error),
-            style = Fonts.textRegular(12.sp, red200)
-        )
+        if (showError) {
+            Text(
+                text = stringResource(R.string.uikit_field_required_error),
+                style = Fonts.textRegular(12.sp, red200)
+            )
+        }
     }
 }
 
