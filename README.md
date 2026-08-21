@@ -4,6 +4,9 @@ Librería de componentes de Jetpack Compose (botones, diálogos, toolbars, etc.)
 extraída de MypeFact para poder reusarse entre varios proyectos Android sin
 copiar y pegar carpetas.
 
+Licencia [MIT](LICENSE). CI en GitHub Actions (`.github/workflows/ci.yml`)
+corre `assembleRelease` + `testDebugUnitTest` en cada push/PR a `master`.
+
 ## Estrategia de migración
 
 Ver [MIGRATION_STRATEGY.md](MIGRATION_STRATEGY.md) para el mapa completo de
