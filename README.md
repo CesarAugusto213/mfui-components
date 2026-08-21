@@ -12,18 +12,31 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-Wave 1 en progreso (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Wave 1 completa** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
 - `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`.
 - `items/`: `ItemEmptyList`, `RadioButtonWithBorder`.
-- `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`.
-- `select/`: `SelectMF`.
+- `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`, `TextFieldDate`,
+  `TextFieldDateTime`, `TextFieldMonth`, `TextFieldPlate`, `TextFieldWithCenteredImage`,
+  `TextFieldWithButton`, `SwitchMF`, `FieldWidget`, `FieldSearchNumDoc` (rediseñado,
+  genérico), `TextFieldCountry`, `TextFieldPhoneNumberByCountry`.
+- `select/`: `SelectMF`, `SelectDialogMF`, `SearchDropdownMenu`.
+- `country_code_picker/`: las 10 clases completas (selector de país/teléfono,
+  ya era un subsistema genérico y autocontenido — solo se le cambió el paquete).
+- Soporte: `WidgetCounter`, `dialog/InputTextDialog` (extraído solo la parte
+  genérica de `DialogInput.kt`, sin el wrapper atado a `ItemProductsUiState`).
 
-Quedan pendientes ~95 componentes de MypeFact (ver el mapa de prioridad en
-`MIGRATION_STRATEGY.md`: siguiente parada es terminar Wave 1 con `SelectDialogMF`,
-`TextFieldDate`, `FieldSearchNumDoc`, `SwitchMF`, etc., luego Wave 2 —shell de
-restaurante—).
+Código muerto detectado y **no migrado a propósito** (cero imports en todo
+MypeFact — candidatos a borrar allá): `TextFieldPrefix`, `TextFieldPassword`,
+`SelectSmallMF`, `SelectSearchMF`, `CheckboxMF`.
+
+Nuevas dependencias que trajo este wave: `io.michaelrocks:libphonenumber-android`
+(validación/formato de teléfono) y `androidx.activity:activity-compose`
+(selector de imagen en `TextFieldWithCenteredImage`).
+
+Siguiente parada: **Wave 2** — shell de modo restaurante (`ToolBarMF`,
+`LoaderDialog`, `AlertDialog`, `ButtonMF`, `ButtonCountProduct`, etc.).
 
 ## Convención de paquetes (para migrar componentes fácil)
 

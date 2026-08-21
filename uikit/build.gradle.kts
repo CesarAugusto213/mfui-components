@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.libphonenumber.android)
+    implementation(libs.androidx.activity.compose)
 }
 
 // Publicación local del artefacto "release" (AAR + sources jar).

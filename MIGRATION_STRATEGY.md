@@ -147,6 +147,13 @@ ninguno depende de `data.*` ni `ui.screens.*` — confirmar igual al migrar).
 
 ## Siguiente paso concreto
 
-Empezar Wave 1: migrar `TextFieldMF`, `SelectMF` y `SearchSection` primero
-(las 3 más usadas), validar que compilan y se ven bien con un `@Preview`,
-y de ahí seguir con el resto del wave.
+✅ **Wave 1 completa** — los 16 componentes de `text_field/`+`select/` más el
+bloque `country_code_picker/` (10 archivos) y sus dependencias de soporte
+(`WidgetCounter`, `InputTextDialog`) están migrados y compilando. Detalle en
+el README.
+
+Siguiente: **Wave 2** — shell de modo restaurante sin acoplamiento a datos
+(`ToolBarMF`, `LoaderDialog`, `AlertDialog`, `ButtonMF`, `ButtonCountProduct`,
+`SmallIconButton` ✅ ya migrado, `ToggleSelector2`, `ButtonOptions`,
+`ItemEmptyList` ✅ ya migrado, `FieldWidget` ✅ ya migrado, `ConfirmDialog`,
+`NullDialog`).
