@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.mindtec.uikit.R
@@ -23,4 +24,10 @@ fun ItemEmptyList(message: String = stringResource(R.string.uikit_empty_list)) {
         textAlign = TextAlign.Center,
         style = TextStyle(fontSize = 18.sp, color = gray)
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ItemEmptyListPreview() {
+    ItemEmptyList()
 }

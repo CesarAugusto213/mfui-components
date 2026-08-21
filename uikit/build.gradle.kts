@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.paparazzi)
     id("maven-publish")
 }
 

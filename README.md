@@ -80,6 +80,32 @@ host), a `data.*` (entidades propias) o a ViewModels/pantallas de MypeFact.
    parámetro (`Painter`, regla 2) un ícono que YA era `Int`/`@DrawableRes`
    configurable en el componente original.
 
+## Ver los componentes renderizados (previews)
+
+Todos los componentes tienen `@Preview` — si abres el proyecto en Android
+Studio los ves ahí directamente. Como este flujo también se maneja por CLI,
+el módulo `:uikit` además tiene [Paparazzi](https://github.com/cashapp/paparazzi)
+configurado, que renderiza los `@Composable` a PNG usando layoutlib sin
+necesitar emulador ni dispositivo:
+
+```bash
+./gradlew :uikit:recordPaparazziDebug   # genera/actualiza los PNG de referencia
+./gradlew :uikit:verifyPaparazziDebug   # compara contra esos PNG (test de regresión visual)
+```
+
+Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
+(una muestra representativa de 22 componentes, no los 100% — se puede ampliar).
+Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
+como referencia visual.
+
+> **Nota:** el `compileSdk` del módulo está fijado en **35**, no 36. Paparazzi
+> 1.3.5 tiene un bug conocido con compileSdk 36
+> ([cashapp/paparazzi#1877](https://github.com/cashapp/paparazzi/issues/1877),
+> arreglado recién en la rama 2.0.0-alpha, que a su vez no es compatible con
+> Kotlin 2.0.0 de este proyecto). Ninguno de los componentes usa APIs
+> exclusivas de API 36, así que no hay pérdida real por ahora — si algún día
+> se sube el `compileSdk`, revisar si Paparazzi ya lo soporta.
+
 ## Build local
 
 ```bash
