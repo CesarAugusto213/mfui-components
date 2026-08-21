@@ -1,170 +1,37 @@
 # mfui-components
 
-Librería de componentes de Jetpack Compose (botones, diálogos, toolbars, etc.),
-extraída de MypeFact para poder reusarse entre varios proyectos Android sin
-copiar y pegar carpetas.
+Librería de componentes de Jetpack Compose (botones, diálogos, toolbars,
+selects, cards, etc.) para reutilizar entre proyectos Android sin copiar y
+pegar código. Los modelos de datos que consumen los componentes son
+genéricos (no dependen de Room, Retrofit ni de ningún ViewModel/Hilt), así
+que se pueden usar en cualquier proyecto.
 
-Licencia [MIT](LICENSE). CI en GitHub Actions (`.github/workflows/ci.yml`)
-corre `assembleRelease` + `testDebugUnitTest` en cada push/PR a `master`.
+Licencia [MIT](LICENSE).
 
-## Estrategia de migración
+## Instalación
 
-Ver [MIGRATION_STRATEGY.md](MIGRATION_STRATEGY.md) para el mapa completo de
-qué componentes migrar primero (modo restaurante + entrada de datos), las
-reglas de genericidad y el orden de oleadas.
+En el `settings.gradle.kts` del proyecto:
 
-## Estado actual
-
-**Waves 1, 2, 3, 4a, 4b y 5 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
-
-- Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
-- `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
-  `OutlinedButtonMF`, `ButtonCountProduct`, `ToggleSelector2`, `ButtonOptions`.
-- `items/`: `ItemEmptyList`, `RadioButtonWithBorder`, `ItemProductList`,
-  `ItemProductRestaurantList`.
-- `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`, `TextFieldDate`,
-  `TextFieldDateTime`, `TextFieldMonth`, `TextFieldPlate`, `TextFieldWithCenteredImage`,
-  `TextFieldWithButton`, `SwitchMF`, `FieldWidget`, `FieldSearchNumDoc` (rediseñado,
-  genérico), `TextFieldCountry`, `TextFieldPhoneNumberByCountry`.
-- `select/`: `SelectMF`, `SelectDialogMF`, `SearchDropdownMenu`.
-- `country_code_picker/`: las 10 clases completas (selector de país/teléfono,
-  ya era un subsistema genérico y autocontenido — solo se le cambió el paquete).
-- `alerts/`: `LoaderDialog`, `AlertDialog`.
-- `dialog/`: `WarningDialog`, `ConfirmDialog`, `NullDialog`, `InputTextDialog`
-  (extraído solo la parte genérica de `DialogInput.kt`, sin el wrapper atado a
-  `ItemProductsUiState`), `FilterDialogMF`, `TableDialog`, `TableRestaurantDialog`,
-  `DialogInputComment` (rediseñado, sin ViewModel).
-- `toolbar/`: `ToolBarMF`.
-- Soporte: `WidgetCounter`, `TableProductList`, `TableRestaurantProductList`,
-  `CloseButton`.
-- `model/`: `UiKitProduct`, `UiKitComment`, `UiKitCommentGroup`,
-  `ExpandedUiKitProduct` — el modelo genérico que reemplaza a
-  `ProductEntity`/`RestaurantNote`/`ProductCommentGroup` (detalle en el
-  catálogo, sección Restaurante).
-- **Wave 4a — facturación de restaurante** (ver sección
-  [Facturación de restaurante](#facturación-de-restaurante-uicomponents-uicomponentscard-uicomponentsitems-uicomponentsdialog-uicomponentsalerts)
-  en el catálogo): `ItemProduct`, `DialogFormFreeProduct`, `DialogItemLots`,
-  `ListPriceDialog`, `PaymentCashDialog`, `PaymentInstallmentsDialog`,
-  `CustomTable`, `OutlineIconButtonMF`, `SelectableCard`, `CardPriceMultiple`,
-  `DataClient`, `SearchButton`, `SelectSmallMF`, `LoaderProgressDialog`,
-  `ImagePickerComponent`. Modelo genérico nuevo: `UiKitPriceOption`,
-  `UiKitSeries`/`UiKitLotGroup`, `UiKitPaymentMethod`/`UiKitPaymentDestination`/
-  `UiKitCashPayment`/`UiKitInstallment`, `UiKitCatalogProduct`, `UiKitOption`.
-
-Código muerto original que Wave 4a terminó migrando de todos modos porque
-sí tenía un caller real (`PaymentCashDialog`): `SelectSmallMF` — la nota de
-"cero imports" de las primeras oleadas quedó desactualizada para este caso.
-Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
-`TextFieldPrefix`, `TextFieldPassword`, `SelectSearchMF`, `CheckboxMF`.
-
-- `toolbar/`: `AppTopBar` (+ `AppTopBarMenuItem`) — reemplaza a `ToolBarHome`,
-  el único componente con Hilt + `NavHostController` + `Activity`s propias
-  incrustados directo. Ya no depende de ninguno de los tres.
-- `dialog/`: `ProfileDialog` (rediseñado, recibe `logoUri` en vez de leer
-  una ruta fija).
-- **Wave 4b — resto de uso general** (ver sección
-  [Cards y reportes](#cards-y-reportes-uicomponentscard-uicomponentsitems-uicomponents)
-  en el catálogo): `CardInventory`, `CardList`, `CardListClient`,
-  `CardListSimple`, `CardDetails` (rediseñado), `ItemCircleReport`,
-  `ItemReportDashboard`, `CountSlider`, `NavigationBottomBar`,
-  `OpenSalesBoxDialog`, `SingleTextInputDialog` (antes `SendEmailDialog`),
-  `StateTypeDialog`, `PhoneNumberDialog` (antes `WhatsappDialog`). Modelo
-  genérico nuevo: `UiKitCircleReportItem`, `UiKitDashboardCard`,
-  `UiKitNavItem`, `CardDetailsAction`.
-
-Código muerto original que Wave 4a terminó migrando de todos modos porque
-sí tenía un caller real (`PaymentCashDialog`): `SelectSmallMF` — la nota de
-"cero imports" de las primeras oleadas quedó desactualizada para este caso.
-Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
-`TextFieldPrefix`, `TextFieldPassword`, `SelectSearchMF`, `CheckboxMF`,
-`ItemAddProduct`, `CustomLineChart`, `ItemLineReport`, `CreateBillDialog`,
-`CalendarDialog`, `CalendarDialogSelection`.
-
-No migrados de Wave 4b por ser demasiado específicos de MypeFact (evaluados,
-no es que falten — ver detalle en `MIGRATION_STRATEGY.md`):
-`CardDetailsQuotesOrdersList`, `ReportsDialog`, `UbigeoDialog`.
-
-Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
-(validación/formato de teléfono) y `androidx.activity:activity-compose`
-(selector de imagen en `TextFieldWithCenteredImage`). Wave 2, Wave 3, Wave 4b
-y Wave 5 no agregaron dependencias nuevas. Wave 4a agregó
-`androidx.exifinterface:exifinterface` (orientación de fotos en
-`ImagePickerComponent`).
-
-Con Waves 1–5 y 4a–4b completas, prácticamente todo lo reutilizable de
-`ui/components/` de MypeFact ya está en la librería.
-
-## Convención de paquetes (para migrar componentes fácil)
-
-El namespace base cambia de `org.mindtec.mypefact` a `org.mindtec.uikit`,
-pero la estructura de subpaquetes se mantiene idéntica:
-
-| MypeFact (origen)                          | mfui-components (destino)              |
-|---------------------------------------------|------------------------------------------|
-| `org.mindtec.mypefact.ui.theme`             | `org.mindtec.uikit.ui.theme`             |
-| `org.mindtec.mypefact.ui.components.button` | `org.mindtec.uikit.ui.components.button` |
-| `org.mindtec.mypefact.ui.components.dialog` | `org.mindtec.uikit.ui.components.dialog` |
-| `org.mindtec.mypefact.utils`                | `org.mindtec.uikit.utils`                |
-
-Para migrar un componente nuevo: copiar el archivo, reemplazar
-`org.mindtec.mypefact` por `org.mindtec.uikit` en el `package` y en los
-imports, y resolver a mano cualquier dependencia a `R` (recursos del app
-host), a `data.*` (entidades propias) o a ViewModels/pantallas de MypeFact.
-
-### Reglas rápidas para desacoplar un componente
-
-1. **`R.string` / `R.drawable` fijos**: la librería puede traer sus propios
-   recursos por defecto (`uikit/src/main/res/values/strings.xml`, etc.).
-   Un proyecto consumidor puede sobrescribirlos definiendo un recurso con el
-   mismo nombre — no hace falta convertir cada texto en parámetro.
-2. **Iconos**: en vez de recibir un `Int` (`@DrawableRes`), los componentes
-   de este kit reciben un `Painter` ya resuelto por el caller
-   (`icon = painterResource(R.drawable.mi_icono)`). Es un cambio de API
-   intencional respecto al original: desacopla el componente de
-   `painterResource` como implementación fija.
-3. **Entidades propias** (`ProductEntity`, etc.): el componente debe recibir
-   un modelo/interfaz genérico definido en la librería; cada app mapea su
-   propia entidad a ese modelo antes de pasarlo.
-4. **ViewModels / navegación / Hilt** (caso `ToolBarHome`): separar en un
-   componente genérico (título, ícono, acciones vía lambdas) + la lógica de
-   negocio se queda en cada app armando esos callbacks.
-5. **Íconos decorativos que NUNCA fueron parámetro en el original** (ej. la
-   lupa fija de `EditTextSearch`, la flecha de `SelectMF`): esos SÍ se
-   bundlean como recurso propio de la librería (`uikit_ic_*`), no se
-   convierten en parámetro nuevo — no era un punto de personalización en el
-   diseño original, así que agregarlo sería scope creep. Solo se vuelve
-   parámetro (`Painter`, regla 2) un ícono que YA era `Int`/`@DrawableRes`
-   configurable en el componente original.
-
-## Ver los componentes renderizados (previews)
-
-Todos los componentes tienen `@Preview` — si abres el proyecto en Android
-Studio los ves ahí directamente. Como este flujo también se maneja por CLI,
-el módulo `:uikit` además tiene [Paparazzi](https://github.com/cashapp/paparazzi)
-configurado, que renderiza los `@Composable` a PNG usando layoutlib sin
-necesitar emulador ni dispositivo:
-
-```bash
-./gradlew :uikit:recordPaparazziDebug   # genera/actualiza los PNG de referencia
-./gradlew :uikit:verifyPaparazziDebug   # compara contra esos PNG (test de regresión visual)
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        // ...
+        maven { url = uri("https://jitpack.io") }
+    }
+}
 ```
 
-Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
-(76 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
-Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
-como referencia visual — el catálogo de abajo los muestra directo.
+Y en el `build.gradle.kts` del módulo de la app:
 
-> **Nota:** el `compileSdk` del módulo está fijado en **35**, no 36. Paparazzi
-> 1.3.5 tiene un bug conocido con compileSdk 36
-> ([cashapp/paparazzi#1877](https://github.com/cashapp/paparazzi/issues/1877),
-> arreglado recién en la rama 2.0.0-alpha, que a su vez no es compatible con
-> Kotlin 2.0.0 de este proyecto). Ninguno de los componentes usa APIs
-> exclusivas de API 36, así que no hay pérdida real por ahora — si algún día
-> se sube el `compileSdk`, revisar si Paparazzi ya lo soporta.
+```kotlin
+dependencies {
+    implementation("com.github.CesarAugusto213:mfui-components:v0.2.0")
+}
+```
 
 ## Catálogo de componentes
 
-Captura real (Paparazzi) + lo mínimo que necesita cada uno para funcionar. Todos viven en `org.mindtec.uikit.ui.components.*` — el import completo es `org.mindtec.uikit.ui.components.<paquete>.<Nombre>`.
+Captura real de cada componente + lo mínimo que necesita para funcionar. Todos viven en `org.mindtec.uikit.ui.components.*` — el import completo es `org.mindtec.uikit.ui.components.<paquete>.<Nombre>`.
 
 ### Botones (`ui.components.button`)
 
@@ -499,7 +366,7 @@ FieldSearchNumDoc(
 ```
 
 
-<sub>⚠️ Rediseñado: el original de MypeFact traía DNI/RUC/SUNAT hardcodeados. Ahora vos armás la validación y el botón vía <code>action</code>.</sub>
+<sub>⚠️ La validación (DNI, RUC, etc.) y el botón de acción los armas vos vía <code>action</code>.</sub>
 
 ---
 
@@ -531,7 +398,7 @@ TextFieldPhoneNumberByCountry(
 ```
 
 
-<sub>⚠️ <code>showError</code> por defecto es <code>true</code> (igual que el original) — pásale tu propia condición de validez.</sub>
+<sub>⚠️ <code>showError</code> por defecto es <code>true</code> — pásale tu propia condición de validez.</sub>
 
 
 ### Selects (`ui.components.select`)
@@ -615,7 +482,7 @@ RadioButtonWithBorder(
 
 ### Selector de país / teléfono (`ui.components.country_code_picker`)
 
-Subsistema completo de 10 archivos (enum `Country` con ~240 países, validación y formato de números vía `libphonenumber-android`, bottom sheet y diálogo de selección). Ya era genérico en el original — se migró completo y sin cambios de API.
+Subsistema completo de 10 archivos: enum `Country` con ~240 países, validación y formato de números vía `libphonenumber-android`, bottom sheet y diálogo de selección.
 
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_countryCodePicker_country_code_picker_countrycodepicker.png" width="420">
 
@@ -665,7 +532,7 @@ AlertDialog(
 ```
 
 
-<sub>⚠️ <code>image</code> es obligatorio (antes se llamaba <code>imageResourceId</code>); el ícono opcional del botón se renombró a <code>buttonIcon</code> para no confundirlos.</sub>
+<sub>⚠️ <code>image</code> es obligatorio; el ícono opcional del botón es <code>buttonIcon</code>.</sub>
 
 ---
 
@@ -774,7 +641,7 @@ AppTopBar(
 ```
 
 
-<sub>⚠️ Reemplaza a <code>ToolBarHome</code>, el único componente con <code>hiltViewModel()</code> + <code>NavHostController</code> + <code>Activity</code>s propias incrustadas directo en el original. Acá cada <code>AppTopBarMenuItem</code> trae su propio <code>onClick</code> — la navegación, el chequeo de Bluetooth, el logout, etc. los arma tu app al construir la lista. Para el diálogo de "¿cerrar sesión?" no hace falta un componente nuevo — usa <code>WarningDialog(description = "¿Seguro que quieres cerrar sesión?", ...)</code>. Para el popup de perfil, ver <code>ProfileDialog</code> abajo.</sub>
+<sub>⚠️ Sin ViewModel ni navegación acoplados — cada <code>AppTopBarMenuItem</code> trae su propio <code>onClick</code> (navegación, checks, lo que necesites). Para el diálogo de "¿cerrar sesión?" usa <code>WarningDialog(description = "¿Seguro que quieres cerrar sesión?", ...)</code>. Para el popup de perfil, ver <code>ProfileDialog</code> abajo.</sub>
 
 ---
 
@@ -793,14 +660,14 @@ ProfileDialog(
 ```
 
 
-<sub>⚠️ El original leía el logo desde una ruta fija (<code>Constants.IMAGE_PATH</code>); acá tu app pasa su propio <code>logoUri</code>. Vive en <code>ui.components.dialog</code>, no en <code>toolbar</code> — normalmente se abre desde el <code>onProfileClick</code> de <code>AppTopBar</code>.</sub>
+<sub>⚠️ <code>logoUri</code> es opcional — si es <code>null</code> se muestra un ícono de usuario por defecto. Vive en <code>ui.components.dialog</code>, no en <code>toolbar</code> — normalmente se abre desde el <code>onProfileClick</code> de <code>AppTopBar</code>.</sub>
 
 ### Restaurante (`ui.components`, `ui.components.dialog`, `ui.components.items`)
 
-Estos son los componentes atados a datos que se dejaron para el final
-(Wave 3). Ya no dependen de `ProductEntity`/`WarehouseEntity` ni de ningún
-ViewModel — ver el modelo genérico [`UiKitProduct` / `UiKitComment`](#modelo-de-datos-genérico-uikitproduct--uikitcomment)
-más abajo.
+Componentes para listar y gestionar productos de un pedido, con
+indicaciones de cocina. Usan el modelo genérico
+[`UiKitProduct` / `UiKitComment`](#modelo-de-datos-genérico-uikitproduct--uikitcomment)
+de más abajo — sin entidades de Room ni ViewModel.
 
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableProductList_tableproductlist.png" width="420">
 
@@ -814,7 +681,7 @@ TableProductList(
 ```
 
 
-<sub>⚠️ Lista + footer con el total. Borra por índice (así era el original) — para borrar por id real, usa la versión de restaurante.</sub>
+<sub>⚠️ Lista + footer con el total. Borra por índice — si necesitas borrar por id real, usa la versión de restaurante.</sub>
 
 ---
 
@@ -892,10 +759,6 @@ FilterDialogMF(
 ```
 
 
-<sub>⚠️ Ya era 100% genérico en el original — se migró sin cambios de API.</sub>
-
----
-
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogInputComment_dialog_dialoginputcomment.png" width="420">
 
 **`DialogInputComment`**
@@ -913,26 +776,25 @@ DialogInputComment(
 ```
 
 
-<sub>⚠️ El más rediseñado del kit: el original recibía un <code>BaseViewModel</code> completo y observaba 4 LiveData. Acá todo el estado de red (comentarios disponibles, guardar uno nuevo) se recibe por parámetro/callback; el estado de tabs/selección sigue siendo interno porque es pura interacción de UI.</sub>
+<sub>⚠️ Todo el estado de red (comentarios disponibles, guardar uno nuevo) se recibe por parámetro/callback; el estado de tabs/selección es interno, por ser pura interacción de UI.</sub>
 
 
 #### Modelo de datos genérico: `UiKitProduct` / `UiKitComment`
 
-Reemplaza a `ProductEntity` (Room), `RestaurantNote`/`RestaurantNoteResponse`
-y `ProductCommentGroup` del proyecto original. Tu app mapea su propia
-entidad a esto antes de pasarlo a cualquier componente de esta sección —
-ahí es donde va la lógica específica de tu proyecto (ej. cómo armar el
-texto de presentación, qué usar como id cuando el producto es local/offline).
+Tu app mapea su propia entidad de producto a esto antes de pasarlo a
+cualquier componente de esta sección — ahí es donde va la lógica específica
+de tu proyecto (ej. cómo armar el texto de presentación, qué usar como id
+cuando el producto es local/offline).
 
 ```kotlin
 data class UiKitProduct(
-    val id: String,               // antes: if (id == 0) internalId else id.toString()
-    val itemTypeId: String,       // antes: itemId — clave para agrupar unidades del mismo producto
+    val id: String,               // id único para borrar/ubicar el item en la lista
+    val itemTypeId: String,       // clave para agrupar unidades del mismo producto
     val description: String,      // ya resuelto, incluye cualquier sufijo de presentación
-    val quantity: BigDecimal,      // antes: auxQuantity (String)
-    val unitPrice: BigDecimal,     // antes: saleUnitPrice (String)
+    val quantity: BigDecimal,
+    val unitPrice: BigDecimal,
     val imageUrl: String? = null,
-    val commentGroups: List<UiKitCommentGroup> = emptyList() // antes: JSON en `comment`
+    val commentGroups: List<UiKitCommentGroup> = emptyList() // indicaciones de cocina, ya parseadas
 )
 
 data class UiKitComment(
@@ -964,15 +826,8 @@ fun MyProductEntity.toUiKitProduct() = UiKitProduct(
 
 ### Facturación de restaurante (`ui.components`, `ui.components.card`, `ui.components.items`, `ui.components.dialog`, `ui.components.alerts`)
 
-El flujo real de MypeFact es: mesa/take away → `TableManagementViewModel.generatePayment()`
-→ pantallas "genéricas" de facturación (`GenericCreateScreen`,
-`GenericSearchProductScreen`, `GenericSearchClientScreen`,
-`GenericAddProductScreen`). Estos componentes son los que ese flujo usa
-para armar y cobrar el documento — reemplazan `ProductEntity`,
-`ItemTypesEntity`, `ItemLotsEntity`/`LotsGroupEntity`,
-`PaymentMethodEntity`/`PaymentDestinationsEntity` y los `UiState` que los
-envolvían (`ItemProductsUiState`, `ListPriceDialogUiState`,
-`DataPaymentMethodUiState`, `LoaderUiState`) por modelos genéricos — ver
+Componentes para armar y cobrar un documento: selección de producto desde
+catálogo, lotes/series, lista de precios y métodos de pago. Ver
 [Modelos de facturación](#modelos-de-facturación) más abajo.
 
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProduct_items_itemproduct.png" width="420">
@@ -1000,7 +855,7 @@ ItemProduct(
 ```
 
 
-<sub>⚠️ Card de un producto de catálogo/grilla de selección (distinto de <code>ItemProductList</code>, que muestra una línea ya agregada). Los 4 íconos del footer (editar, comentario, granel, precio por lista) son decorativos y vienen bundleados — no son parámetro, igual que en el original.</sub>
+<sub>⚠️ Card de un producto de catálogo/grilla de selección (distinto de <code>ItemProductList</code>, que muestra una línea ya agregada). Los 4 íconos del footer (editar, comentario, granel, precio por lista) son decorativos y vienen bundleados, no son parámetro.</sub>
 
 ---
 
@@ -1020,7 +875,7 @@ DialogFormFreeProduct(
 ```
 
 
-<sub>⚠️ Antes construía un <code>ProductEntity</code> completo internamente (moneda fija, prefijo de id, etc.); ahora devuelve un <code>FreeProductFormResult</code> con lo que el usuario ingresó, y tu app arma su propia entidad con eso.</sub>
+<sub>⚠️ Devuelve un <code>FreeProductFormResult</code> con lo que el usuario ingresó — tu app arma su propia entidad con eso.</sub>
 
 ---
 
@@ -1043,7 +898,7 @@ DialogItemLots(
 ```
 
 
-<sub>⚠️ 3 modos según cómo el producto rastrea su stock: solo series, solo lotes, o lotes con series anidadas. A diferencia del original (que recibía y devolvía un <code>ItemProductsUiState</code> completo), acá solo maneja la selección — tu app ya sabe para qué producto abrió el diálogo.</sub>
+<sub>⚠️ 3 modos según cómo el producto rastrea su stock: solo series, solo lotes, o lotes con series anidadas. Solo maneja la selección — tu app ya sabe para qué producto abrió el diálogo.</sub>
 
 ---
 
@@ -1064,7 +919,7 @@ ListPriceDialog(
 ```
 
 
-<sub>⚠️ El original elegía entre <code>price1</code>/<code>price2</code>/<code>price3</code> según un <code>priceDefault</code>; acá cada <code>UiKitPriceOption</code> ya trae un único <code>price</code> resuelto — esa selección la hace tu app al mapear.</sub>
+<sub>⚠️ Cada <code>UiKitPriceOption</code> trae un único <code>price</code> ya resuelto — si tienes varios precios posibles, decide cuál usar al mapear tu entidad.</sub>
 
 ---
 
@@ -1088,7 +943,7 @@ PaymentCashDialog(
 ```
 
 
-<sub>⚠️ Reparte el total automáticamente entre las filas de pago que agregues. El original filtraba destinos según si el método era "Transferencia" (lógica de negocio específica) — eso se quitó; tu app filtra <code>listDestination</code> antes de pasarla si lo necesita.</sub>
+<sub>⚠️ Reparte el total automáticamente entre las filas de pago que agregues. Si necesitas filtrar destinos según el método elegido, filtra <code>listDestination</code> antes de pasarla.</sub>
 
 ---
 
@@ -1229,7 +1084,7 @@ LoaderProgressDialog(
 ```
 
 
-<sub>⚠️ El original recibía un <code>LoaderUiState</code> completo; acá los 3 campos van directo por parámetro.</sub>
+<sub>⚠️ <code>isVisible</code>/<code>progress</code>/<code>description</code> van directo por parámetro, sin necesidad de armar un objeto de estado.</sub>
 
 ---
 
@@ -1251,8 +1106,8 @@ ImagePickerComponent(
 #### Modelos de facturación
 
 ```kotlin
-// Reemplaza ItemTypesEntity (ListPriceDialog) — el precio ya llega resuelto,
-// no los 3 price1/2/3 + priceDefault del original.
+// El precio ya llega resuelto — si tu app maneja varios precios por
+// producto (ej. precio1/precio2/precio3), decide cuál usar al mapear.
 data class UiKitPriceOption(
     val id: String,
     val unitTypeId: String,
@@ -1261,17 +1116,17 @@ data class UiKitPriceOption(
     val price: BigDecimal
 )
 
-// Reemplazan ItemLotsEntity / LotsGroupEntity (DialogItemLots).
+// Series y lotes (DialogItemLots).
 data class UiKitSeries(val id: Int, val series: String, val date: String)
 data class UiKitLotGroup(
     val id: Int,
     val code: String,
     val quantity: BigDecimal,
     val dateOfDue: String,
-    val selectedQuantity: Int = 0 // antes: auxQuantity: String?
+    val selectedQuantity: Int = 0
 )
 
-// Reemplazan PaymentMethodEntity / PaymentDestinationsEntity / CashState / QuotasState.
+// Modelos de método de pago (efectivo y cuotas a crédito).
 data class UiKitPaymentMethod(val id: String, val description: String)
 data class UiKitPaymentDestination(val id: String, val description: String)
 data class UiKitCashPayment(
@@ -1281,8 +1136,8 @@ data class UiKitCashPayment(
 )
 data class UiKitInstallment(val date: String? = null, val amount: String? = null)
 
-// Reemplaza ProductEntity para ItemProduct (grilla de catálogo — distinto
-// de UiKitProduct, que es una línea ya agregada a un documento).
+// Producto de catálogo/grilla de selección (distinto de UiKitProduct,
+// que es una línea ya agregada a un documento).
 data class UiKitCatalogProduct(
     val id: String,
     val description: String,
@@ -1300,7 +1155,7 @@ data class UiKitOption(val id: String, val description: String)
 
 ### Cards y reportes (`ui.components.card`, `ui.components.items`, `ui.components`)
 
-Resto de uso general (Wave 4b) — no atados a restaurante ni facturación.
+Cards, reportes y componentes de uso general — no atados a restaurante ni facturación.
 
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardInventory_card_cardinventory.png" width="420">
 
@@ -1375,7 +1230,7 @@ CardListSimple(
 ```
 
 
-<sub>⚠️ Con <code>options = false</code>, en vez de los íconos muestra <code>trailingText</code> (ej. "Disponible: 10.00") — antes era un <code>number: Double</code> con un string de negocio bundleado.</sub>
+<sub>⚠️ Con <code>options = false</code>, en vez de los íconos muestra <code>trailingText</code> (ej. "Disponible: 10.00").</sub>
 
 ---
 
@@ -1400,7 +1255,7 @@ CardDetails(
 ```
 
 
-<sub>⚠️ El más rediseñado de este grupo: el original filtraba qué acciones mostrar comparando el <code>R.drawable</code> exacto contra 3 flags de negocio (<code>isAccept</code>/<code>isRegistered</code>/<code>isEnabledDispatch</code>), y abría un diálogo de WhatsApp propio al detectar ese ícono. Ahora cada <code>CardDetailsAction</code> ya viene resuelta por la app — <code>showWhenCollapsed</code> decide si aparece en la fila visible con la card cerrada o solo al expandir.</sub>
+<sub>⚠️ Cada <code>CardDetailsAction</code> ya viene resuelta por la app — <code>showWhenCollapsed</code> decide si aparece en la fila visible con la card cerrada o solo al expandir. Cada <code>onClick</code> es responsabilidad tuya, incluyendo abrir tus propios diálogos.</sub>
 
 ---
 
@@ -1473,7 +1328,7 @@ NavigationBottomBar(
 ```
 
 
-<sub>⚠️ El original traía 5 pantallas de MypeFact hardcodeadas en un sealed class (<code>NavigationBottomBarRouter</code>) leído de <code>Utils.navigationItems</code> — acá tu app arma su propia lista de <code>UiKitNavItem</code>.</sub>
+<sub>⚠️ Tu app arma su propia lista de <code>UiKitNavItem</code> — no hay pantallas fijas.</sub>
 
 ---
 
@@ -1509,8 +1364,6 @@ SingleTextInputDialog(
 ```
 
 
-<sub>⚠️ Antes se llamaba <code>SendEmailDialog</code> — no tenía nada específico de email (ni validación, ni teclado de email), así que se renombró a algo que describe lo que realmente hace.</sub>
-
 ---
 
 <img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_stateTypeDialog_dialog_statetypedialog.png" width="420">
@@ -1544,47 +1397,12 @@ PhoneNumberDialog(
 ```
 
 
-<sub>⚠️ Antes se llamaba <code>WhatsappDialog</code> con 9 dígitos fijos; <code>phoneLength</code> (default 9, como en Perú) ahora es parámetro.</sub>
+<sub>⚠️ <code>phoneLength</code> (default 9, como en Perú) es configurable.</sub>
 
-**No migrados de esta oleada** (evaluados y descartados por ser demasiado
-específicos de MypeFact — ver detalle en `MIGRATION_STRATEGY.md`):
-`CardDetailsQuotesOrdersList` (hardcodea 7 etiquetas contables), `ReportsDialog`
-(5 botones fijos de tipos de reporte PDF), `UbigeoDialog` (selector cascada
-departamento/provincia/distrito atado a un ViewModel + entidades de
-ubigeo de Perú/SUNAT).
-
-## Build local
+## Desarrollo local
 
 ```bash
-./gradlew :uikit:assembleRelease
+./gradlew :uikit:assembleRelease       # compila el AAR
+./gradlew :uikit:testDebugUnitTest     # corre los tests (incluye Paparazzi)
 ./gradlew :uikit:publishToMavenLocal   # valida la publicación sin salir de tu máquina
-```
-
-## Publicar en GitHub + JitPack
-
-1. Crear el repo en GitHub (público, o privado si tienes cuenta JitPack Pro)
-   y subir este proyecto.
-2. Crear un tag de release, por ejemplo `v0.1.0`, y publicarlo en GitHub.
-3. JitPack construye el tag automáticamente la primera vez que alguien lo pide
-   (puedes forzar el build entrando a `https://jitpack.io/#tu-usuario/mfui-components`).
-
-## Consumir desde otro proyecto
-
-En el `settings.gradle.kts` del proyecto consumidor:
-
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        // ...
-        maven { url = uri("https://jitpack.io") }
-    }
-}
-```
-
-Y en el `build.gradle.kts` del módulo de la app:
-
-```kotlin
-dependencies {
-    implementation("com.github.tu-usuario:mfui-components:v0.1.0")
-}
 ```
