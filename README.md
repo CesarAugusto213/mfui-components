@@ -138,10 +138,7 @@ Captura real (Paparazzi) + lo mínimo que necesita cada uno para funcionar. Todo
 
 ### Botones (`ui.components.button`)
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_smallOutlinedButtonMF_button_smalloutlinedbuttonmf.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_smallOutlinedButtonMF_button_smalloutlinedbuttonmf.png" width="420">
 
 **`SmallOutlinedButtonMF`**
 
@@ -152,11 +149,9 @@ SmallOutlinedButtonMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_iconButtonMF_button_iconbuttonmf.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_iconButtonMF_button_iconbuttonmf.png" width="420">
 
 **`IconButtonMF`**
 
@@ -167,11 +162,9 @@ IconButtonMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_smallIconButton_button_smalliconbutton.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_smallIconButton_button_smalliconbutton.png" width="420">
 
 **`SmallIconButton`**
 
@@ -184,11 +177,10 @@ SmallIconButton(
 
 
 <sub>⚠️ <code>icon</code> es obligatorio y es un <code>Painter</code>, no un id de recurso.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonMF_button_buttonmf.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonMF_button_buttonmf.png" width="420">
 
 **`ButtonMF`**
 
@@ -199,11 +191,9 @@ ButtonMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlinedButtonMF_button_outlinedbuttonmf.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlinedButtonMF_button_outlinedbuttonmf.png" width="420">
 
 **`OutlinedButtonMF`**
 
@@ -214,11 +204,9 @@ OutlinedButtonMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonCountProduct_button_buttoncountproduct.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonCountProduct_button_buttoncountproduct.png" width="420">
 
 **`ButtonCountProduct`**
 
@@ -232,11 +220,10 @@ ButtonCountProduct(
 
 
 <sub>⚠️ El ícono derecho por defecto ya viene bundleado (<code>uikit_ic_arrow_right</code>) — pasa <code>icon</code> solo si quieres cambiarlo.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toggleSelector2_button_toggleselector2.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toggleSelector2_button_toggleselector2.png" width="420">
 
 **`ToggleSelector2<T>`**
 
@@ -250,11 +237,9 @@ ToggleSelector2(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonOptions_button_buttonoptions.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonOptions_button_buttonoptions.png" width="420">
 
 **`ButtonOptions`**
 
@@ -267,16 +252,11 @@ ButtonOptions(
 
 
 <sub>⚠️ Combina <code>OutlinedButtonMF</code> (cancelar) + <code>ButtonMF</code> (guardar) en una fila.</sub>
-</td>
-</tr>
-</table>
+
 
 ### Campos de texto (`ui.components.text_field`)
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMF_text_field_textfieldmf.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMF_text_field_textfieldmf.png" width="420">
 
 **`TextFieldMF`**
 
@@ -288,20 +268,16 @@ TextFieldMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMFWithError_text_field_textfieldmf_error.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMFWithError_text_field_textfieldmf_error.png" width="420">
 
 Mismo componente con `showError = true` (usa el string bundleado
 `uikit_field_required_error`, sobrescribible desde tu app).
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchSection_text_field_searchsection.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchSection_text_field_searchsection.png" width="420">
 
 **`SearchSection`**
 
@@ -314,11 +290,9 @@ SearchSection(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_editTextSearch_text_field_edittextsearch.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_editTextSearch_text_field_edittextsearch.png" width="420">
 
 **`EditTextSearch`**
 
@@ -329,11 +303,9 @@ EditTextSearch(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldPlate_text_field_textfieldplate.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldPlate_text_field_textfieldplate.png" width="420">
 
 **`TextFieldPlate`**
 
@@ -347,11 +319,10 @@ TextFieldPlate(
 
 
 <sub>⚠️ Formatea a <code>ABC-123</code> automáticamente al tipear.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldWithButton_text_field_textfieldwithbutton.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldWithButton_text_field_textfieldwithbutton.png" width="420">
 
 **`TextFieldWithButton`**
 
@@ -364,11 +335,9 @@ TextFieldWithButton(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldDate_text_field_textfielddate.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldDate_text_field_textfielddate.png" width="420">
 
 **`TextFieldDate`**
 
@@ -381,11 +350,9 @@ TextFieldDate(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldDateTime_text_field_textfielddatetime.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldDateTime_text_field_textfielddatetime.png" width="420">
 
 **`TextFieldDateTime`**
 
@@ -398,11 +365,9 @@ TextFieldDateTime(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMonth_text_field_textfieldmonth.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldMonth_text_field_textfieldmonth.png" width="420">
 
 **`TextFieldMonth`**
 
@@ -415,11 +380,9 @@ TextFieldMonth(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldWithCenteredImage_text_field_textfieldwithcenteredimage.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldWithCenteredImage_text_field_textfieldwithcenteredimage.png" width="420">
 
 **`TextFieldWithCenteredImage`**
 
@@ -433,11 +396,10 @@ TextFieldWithCenteredImage(
 
 
 <sub>⚠️ Usa <code>rememberLauncherForActivityResult</code> internamente — solo funciona con una <code>Activity</code>/<code>ComponentActivity</code> real detrás (cualquier pantalla normal de la app sirve).</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_switchMF_text_field_switchmf.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_switchMF_text_field_switchmf.png" width="420">
 
 **`SwitchMF`**
 
@@ -449,11 +411,9 @@ SwitchMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_fieldWidget_text_field_fieldwidget.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_fieldWidget_text_field_fieldwidget.png" width="420">
 
 **`FieldWidget`**
 
@@ -469,11 +429,10 @@ FieldWidget(
 
 
 <sub>⚠️ Combina <code>WidgetCounter</code> + <code>dialog/InputTextDialog</code> (ambos incluidos).</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_widgetCounter_widgetcounter.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_widgetCounter_widgetcounter.png" width="420">
 
 **`WidgetCounter`**
 
@@ -490,11 +449,10 @@ WidgetCounter(
 
 
 <sub>⚠️ Vive en <code>ui.components</code> (no en <code>text_field</code>) — es la piecita de <code>FieldWidget</code>, úsala suelta si no necesitas el diálogo de cantidad exacta.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_fieldSearchNumDoc_text_field_fieldsearchnumdoc.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_fieldSearchNumDoc_text_field_fieldsearchnumdoc.png" width="420">
 
 **`FieldSearchNumDoc`**
 
@@ -512,11 +470,10 @@ FieldSearchNumDoc(
 
 
 <sub>⚠️ Rediseñado: el original de MypeFact traía DNI/RUC/SUNAT hardcodeados. Ahora vos armás la validación y el botón vía <code>action</code>.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldCountry_text_field_textfieldcountry.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldCountry_text_field_textfieldcountry.png" width="420">
 
 **`TextFieldCountry`**
 
@@ -529,11 +486,10 @@ TextFieldCountry(
 
 
 <sub>⚠️ Devuelve un <code>Country</code> de <code>country_code_picker/</code> (ver más abajo).</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldPhoneNumberByCountry_text_field_textfieldphonenumberbycountry.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_textFieldPhoneNumberByCountry_text_field_textfieldphonenumberbycountry.png" width="420">
 
 **`TextFieldPhoneNumberByCountry`**
 
@@ -546,16 +502,11 @@ TextFieldPhoneNumberByCountry(
 
 
 <sub>⚠️ <code>showError</code> por defecto es <code>true</code> (igual que el original) — pásale tu propia condición de validez.</sub>
-</td>
-</tr>
-</table>
+
 
 ### Selects (`ui.components.select`)
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectMF_select_selectmf.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectMF_select_selectmf.png" width="420">
 
 **`SelectMF<T>`**
 
@@ -571,11 +522,10 @@ SelectMF(
 
 
 <sub>⚠️ Con más de 5 <code>options</code> muestra buscador automáticamente.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectDialogMF_select_selectdialogmf.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectDialogMF_select_selectdialogmf.png" width="420">
 
 **`SelectDialogMF`**
 
@@ -589,11 +539,10 @@ SelectDialogMF(
 
 
 <sub>⚠️ Solo dibuja el campo — el diálogo de selección lo armas vos y lo abres en <code>onClick</code>.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchDropdownMenu_select_searchdropdownmenu.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchDropdownMenu_select_searchdropdownmenu.png" width="420">
 
 **`SearchDropdownMenu<T>`**
 
@@ -607,16 +556,10 @@ SearchDropdownMenu(
 )
 ```
 
-</td>
-</tr>
-</table>
 
 ### Items (`ui.components.items`)
 
-<table>
-<tr>
-<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemEmptyList_items_itememptylist.png" width="180"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemEmptyList_items_itememptylist.png" width="420">
 
 **`ItemEmptyList`**
 
@@ -624,14 +567,10 @@ SearchDropdownMenu(
 ItemEmptyList()   // o ItemEmptyList("Sin resultados")
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300">
-<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_radioButtonWithBorderSelected_items_radiobuttonwithborder_selected.png" width="300"><br>
-<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_radioButtonWithBorderUnselected_items_radiobuttonwithborder_unselected.png" width="300">
-</td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_radioButtonWithBorderSelected_items_radiobuttonwithborder_selected.png" width="420"><br>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_radioButtonWithBorderUnselected_items_radiobuttonwithborder_unselected.png" width="420">
 
 **`RadioButtonWithBorder`**
 
@@ -643,18 +582,12 @@ RadioButtonWithBorder(
 )
 ```
 
-</td>
-</tr>
-</table>
 
 ### Selector de país / teléfono (`ui.components.country_code_picker`)
 
 Subsistema completo de 10 archivos (enum `Country` con ~240 países, validación y formato de números vía `libphonenumber-android`, bottom sheet y diálogo de selección). Ya era genérico en el original — se migró completo y sin cambios de API.
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_countryCodePicker_country_code_picker_countrycodepicker.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_countryCodePicker_country_code_picker_countrycodepicker.png" width="420">
 
 **`CountryCodePicker`**
 
@@ -667,18 +600,13 @@ CountryCodePicker(
 
 
 <sub>⚠️ Normalmente no lo usas directo — <code>TextFieldPhoneNumberByCountry</code> ya lo trae integrado como <code>leadingIcon</code>.</sub>
-</td>
-</tr>
-</table>
+
 
 La dependencia `io.michaelrocks:libphonenumber-android` va como `implementation` dentro de la librería — no hace falta declararla en tu app, ya viaja incluida.
 
 ### Alertas y diálogos (`ui.components.alerts`, `ui.components.dialog`)
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderDialog_alerts_loaderdialog.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderDialog_alerts_loaderdialog.png" width="420">
 
 **`LoaderDialog`**
 
@@ -688,11 +616,10 @@ LoaderDialog(text = "Cargando…")
 
 
 <sub>⚠️ El ícono gira infinitamente. Trae un ícono de carga bundleado por defecto.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_alertDialog_alerts_alertdialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_alertDialog_alerts_alertdialog.png" width="420">
 
 **`AlertDialog`**
 
@@ -709,11 +636,10 @@ AlertDialog(
 
 
 <sub>⚠️ <code>image</code> es obligatorio (antes se llamaba <code>imageResourceId</code>); el ícono opcional del botón se renombró a <code>buttonIcon</code> para no confundirlos.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_warningDialog_dialog_warningdialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_warningDialog_dialog_warningdialog.png" width="420">
 
 **`WarningDialog`**
 
@@ -727,11 +653,10 @@ WarningDialog(
 
 
 <sub>⚠️ Es el diálogo de confirmación que usa <code>ToolBarMF</code> internamente cuando <code>onShowDialog = true</code>.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_confirmDialog_dialog_confirmdialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_confirmDialog_dialog_confirmdialog.png" width="420">
 
 **`ConfirmDialog`**
 
@@ -745,11 +670,10 @@ ConfirmDialog(
 
 
 <sub>⚠️ Con <code>showTextField = true</code> agrega un <code>TextFieldMF</code> y el motivo llega en <code>onConfirmation</code>.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_nullDialog_dialog_nulldialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_nullDialog_dialog_nulldialog.png" width="420">
 
 **`NullDialog`**
 
@@ -764,16 +688,11 @@ NullDialog(
 
 
 <sub>⚠️ Pensado específicamente para anular/nulificar un comprobante (no es un confirm genérico como <code>ConfirmDialog</code>).</sub>
-</td>
-</tr>
-</table>
+
 
 ### Toolbar (`ui.components.toolbar`)
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toolBarMF_toolbar_toolbarmf.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toolBarMF_toolbar_toolbarmf.png" width="420">
 
 **`ToolBarMF`**
 
@@ -786,9 +705,7 @@ ToolBarMF(
 
 
 <sub>⚠️ Con <code>onShowDialog = true</code> muestra un <code>WarningDialog</code> de confirmación antes de salir (back físico incluido, vía <code>BackHandler</code>). <code>icon</code>/<code>onClickIcon</code> agregan una acción a la derecha.</sub>
-</td>
-</tr>
-</table>
+
 
 ### Restaurante (`ui.components`, `ui.components.dialog`, `ui.components.items`)
 
@@ -797,10 +714,7 @@ Estos son los componentes atados a datos que se dejaron para el final
 ViewModel — ver el modelo genérico [`UiKitProduct` / `UiKitComment`](#modelo-de-datos-genérico-uikitproduct--uikitcomment)
 más abajo.
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableProductList_tableproductlist.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableProductList_tableproductlist.png" width="420">
 
 **`TableProductList`**
 
@@ -813,11 +727,10 @@ TableProductList(
 
 
 <sub>⚠️ Lista + footer con el total. Borra por índice (así era el original) — para borrar por id real, usa la versión de restaurante.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProductRestaurantList_items_itemproductrestaurantlist.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProductRestaurantList_items_itemproductrestaurantlist.png" width="420">
 
 **`ItemProductRestaurantList`**
 
@@ -829,11 +742,9 @@ ItemProductRestaurantList(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantProductList_tablerestaurantproductlist.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantProductList_tablerestaurantproductlist.png" width="420">
 
 **`TableRestaurantProductList`**
 
@@ -846,11 +757,10 @@ TableRestaurantProductList(
 
 
 <sub>⚠️ Expande automáticamente productos con cantidad &gt; 1 en unidades individuales cuando tienen indicaciones distintas (usa <code>RestaurantListUtils.expandProductsWithComments</code>).</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableDialog_dialog_tabledialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableDialog_dialog_tabledialog.png" width="420">
 
 **`TableDialog`**
 
@@ -863,11 +773,9 @@ TableDialog(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantDialog_dialog_tablerestaurantdialog.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantDialog_dialog_tablerestaurantdialog.png" width="420">
 
 **`TableRestaurantDialog`**
 
@@ -880,11 +788,9 @@ TableRestaurantDialog(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_filterDialogMF_dialog_filterdialogmf.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_filterDialogMF_dialog_filterdialogmf.png" width="420">
 
 **`FilterDialogMF<T>`**
 
@@ -899,11 +805,10 @@ FilterDialogMF(
 
 
 <sub>⚠️ Ya era 100% genérico en el original — se migró sin cambios de API.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogInputComment_dialog_dialoginputcomment.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogInputComment_dialog_dialoginputcomment.png" width="420">
 
 **`DialogInputComment`**
 
@@ -921,9 +826,7 @@ DialogInputComment(
 
 
 <sub>⚠️ El más rediseñado del kit: el original recibía un <code>BaseViewModel</code> completo y observaba 4 LiveData. Acá todo el estado de red (comentarios disponibles, guardar uno nuevo) se recibe por parámetro/callback; el estado de tabs/selección sigue siendo interno porque es pura interacción de UI.</sub>
-</td>
-</tr>
-</table>
+
 
 #### Modelo de datos genérico: `UiKitProduct` / `UiKitComment`
 
@@ -984,10 +887,7 @@ envolvían (`ItemProductsUiState`, `ListPriceDialogUiState`,
 `DataPaymentMethodUiState`, `LoaderUiState`) por modelos genéricos — ver
 [Modelos de facturación](#modelos-de-facturación) más abajo.
 
-<table>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProduct_items_itemproduct.png" width="300"></td>
-<td>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProduct_items_itemproduct.png" width="420">
 
 **`ItemProduct`**
 
@@ -1013,11 +913,10 @@ ItemProduct(
 
 
 <sub>⚠️ Card de un producto de catálogo/grilla de selección (distinto de <code>ItemProductList</code>, que muestra una línea ya agregada). Los 4 íconos del footer (editar, comentario, granel, precio por lista) son decorativos y vienen bundleados — no son parámetro, igual que en el original.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogFormFreeProduct_dialog_dialogformfreeproduct.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogFormFreeProduct_dialog_dialogformfreeproduct.png" width="420">
 
 **`DialogFormFreeProduct`**
 
@@ -1034,13 +933,12 @@ DialogFormFreeProduct(
 
 
 <sub>⚠️ Antes construía un <code>ProductEntity</code> completo internamente (moneda fija, prefijo de id, etc.); ahora devuelve un <code>FreeProductFormResult</code> con lo que el usuario ingresó, y tu app arma su propia entidad con eso.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsSeriesOnly_dialog_dialogitemlots_series.png" width="300"><br>
-<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsLotsOnly_dialog_dialogitemlots_lots.png" width="300"><br>
-<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsWithSeries_dialog_dialogitemlots_lotswithseries.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsSeriesOnly_dialog_dialogitemlots_series.png" width="420"><br>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsLotsOnly_dialog_dialogitemlots_lots.png" width="420"><br>
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogItemLotsWithSeries_dialog_dialogitemlots_lotswithseries.png" width="420">
 
 **`DialogItemLots`**
 
@@ -1058,11 +956,10 @@ DialogItemLots(
 
 
 <sub>⚠️ 3 modos según cómo el producto rastrea su stock: solo series, solo lotes, o lotes con series anidadas. A diferencia del original (que recibía y devolvía un <code>ItemProductsUiState</code> completo), acá solo maneja la selección — tu app ya sabe para qué producto abrió el diálogo.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_listPriceDialog_dialog_listpricedialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_listPriceDialog_dialog_listpricedialog.png" width="420">
 
 **`ListPriceDialog`**
 
@@ -1080,11 +977,10 @@ ListPriceDialog(
 
 
 <sub>⚠️ El original elegía entre <code>price1</code>/<code>price2</code>/<code>price3</code> según un <code>priceDefault</code>; acá cada <code>UiKitPriceOption</code> ya trae un único <code>price</code> resuelto — esa selección la hace tu app al mapear.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentCashDialog_dialog_paymentcashdialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentCashDialog_dialog_paymentcashdialog.png" width="420">
 
 **`PaymentCashDialog`**
 
@@ -1105,11 +1001,10 @@ PaymentCashDialog(
 
 
 <sub>⚠️ Reparte el total automáticamente entre las filas de pago que agregues. El original filtraba destinos según si el método era "Transferencia" (lógica de negocio específica) — eso se quitó; tu app filtra <code>listDestination</code> antes de pasarla si lo necesita.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentInstallmentsDialog_dialog_paymentinstallmentsdialog.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_paymentInstallmentsDialog_dialog_paymentinstallmentsdialog.png" width="420">
 
 **`PaymentInstallmentsDialog`**
 
@@ -1126,11 +1021,10 @@ PaymentInstallmentsDialog(
 
 
 <sub>⚠️ Reparte el total entre cuotas automáticamente; cada cuota nueva sugiere la fecha del mes siguiente. <code>dateFormatPattern</code> (default <code>dd/MM/yyyy</code>) es configurable si tu app usa otro formato.</sub>
-</td>
-</tr>
-<tr>
-<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_customTable_customtable.png" width="180"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_customTable_customtable.png" width="420">
 
 **`CustomTable<T>`**
 
@@ -1143,11 +1037,9 @@ CustomTable(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlineIconButtonMF_button_outlineiconbuttonmf.png" width="180"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlineIconButtonMF_button_outlineiconbuttonmf.png" width="420">
 
 **`OutlineIconButtonMF`**
 
@@ -1158,11 +1050,9 @@ OutlineIconButtonMF(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectableCard_items_selectablecard.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectableCard_items_selectablecard.png" width="420">
 
 **`SelectableCard`**
 
@@ -1175,11 +1065,9 @@ SelectableCard(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardPriceMultiple_card_cardpricemultiple.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_cardPriceMultiple_card_cardpricemultiple.png" width="420">
 
 **`CardPriceMultiple`**
 
@@ -1191,11 +1079,9 @@ CardPriceMultiple(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dataClient_card_dataclient.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dataClient_card_dataclient.png" width="420">
 
 **`DataClient`**
 
@@ -1209,11 +1095,9 @@ DataClient(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchButton_card_searchbutton.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_searchButton_card_searchbutton.png" width="420">
 
 **`SearchButton`**
 
@@ -1224,11 +1108,9 @@ SearchButton(
 )
 ```
 
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectSmallMF_select_selectsmallmf.png" width="300"></td>
-<td>
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_selectSmallMF_select_selectsmallmf.png" width="420">
 
 **`SelectSmallMF<T>`**
 
@@ -1243,11 +1125,10 @@ SelectSmallMF(
 
 
 <sub>⚠️ Versión compacta de <code>SelectMF</code> sin título ni buscador — la usan las filas de <code>PaymentCashDialog</code>.</sub>
-</td>
-</tr>
-<tr>
-<td width="180"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderProgressDialog_alerts_loaderprogressdialog.png" width="180"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderProgressDialog_alerts_loaderprogressdialog.png" width="420">
 
 **`LoaderProgressDialog`**
 
@@ -1261,11 +1142,10 @@ LoaderProgressDialog(
 
 
 <sub>⚠️ El original recibía un <code>LoaderUiState</code> completo; acá los 3 campos van directo por parámetro.</sub>
-</td>
-</tr>
-<tr>
-<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_imagePickerComponent_imagepickercomponent.png" width="300"></td>
-<td>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_imagePickerComponent_imagepickercomponent.png" width="420">
 
 **`ImagePickerComponent`**
 
@@ -1277,10 +1157,8 @@ ImagePickerComponent(
 ```
 
 
-<sub>⚠️ Optimiza la foto (resize + orientación EXIF) antes de devolverla. Para tomar foto con cámara tu app necesita declarar su propio <code>FileProvider</code> en el manifest — ver el KDoc del componente. <code>fileProviderAuthority</code> es opcional si no usas la convención <code>"${'$'}{packageName}.fileprovider"</code>.</sub>
-</td>
-</tr>
-</table>
+<sub>⚠️ Optimiza la foto (resize + orientación EXIF) antes de devolverla. Para tomar foto con cámara tu app necesita declarar su propio <code>FileProvider</code> en el manifest — ver el KDoc del componente. <code>fileProviderAuthority</code> es opcional si no usas la convención <code>"{packageName}.fileprovider"</code>.</sub>
+
 
 #### Modelos de facturación
 
