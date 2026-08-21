@@ -50,21 +50,24 @@ Verificado por import real en `ui/screens/restaurant/` (incluye `table/`,
 ### Ya listos para migrar tal cual (sin `data.*` ni `ui.screens.*`)
 | Componente | Paquete origen | Usado en |
 |---|---|---|
-| `ToolBarMF` | `toolbar` | CommandView, SearchDishes, AddTakeAway, AddDelivery, DeliveryDetail |
-| `LoaderDialog` | `alerts` | TakeAwayDetail, SearchDishes, TakeAwayManagement, TableDetail, TableManagement |
-| `AlertDialog` | `alerts` | AddTakeAway, TakeAwayManagement, AddDelivery, DeliveryDetail |
-| `ButtonMF` | `button` | TakeAwayDetail, AddTakeAway, TableManagement, AddDelivery |
-| `ButtonCountProduct` | `button` | SearchDishes |
-| `SmallIconButton` | `button` | TableDetail, GenericRestaurantDetailScreen |
-| `ToggleSelector2` | `button` | AddDelivery |
-| `ButtonOptions` | `button` | DeliveryDetail, GenericRestaurantDetailScreen |
-| `ItemEmptyList` | `items` | TableManagement |
-| `FieldWidget` | `text_field` | TableManagement |
-| `ConfirmDialog` | `dialog` | GenericRestaurantDetailScreen |
-| `NullDialog` | `dialog` | GenericRestaurantDetailScreen |
-| `SmallOutlinedButtonMF` | `button` | TableManagement — **ya migrado** ✅ |
+| `ToolBarMF` | `toolbar` | CommandView, SearchDishes, AddTakeAway, AddDelivery, DeliveryDetail — **migrado** ✅ |
+| `LoaderDialog` | `alerts` | TakeAwayDetail, SearchDishes, TakeAwayManagement, TableDetail, TableManagement — **migrado** ✅ |
+| `AlertDialog` | `alerts` | AddTakeAway, TakeAwayManagement, AddDelivery, DeliveryDetail — **migrado** ✅ |
+| `ButtonMF` | `button` | TakeAwayDetail, AddTakeAway, TableManagement, AddDelivery — **migrado** ✅ |
+| `ButtonCountProduct` | `button` | SearchDishes — **migrado** ✅ |
+| `SmallIconButton` | `button` | TableDetail, GenericRestaurantDetailScreen — migrado en Wave 1 ✅ |
+| `ToggleSelector2` | `button` | AddDelivery — **migrado** ✅ |
+| `ButtonOptions` | `button` | DeliveryDetail, GenericRestaurantDetailScreen — **migrado** ✅ |
+| `ItemEmptyList` | `items` | TableManagement — migrado en Wave 1 ✅ |
+| `FieldWidget` | `text_field` | TableManagement — migrado en Wave 1 ✅ |
+| `ConfirmDialog` | `dialog` | GenericRestaurantDetailScreen — **migrado** ✅ |
+| `NullDialog` | `dialog` | GenericRestaurantDetailScreen — **migrado** ✅ |
+| `SmallOutlinedButtonMF` | `button` | TableManagement — migrado en Wave 1 ✅ |
 
-→ **Wave 2 de migración** (13 componentes, 12 pendientes).
+✅ **Wave 2 completa** — los 13 componentes de esta tabla están migrados,
+compilando y con captura Paparazzi. De paso se migraron 2 dependencias más
+que este grupo arrastraba: `OutlinedButtonMF` (la necesita `ButtonOptions`)
+y `WarningDialog` (la necesita `ToolBarMF`).
 
 ### Necesitan modelo genérico antes de migrarse (`data.*` confirmado)
 | Componente | Depende de | Nota |
@@ -149,11 +152,19 @@ ninguno depende de `data.*` ni `ui.screens.*` — confirmar igual al migrar).
 
 ✅ **Wave 1 completa** — los 16 componentes de `text_field/`+`select/` más el
 bloque `country_code_picker/` (10 archivos) y sus dependencias de soporte
-(`WidgetCounter`, `InputTextDialog`) están migrados y compilando. Detalle en
-el README.
+(`WidgetCounter`, `InputTextDialog`) están migrados y compilando.
 
-Siguiente: **Wave 2** — shell de modo restaurante sin acoplamiento a datos
+✅ **Wave 2 completa** — los 13 componentes del shell de restaurante
 (`ToolBarMF`, `LoaderDialog`, `AlertDialog`, `ButtonMF`, `ButtonCountProduct`,
-`SmallIconButton` ✅ ya migrado, `ToggleSelector2`, `ButtonOptions`,
-`ItemEmptyList` ✅ ya migrado, `FieldWidget` ✅ ya migrado, `ConfirmDialog`,
-`NullDialog`).
+`ToggleSelector2`, `ButtonOptions`, `ConfirmDialog`, `NullDialog`, más
+`OutlinedButtonMF` y `WarningDialog` como dependencias) están migrados,
+compilando y con captura Paparazzi. Detalle de ambos en el README.
+
+Siguiente: **Wave 3** — componentes de restaurante atados a datos
+(`TableProductList`/`BoxItemsProducts`, `FilterDialogMF`,
+`ItemProductRestaurantList`, `TableRestaurantDialog`,
+`TableRestaurantProductList`, `TableDialog`, `DialogInputComment`).
+Requiere definir primero modelos genéricos (`UiKitProduct`, `UiKitWarehouse`,
+`UiKitComment`) — es el trabajo más pesado del roadmap, empezar por los 4
+componentes que solo dependen de `ProductEntity` antes de tocar
+`DialogInputComment` (el más grande, mezcla UI con un ViewModel real).

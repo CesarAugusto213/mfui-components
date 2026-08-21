@@ -19,6 +19,13 @@
     <string name="uikit_quantity_above_stock">La cantidad no puede ser mayor al stock</string>
     <string name="uikit_invalid_quantity">Ingrese un valor válido</string>
     <string name="uikit_quantity_exceeds_stock">El valor ingresado es mayor al stock actual</string>
+    <string name="uikit_items_label">Items</string>
+    <string name="uikit_save">Guardar</string>
+    <string name="uikit_yes">Sí</string>
+    <string name="uikit_no">No</string>
+    <string name="uikit_reason_label">Motivo</string>
+    <string name="uikit_cancellation_reason_label">Motivo de anulación</string>
+    <string name="uikit_exit_without_saving">¿Estás seguro de salir sin guardar?</string>
     <string-array name="uikit_month_abbreviations">
         <item>Ene</item>
         <item>Feb</item>

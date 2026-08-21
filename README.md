@@ -12,10 +12,11 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-**Wave 1 completa** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Wave 1 y Wave 2 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
-- `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`.
+- `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
+  `OutlinedButtonMF`, `ButtonCountProduct`, `ToggleSelector2`, `ButtonOptions`.
 - `items/`: `ItemEmptyList`, `RadioButtonWithBorder`.
 - `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`, `TextFieldDate`,
   `TextFieldDateTime`, `TextFieldMonth`, `TextFieldPlate`, `TextFieldWithCenteredImage`,
@@ -24,19 +25,27 @@ reglas de genericidad y el orden de oleadas.
 - `select/`: `SelectMF`, `SelectDialogMF`, `SearchDropdownMenu`.
 - `country_code_picker/`: las 10 clases completas (selector de país/teléfono,
   ya era un subsistema genérico y autocontenido — solo se le cambió el paquete).
-- Soporte: `WidgetCounter`, `dialog/InputTextDialog` (extraído solo la parte
-  genérica de `DialogInput.kt`, sin el wrapper atado a `ItemProductsUiState`).
+- `alerts/`: `LoaderDialog`, `AlertDialog`.
+- `dialog/`: `WarningDialog`, `ConfirmDialog`, `NullDialog`, `InputTextDialog`
+  (extraído solo la parte genérica de `DialogInput.kt`, sin el wrapper atado a
+  `ItemProductsUiState`).
+- `toolbar/`: `ToolBarMF`.
+- Soporte: `WidgetCounter`.
 
 Código muerto detectado y **no migrado a propósito** (cero imports en todo
 MypeFact — candidatos a borrar allá): `TextFieldPrefix`, `TextFieldPassword`,
 `SelectSmallMF`, `SelectSearchMF`, `CheckboxMF`.
 
-Nuevas dependencias que trajo este wave: `io.michaelrocks:libphonenumber-android`
+Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
 (validación/formato de teléfono) y `androidx.activity:activity-compose`
-(selector de imagen en `TextFieldWithCenteredImage`).
+(selector de imagen en `TextFieldWithCenteredImage`). Wave 2 no agregó
+dependencias nuevas.
 
-Siguiente parada: **Wave 2** — shell de modo restaurante (`ToolBarMF`,
-`LoaderDialog`, `AlertDialog`, `ButtonMF`, `ButtonCountProduct`, etc.).
+Siguiente parada: **Wave 3** — componentes de restaurante que dependen de
+`ProductEntity`/`WarehouseEntity` (`ItemProductRestaurantList`,
+`TableRestaurantDialog`, `TableDialog`, `FilterDialogMF`, `DialogInputComment`)
+— requieren definir primero un modelo genérico de producto/almacén en la
+librería.
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -94,7 +103,7 @@ necesitar emulador ni dispositivo:
 ```
 
 Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
-(26 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
+(37 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
 Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
 como referencia visual — el catálogo de abajo los muestra directo.
 
@@ -158,6 +167,89 @@ SmallIconButton(
 
 
 <sub>⚠️ <code>icon</code> es obligatorio y es un <code>Painter</code>, no un id de recurso.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonMF_button_buttonmf.png" width="300"></td>
+<td>
+
+**`ButtonMF`**
+
+```kotlin
+ButtonMF(
+    text = "Ingresar",
+    onClick = { }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_outlinedButtonMF_button_outlinedbuttonmf.png" width="300"></td>
+<td>
+
+**`OutlinedButtonMF`**
+
+```kotlin
+OutlinedButtonMF(
+    text = "Cancelar",
+    onClick = { }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonCountProduct_button_buttoncountproduct.png" width="300"></td>
+<td>
+
+**`ButtonCountProduct`**
+
+```kotlin
+ButtonCountProduct(
+    onClick = { },
+    quantity = itemsSeleccionados,
+    total = "S/ 50"
+)
+```
+
+
+<sub>⚠️ El ícono derecho por defecto ya viene bundleado (<code>uikit_ic_arrow_right</code>) — pasa <code>icon</code> solo si quieres cambiarlo.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toggleSelector2_button_toggleselector2.png" width="300"></td>
+<td>
+
+**`ToggleSelector2<T>`**
+
+```kotlin
+ToggleSelector2(
+    label = "Selecciona una opción",
+    options = opciones,
+    selectedOption = seleccion,
+    onOptionSelected = { seleccion = it },
+    optionLabel = { it.nombre }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_buttonOptions_button_buttonoptions.png" width="300"></td>
+<td>
+
+**`ButtonOptions`**
+
+```kotlin
+ButtonOptions(
+    onClickCancel = { },
+    onClickSave = { }
+)
+```
+
+
+<sub>⚠️ Combina <code>OutlinedButtonMF</code> (cancelar) + <code>ButtonMF</code> (guardar) en una fila.</sub>
 </td>
 </tr>
 </table>
@@ -563,6 +655,123 @@ CountryCodePicker(
 </table>
 
 La dependencia `io.michaelrocks:libphonenumber-android` va como `implementation` dentro de la librería — no hace falta declararla en tu app, ya viaja incluida.
+
+### Alertas y diálogos (`ui.components.alerts`, `ui.components.dialog`)
+
+<table>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_loaderDialog_alerts_loaderdialog.png" width="300"></td>
+<td>
+
+**`LoaderDialog`**
+
+```kotlin
+LoaderDialog(text = "Cargando…")
+```
+
+
+<sub>⚠️ El ícono gira infinitamente. Trae un ícono de carga bundleado por defecto.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_alertDialog_alerts_alertdialog.png" width="300"></td>
+<td>
+
+**`AlertDialog`**
+
+```kotlin
+AlertDialog(
+    description = "Registro realizado con éxito",
+    image = painterResource(R.drawable.ic_success),
+    onDismissRequest = { },
+    onConfirmation = { },
+    showConfirmationButton = true,
+    buttonSave = "Ok"
+)
+```
+
+
+<sub>⚠️ <code>image</code> es obligatorio (antes se llamaba <code>imageResourceId</code>); el ícono opcional del botón se renombró a <code>buttonIcon</code> para no confundirlos.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_warningDialog_dialog_warningdialog.png" width="300"></td>
+<td>
+
+**`WarningDialog`**
+
+```kotlin
+WarningDialog(
+    description = "¿Seguro que quieres salir sin guardar?",
+    onDismissRequest = { },
+    onConfirmation = { }
+)
+```
+
+
+<sub>⚠️ Es el diálogo de confirmación que usa <code>ToolBarMF</code> internamente cuando <code>onShowDialog = true</code>.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_confirmDialog_dialog_confirmdialog.png" width="300"></td>
+<td>
+
+**`ConfirmDialog`**
+
+```kotlin
+ConfirmDialog(
+    title = "Confirmar cambios",
+    onDismissRequest = { },
+    onConfirmation = { motivo -> }
+)
+```
+
+
+<sub>⚠️ Con <code>showTextField = true</code> agrega un <code>TextFieldMF</code> y el motivo llega en <code>onConfirmation</code>.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_nullDialog_dialog_nulldialog.png" width="300"></td>
+<td>
+
+**`NullDialog`**
+
+```kotlin
+NullDialog(
+    title = "ANULAR",
+    billNumber = "F001-298",
+    onDismissRequest = { },
+    onConfirmation = { motivo -> }
+)
+```
+
+
+<sub>⚠️ Pensado específicamente para anular/nulificar un comprobante (no es un confirm genérico como <code>ConfirmDialog</code>).</sub>
+</td>
+</tr>
+</table>
+
+### Toolbar (`ui.components.toolbar`)
+
+<table>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_toolBarMF_toolbar_toolbarmf.png" width="300"></td>
+<td>
+
+**`ToolBarMF`**
+
+```kotlin
+ToolBarMF(
+    title = "Productos",
+    onReturnScreen = { navController.popBackStack() }
+)
+```
+
+
+<sub>⚠️ Con <code>onShowDialog = true</code> muestra un <code>WarningDialog</code> de confirmación antes de salir (back físico incluido, vía <code>BackHandler</code>). <code>icon</code>/<code>onClickIcon</code> agregan una acción a la derecha.</sub>
+</td>
+</tr>
+</table>
 
 ## Build local
 

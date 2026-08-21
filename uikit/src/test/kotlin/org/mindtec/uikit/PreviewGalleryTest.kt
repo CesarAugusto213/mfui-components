@@ -23,11 +23,21 @@ import com.android.ide.common.rendering.api.SessionParams
 import org.junit.Rule
 import org.junit.Test
 import org.mindtec.uikit.ui.components.WidgetCounter
+import org.mindtec.uikit.ui.components.alerts.AlertDialog
+import org.mindtec.uikit.ui.components.alerts.LoaderDialog
+import org.mindtec.uikit.ui.components.button.ButtonCountProduct
+import org.mindtec.uikit.ui.components.button.ButtonMF
+import org.mindtec.uikit.ui.components.button.ButtonOptions
 import org.mindtec.uikit.ui.components.button.IconButtonMF
+import org.mindtec.uikit.ui.components.button.OutlinedButtonMF
 import org.mindtec.uikit.ui.components.button.SmallIconButton
 import org.mindtec.uikit.ui.components.button.SmallOutlinedButtonMF
+import org.mindtec.uikit.ui.components.button.ToggleSelector2
 import org.mindtec.uikit.ui.components.country_code_picker.Country
 import org.mindtec.uikit.ui.components.country_code_picker.CountryCodePicker
+import org.mindtec.uikit.ui.components.dialog.ConfirmDialog
+import org.mindtec.uikit.ui.components.dialog.NullDialog
+import org.mindtec.uikit.ui.components.dialog.WarningDialog
 import org.mindtec.uikit.ui.components.items.ItemEmptyList
 import org.mindtec.uikit.ui.components.items.RadioButtonWithBorder
 import org.mindtec.uikit.ui.components.select.SearchDropdownMenu
@@ -47,6 +57,7 @@ import org.mindtec.uikit.ui.components.text_field.TextFieldPhoneNumberByCountry
 import org.mindtec.uikit.ui.components.text_field.TextFieldPlate
 import org.mindtec.uikit.ui.components.text_field.TextFieldWithButton
 import org.mindtec.uikit.ui.components.text_field.TextFieldWithCenteredImage
+import org.mindtec.uikit.ui.components.toolbar.ToolBarMF
 import org.mindtec.uikit.ui.theme.white
 import java.math.BigDecimal
 
@@ -347,6 +358,96 @@ class PreviewGalleryTest {
         CountryCodePicker(
             selectedCountry = Country.Peru,
             onCountrySelected = {}
+        )
+    }
+
+    @Test
+    fun buttonMF() = snapshot("button_ButtonMF") {
+        ButtonMF(text = "Ingresar", onClick = {})
+    }
+
+    @Test
+    fun outlinedButtonMF() = snapshot("button_OutlinedButtonMF") {
+        OutlinedButtonMF(text = "Cancelar", onClick = {})
+    }
+
+    @Test
+    fun buttonCountProduct() = snapshot("button_ButtonCountProduct") {
+        ButtonCountProduct(
+            onClick = {},
+            quantity = 10,
+            total = "S/ 50",
+            description = "Items"
+        )
+    }
+
+    @Test
+    fun toggleSelector2() = snapshot("button_ToggleSelector2") {
+        ToggleSelector2(
+            label = "Selecciona una opción",
+            options = listOf("Opción 1", "Opción 2", "Opción 3"),
+            selectedOption = "Opción 1",
+            onOptionSelected = {},
+            optionLabel = { it }
+        )
+    }
+
+    @Test
+    fun buttonOptions() = snapshot("button_ButtonOptions") {
+        ButtonOptions(onClickCancel = {}, onClickSave = {})
+    }
+
+    @Test
+    fun loaderDialog() = snapshot("alerts_LoaderDialog") {
+        LoaderDialog(text = "Cargando…")
+    }
+
+    @Test
+    fun alertDialog() = snapshot("alerts_AlertDialog") {
+        AlertDialog(
+            description = "Registro realizado de forma exitosa",
+            image = painterResource(id = R.drawable.uikit_ic_arrow_down),
+            onDismissRequest = {},
+            onConfirmation = {},
+            showConfirmationButton = true,
+            buttonSave = "Ok"
+        )
+    }
+
+    @Test
+    fun warningDialog() = snapshot("dialog_WarningDialog") {
+        WarningDialog(
+            description = "Tienes cambios sin guardar. ¿Seguro que quieres salir?",
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun confirmDialog() = snapshot("dialog_ConfirmDialog") {
+        ConfirmDialog(
+            title = "Confirmar cambios",
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun nullDialog() = snapshot("dialog_NullDialog") {
+        NullDialog(
+            title = "ANULAR",
+            billNumber = "F001-298",
+            onDismissRequest = {},
+            onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun toolBarMF() = snapshot("toolbar_ToolBarMF") {
+        ToolBarMF(
+            title = "Productos",
+            icon = painterResource(id = R.drawable.uikit_ic_arrow_down),
+            onReturnScreen = {}
         )
     }
 }
