@@ -12,7 +12,7 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-**Waves 1, 2, 3 y 4a completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Waves 1, 2, 3, 4a y 5 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
 - `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
@@ -54,15 +54,21 @@ sí tenía un caller real (`PaymentCashDialog`): `SelectSmallMF` — la nota de
 Siguen sin migrar (cero imports confirmados, candidatos a borrar en MypeFact):
 `TextFieldPrefix`, `TextFieldPassword`, `SelectSearchMF`, `CheckboxMF`.
 
+- `toolbar/`: `AppTopBar` (+ `AppTopBarMenuItem`) — reemplaza a `ToolBarHome`,
+  el único componente con Hilt + `NavHostController` + `Activity`s propias
+  incrustados directo. Ya no depende de ninguno de los tres.
+- `dialog/`: `ProfileDialog` (rediseñado, recibe `logoUri` en vez de leer
+  una ruta fija).
+
 Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
 (validación/formato de teléfono) y `androidx.activity:activity-compose`
 (selector de imagen en `TextFieldWithCenteredImage`). Wave 2 y Wave 3 no
 agregaron dependencias nuevas. Wave 4a agregó `androidx.exifinterface:exifinterface`
-(orientación de fotos en `ImagePickerComponent`).
+(orientación de fotos en `ImagePickerComponent`). Wave 5 no agregó
+dependencias nuevas.
 
 Siguiente parada: **Wave 4b** — resto de uso general no atado a facturación
-(`card/` restante, `alerts/` restante, `dialog/` restante, `items/` restante)
-— y **Wave 5**: `ToolBarHome` (el único caso con Hilt + navegación directos).
+(`card/` restante, `dialog/` restante, `items/` restante, gráficos sueltos).
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -120,7 +126,7 @@ necesitar emulador ni dispositivo:
 ```
 
 Los tests están en `uikit/src/test/kotlin/org/mindtec/uikit/PreviewGalleryTest.kt`
-(61 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
+(63 de los componentes migrados hasta ahora, no los 100% — se puede ampliar).
 Los PNG quedan en `uikit/src/test/snapshots/images/` y están versionados en git
 como referencia visual — el catálogo de abajo los muestra directo.
 
@@ -706,6 +712,64 @@ ToolBarMF(
 
 <sub>⚠️ Con <code>onShowDialog = true</code> muestra un <code>WarningDialog</code> de confirmación antes de salir (back físico incluido, vía <code>BackHandler</code>). <code>icon</code>/<code>onClickIcon</code> agregan una acción a la derecha.</sub>
 
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_appTopBar_toolbar_apptopbar.png" width="420">
+
+**`AppTopBar`**
+
+```kotlin
+AppTopBar(
+    logo = painterResource(R.drawable.mi_logo),
+    menuItems = listOf(
+        AppTopBarMenuItem(
+            id = "catalog",
+            label = "Catálogo",
+            icon = painterResource(R.drawable.ic_catalog),
+            onClick = { /* navegar */ }
+        ),
+        AppTopBarMenuItem(
+            id = "settings",
+            label = "Configuración",
+            icon = painterResource(R.drawable.ic_settings),
+            onClick = { /* navegar */ }
+        )
+    ),
+    bottomMenuItems = listOf(
+        AppTopBarMenuItem(
+            id = "logout",
+            label = "Cerrar sesión",
+            icon = painterResource(R.drawable.ic_logout),
+            color = Color.Red,
+            onClick = { showLogoutConfirm = true }
+        )
+    ),
+    dropdownHeight = 400.dp,   // opcional — sin esto bottomMenuItems no queda pegado abajo
+    onProfileClick = { showProfile = true }
+)
+```
+
+
+<sub>⚠️ Reemplaza a <code>ToolBarHome</code>, el único componente con <code>hiltViewModel()</code> + <code>NavHostController</code> + <code>Activity</code>s propias incrustadas directo en el original. Acá cada <code>AppTopBarMenuItem</code> trae su propio <code>onClick</code> — la navegación, el chequeo de Bluetooth, el logout, etc. los arma tu app al construir la lista. Para el diálogo de "¿cerrar sesión?" no hace falta un componente nuevo — usa <code>WarningDialog(description = "¿Seguro que quieres cerrar sesión?", ...)</code>. Para el popup de perfil, ver <code>ProfileDialog</code> abajo.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_profileDialog_dialog_profiledialog.png" width="420">
+
+**`ProfileDialog`**
+
+```kotlin
+ProfileDialog(
+    name = usuario.nombre,
+    email = usuario.email,
+    domain = usuario.subdominio,
+    logoUri = miLogoUri,   // null = ícono de usuario por defecto
+    onDismissRequest = { showProfile = false }
+)
+```
+
+
+<sub>⚠️ El original leía el logo desde una ruta fija (<code>Constants.IMAGE_PATH</code>); acá tu app pasa su propio <code>logoUri</code>. Vive en <code>ui.components.dialog</code>, no en <code>toolbar</code> — normalmente se abre desde el <code>onProfileClick</code> de <code>AppTopBar</code>.</sub>
 
 ### Restaurante (`ui.components`, `ui.components.dialog`, `ui.components.items`)
 

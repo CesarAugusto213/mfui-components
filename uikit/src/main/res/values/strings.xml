@@ -102,6 +102,13 @@
     <string name="uikit_date">Fecha</string>
     <string name="uikit_add_installment">Agregar cuota</string>
 
+    <!-- ProfileDialog -->
+    <string name="uikit_profile_dialog_title">Mi perfil</string>
+    <string name="uikit_profile_label_name">Nombre</string>
+    <string name="uikit_profile_label_email">Correo</string>
+    <string name="uikit_profile_label_domain">Dominio</string>
+    <string name="uikit_profile_value_unavailable">No disponible</string>
+
     <string-array name="uikit_month_abbreviations">
         <item>Ene</item>
         <item>Feb</item>

@@ -212,8 +212,28 @@ Modelos nuevos en `ui.components.model`: `UiKitPriceOption`, `UiKitSeries`,
 Nueva dependencia: `androidx.exifinterface:exifinterface` (orientación EXIF
 en `ImagePickerComponent`).
 
+✅ **Wave 5 completa** — `ToolBarHome` (el único componente con
+`hiltViewModel()` + `NavHostController` + `Activity`s propias de MypeFact
+incrustados) se separó en:
+
+| Componente | Reemplaza | Nota |
+|---|---|---|
+| `AppTopBar` (+ `AppTopBarMenuItem`) | `ToolBarHome` | Sin ViewModel/nav/Activity — cada `AppTopBarMenuItem` trae su propio `onClick`, la app arma la lista con su navegación real. Se quitó el hack de `Box(width=280.dp, height=680.dp)` con un `Spacer(weight=1f)` fijo para separar "sync/logout" del resto: ahora es `bottomMenuItems` + `dropdownHeight` opcional. También se quitó el guard `enabled`/`selectedOption`/`locked` (lógica de negocio de "hay que sincronizar antes de navegar") — cada `onClick` de la app puede implementarlo si lo necesita. |
+| `ProfileDialog` | `ProfileDialog` (el de MypeFact) | Ya era casi genérico — el único cambio es que `logoUri` entra por parámetro en vez de leerse de `Constants.IMAGE_PATH`. |
+
+**No se migró** `LogOutDialog`: es funcionalmente un `WarningDialog` con
+descripción fija ("¿Está seguro de cerrar sesión?") — portarlo hubiera sido
+duplicar un componente que ya existe en el kit desde Wave 2. La recomendación
+para consumidores queda documentada en el catálogo del README.
+
 Siguiente: **Wave 4b** — resto de uso general no atado a facturación
-(`card/` restante, `alerts/` y `dialog/` restantes, `items/` restante) y
-**Wave 5** — `ToolBarHome` (el único caso con Hilt + navegación directos,
-requiere separarse en un `AppTopBar` genérico + lógica de negocio en cada
-app).
+(`card/` restante: `CardDetails`, `CardDetailsQuotesOrdersList`,
+`CardInventory`, `CardList`, `CardListClient`, `CardListSimple`; `items/`
+restante: `ItemAddProduct`, `ItemCircleReport`, `ItemReportDashboard`;
+gráficos/sueltos de la raíz: `CountSlider`, `CustomLineChart`,
+`ItemLineReport`, `NavigationBottomBar`; `dialog/` restante sin auditar
+acoplamiento todavía: `CreateBillDialog`, `OpenSalesBoxDialog`,
+`ReportsDialog`, `SendEmailDialog`, `StateTypeDialog`, `UbigeoDialog`,
+`WhatsappDialog`). `CalendarDialog`/`CalendarDialogSelection` siguen
+confirmados como código muerto (candidatos a borrar en MypeFact, no a
+migrar).

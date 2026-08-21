@@ -55,6 +55,7 @@ import org.mindtec.uikit.ui.components.dialog.LotsSelectionType
 import org.mindtec.uikit.ui.components.dialog.NullDialog
 import org.mindtec.uikit.ui.components.dialog.PaymentCashDialog
 import org.mindtec.uikit.ui.components.dialog.PaymentInstallmentsDialog
+import org.mindtec.uikit.ui.components.dialog.ProfileDialog
 import org.mindtec.uikit.ui.components.dialog.TableDialog
 import org.mindtec.uikit.ui.components.dialog.TableRestaurantDialog
 import org.mindtec.uikit.ui.components.dialog.WarningDialog
@@ -92,6 +93,8 @@ import org.mindtec.uikit.ui.components.text_field.TextFieldPhoneNumberByCountry
 import org.mindtec.uikit.ui.components.text_field.TextFieldPlate
 import org.mindtec.uikit.ui.components.text_field.TextFieldWithButton
 import org.mindtec.uikit.ui.components.text_field.TextFieldWithCenteredImage
+import org.mindtec.uikit.ui.components.toolbar.AppTopBar
+import org.mindtec.uikit.ui.components.toolbar.AppTopBarMenuItem
 import org.mindtec.uikit.ui.components.toolbar.ToolBarMF
 import org.mindtec.uikit.ui.theme.white
 import java.math.BigDecimal
@@ -815,6 +818,49 @@ class PreviewGalleryTest {
             saveInstallmentsPayment = { _, _ -> },
             onDismissRequest = {},
             onConfirmation = {}
+        )
+    }
+
+    @Test
+    fun appTopBar() = snapshot("toolbar_AppTopBar") {
+        AppTopBar(
+            logo = painterResource(R.drawable.uikit_ic_image),
+            menuItems = listOf(
+                AppTopBarMenuItem(
+                    id = "catalog",
+                    label = "Catálogo",
+                    icon = painterResource(R.drawable.uikit_ic_image),
+                    isSelected = true,
+                    onClick = {}
+                ),
+                AppTopBarMenuItem(
+                    id = "settings",
+                    label = "Configuración",
+                    icon = painterResource(R.drawable.uikit_ic_edit),
+                    onClick = {}
+                )
+            ),
+            bottomMenuItems = listOf(
+                AppTopBarMenuItem(
+                    id = "logout",
+                    label = "Cerrar sesión",
+                    icon = painterResource(R.drawable.uikit_ic_clear),
+                    color = androidx.compose.ui.graphics.Color(0xFFE53935),
+                    onClick = {}
+                )
+            ),
+            dropdownHeight = 260.dp,
+            onProfileClick = {}
+        )
+    }
+
+    @Test
+    fun profileDialog() = snapshot("dialog_ProfileDialog") {
+        ProfileDialog(
+            name = "Juan Pérez",
+            email = "juan.perez@mypefact.com",
+            domain = "miempresa",
+            onDismissRequest = {}
         )
     }
 }
