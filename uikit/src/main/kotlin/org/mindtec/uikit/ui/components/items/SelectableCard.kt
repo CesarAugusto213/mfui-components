@@ -38,11 +38,11 @@ fun SelectableCard(
             .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) purple100 else white
+            containerColor = if (isSelected) UiKitTheme.colors.primaryContainer else white
         ),
         border = BorderStroke(
             1.dp,
-            if (isSelected) purple300 else neutral400
+            if (isSelected) UiKitTheme.colors.primary else neutral400
         )
     ) {
         Column(

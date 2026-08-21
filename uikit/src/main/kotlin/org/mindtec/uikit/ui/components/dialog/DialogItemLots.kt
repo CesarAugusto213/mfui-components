@@ -320,7 +320,7 @@ fun DialogItemLots(
                                             .offset { IntOffset(0, thumbOffsetPx.toInt()) }
                                             .width(4.dp)
                                             .height(with(LocalDensity.current) { thumbHeightPx.toDp() })
-                                            .background(purple300, RoundedCornerShape(2.dp))
+                                            .background(UiKitTheme.colors.primary, RoundedCornerShape(2.dp))
                                     )
                                 }
                             }
@@ -338,7 +338,7 @@ fun DialogItemLots(
                                 LotsSelectionType.LOTS_ONLY ->
                                     stringResource(R.string.uikit_selected_quantity, totalSelected)
                             },
-                            style = Fonts.textRegular(14.sp, purple300)
+                            style = Fonts.textRegular(14.sp, UiKitTheme.colors.primary)
                         )
 
                         Row(
@@ -354,7 +354,7 @@ fun DialogItemLots(
                             ButtonMF(
                                 modifier = Modifier.weight(1f),
                                 text = stringResource(R.string.uikit_confirm),
-                                color = purple300,
+                                color = UiKitTheme.colors.primary,
                                 enabled = totalSelected > 0,
                                 onClick = {
                                     onConfirmation(
@@ -571,7 +571,7 @@ private fun LotsWithSeriesContent(
                         onLotSelectionChanged(lot.id, isChecked)
                     },
                     colors = CheckboxDefaults.colors(
-                        checkedColor = purple300,
+                        checkedColor = UiKitTheme.colors.primary,
                         uncheckedColor = gray,
                         checkmarkColor = Color.White
                     ),
@@ -580,7 +580,7 @@ private fun LotsWithSeriesContent(
 
                 Text(
                     text = if (isExpanded) "▼" else "▲",
-                    style = Fonts.textRegular(16.sp, purple300),
+                    style = Fonts.textRegular(16.sp, UiKitTheme.colors.primary),
                     modifier = Modifier.clickable { onExpandToggle(lot.id) }
                 )
             }
@@ -629,19 +629,19 @@ private fun LotQuantitySelector(
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .background(
-                color = if (selectedQuantity > 0) purple300.copy(alpha = 0.1f) else Color.White,
+                color = if (selectedQuantity > 0) UiKitTheme.colors.primary.copy(alpha = 0.1f) else Color.White,
                 shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 2.dp,
-                color = if (selectedQuantity > 0) purple300 else Color.LightGray,
+                color = if (selectedQuantity > 0) UiKitTheme.colors.primary else Color.LightGray,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(12.dp)
     ) {
         Text(
             text = stringResource(R.string.uikit_lot_label, lotsGroup.code),
-            style = Fonts.textBold(16.sp, if (selectedQuantity > 0) purple300 else Color.DarkGray)
+            style = Fonts.textBold(16.sp, if (selectedQuantity > 0) UiKitTheme.colors.primary else Color.DarkGray)
         )
         Text(
             text = stringResource(R.string.uikit_lot_available_summary, lotsGroup.quantity.toString(), lotsGroup.dateOfDue),

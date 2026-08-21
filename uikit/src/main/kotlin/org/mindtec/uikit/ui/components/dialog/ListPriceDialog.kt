@@ -87,7 +87,7 @@ fun ListPriceDialog(
                 ) {
                     Box(
                         modifier = Modifier
-                            .background(purple300)
+                            .background(UiKitTheme.colors.primary)
                             .fillMaxWidth()
                             .height(30.dp)
                             .padding(8.dp),
@@ -173,7 +173,7 @@ private fun PriceTableHeader() {
         for (item in header) {
             Box(
                 modifier = Modifier
-                    .background(purple300)
+                    .background(UiKitTheme.colors.primary)
                     .weight(2f)
                     .height(30.dp)
                     .padding(8.dp),
@@ -193,7 +193,7 @@ private fun PriceTableHeader() {
 
         Box(
             modifier = Modifier
-                .background(purple300)
+                .background(UiKitTheme.colors.primary)
                 .weight(1.5f)
                 .height(30.dp)
                 .padding(8.dp),

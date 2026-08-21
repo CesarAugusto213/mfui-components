@@ -103,7 +103,7 @@ fun TextFieldMonth(
                     painter = icon,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(purple300)
+                    colorFilter = ColorFilter.tint(UiKitTheme.colors.primary)
                 )
             }
         )
@@ -160,19 +160,19 @@ fun MonthPickerDialog(
                             painter = painterResource(id = R.drawable.uikit_ic_arrow_left),
                             contentDescription = null,
                             modifier = Modifier.size(25.dp),
-                            colorFilter = ColorFilter.tint(purple300),
+                            colorFilter = ColorFilter.tint(UiKitTheme.colors.primary),
                         )
                     }
                     Text(
                         text = selectedYear.toString(),
-                        color = purple300,
+                        color = UiKitTheme.colors.primary,
                     )
                     IconButton(onClick = { selectedYear++ }) {
                         Image(
                             painter = painterResource(id = R.drawable.uikit_ic_arrow_right),
                             contentDescription = null,
                             modifier = Modifier.size(25.dp),
-                            colorFilter = ColorFilter.tint(purple300),
+                            colorFilter = ColorFilter.tint(UiKitTheme.colors.primary),
                         )
                     }
                 }
@@ -192,13 +192,13 @@ fun MonthPickerDialog(
                                 .background(
                                     when {
                                         index > initialMonth && isDisabledMonthFuture -> grayCard.copy(alpha = 0.8f)
-                                        index == selectedMonth -> purple300.copy(alpha = 0.2f)
+                                        index == selectedMonth -> UiKitTheme.colors.primary.copy(alpha = 0.2f)
                                         else -> Color.Transparent
                                     }
                                 )
                                 .border(
                                     width = if (index == selectedMonth) 2.dp else 0.dp,
-                                    color = if (index == selectedMonth) purple300 else Color.Transparent,
+                                    color = if (index == selectedMonth) UiKitTheme.colors.primary else Color.Transparent,
                                     shape = RoundedCornerShape(8.dp)
                                 )
                                 .clickable {
@@ -211,7 +211,7 @@ fun MonthPickerDialog(
                             Text(
                                 text = month,
                                 fontSize = 16.sp,
-                                color = if (index == selectedMonth) purple300 else black
+                                color = if (index == selectedMonth) UiKitTheme.colors.primary else black
                             )
                         }
                     }

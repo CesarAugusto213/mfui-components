@@ -30,7 +30,7 @@ fun IconButtonMF(
     text: String? = null,
     heightSize: Dp = 56.dp,
     onClick: () -> Unit,
-    buttonColor: Color = purple300,
+    buttonColor: Color = UiKitTheme.colors.primary,
     iconColor: Color = white,
     textColor: Color = white
 ) {

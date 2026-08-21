@@ -36,10 +36,10 @@ fun ButtonCountProduct(
     quantity: Int = 0,
     total: String = "S/ 0",
     icon: Painter = painterResource(id = R.drawable.uikit_ic_arrow_right),
-    containerColor: Color = purple300,
+    containerColor: Color = UiKitTheme.colors.primary,
     contentColor: Color = white,
-    borderColor: Color = purple300,
-    boxColor: Color = purple400,
+    borderColor: Color = UiKitTheme.colors.primary,
+    boxColor: Color = UiKitTheme.colors.primaryPressed,
     showIcon: Boolean = true,
     showPrice: Boolean = true
 ) {

@@ -168,7 +168,7 @@ fun DialogFormFreeProduct(
 
                         ButtonMF(
                             text = stringResource(R.string.uikit_label_add_item),
-                            color = purple300,
+                            color = UiKitTheme.colors.primary,
                             textColor = white,
                             icon = painterResource(R.drawable.uikit_ic_add),
                             iconColor = white,

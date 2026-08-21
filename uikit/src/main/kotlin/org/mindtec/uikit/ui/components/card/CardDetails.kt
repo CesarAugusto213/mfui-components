@@ -98,7 +98,7 @@ fun CardDetails(
         ) {
             Text(
                 text = headerText,
-                style = Fonts.textRegular(18.sp, purple200)
+                style = Fonts.textRegular(18.sp, UiKitTheme.colors.secondary)
             )
 
             Image(
@@ -162,7 +162,7 @@ fun CardDetails(
                         painter = calendarIcon,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        colorFilter = ColorFilter.tint(purple200),
+                        colorFilter = ColorFilter.tint(UiKitTheme.colors.secondary),
                     )
 
                     Text(

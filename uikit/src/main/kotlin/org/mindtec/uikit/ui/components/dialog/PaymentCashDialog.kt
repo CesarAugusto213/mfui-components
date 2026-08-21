@@ -131,7 +131,7 @@ fun PaymentCashDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = purple300,
+                            color = UiKitTheme.colors.primary,
                             shape = RoundedCornerShape(
                                 8.dp,
                                 8.dp,
@@ -251,7 +251,7 @@ fun PaymentCashDialog(
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Agregar",
-                            tint = purple300,
+                            tint = UiKitTheme.colors.primary,
                             modifier = Modifier.size(20.dp)
                         )
 
@@ -259,7 +259,7 @@ fun PaymentCashDialog(
 
                         Text(
                             text = stringResource(R.string.uikit_add_payment),
-                            style = Fonts.textRegular(14.sp, purple300)
+                            style = Fonts.textRegular(14.sp, UiKitTheme.colors.primary)
                         )
                     }
 
@@ -285,7 +285,7 @@ fun PaymentCashDialog(
                                 )
                                 Text(
                                     text = "S/ ${total?.restrictDigits() ?: "0.00"}",
-                                    style = Fonts.textSemiBold(14.sp, purple300)
+                                    style = Fonts.textSemiBold(14.sp, UiKitTheme.colors.primary)
                                 )
                             }
 
@@ -305,7 +305,7 @@ fun PaymentCashDialog(
                                     text = "S/ ${totalPayments.restrictDigits()}",
                                     style = Fonts.textSemiBold(
                                         14.sp,
-                                        if (totalPayments.compareTo(total ?: BigDecimal.ZERO) == 0) purple300 else red200
+                                        if (totalPayments.compareTo(total ?: BigDecimal.ZERO) == 0) UiKitTheme.colors.primary else red200
                                     )
                                 )
                             }
@@ -336,8 +336,8 @@ fun PaymentCashDialog(
                             text = stringResource(R.string.uikit_save),
                             textColor = white,
                             textSize = 16.sp,
-                            border = purple300,
-                            background = purple300,
+                            border = UiKitTheme.colors.primary,
+                            background = UiKitTheme.colors.primary,
                             onClick = {
                                 val hasEmptyFields = paymentsList.any {
                                     it.payment == null || it.destination == null ||

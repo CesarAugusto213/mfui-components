@@ -143,7 +143,7 @@ fun PaymentInstallmentsDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = purple300,
+                            color = UiKitTheme.colors.primary,
                             shape = RoundedCornerShape(
                                 8.dp,
                                 8.dp,
@@ -234,14 +234,14 @@ fun PaymentInstallmentsDialog(
                         modifier = Modifier.size(20.dp),
                         imageVector = Icons.Default.Add,
                         contentDescription = "Agregar",
-                        tint = purple300
+                        tint = UiKitTheme.colors.primary
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
                         text = stringResource(R.string.uikit_add_installment),
-                        style = Fonts.textRegular(14.sp, purple300)
+                        style = Fonts.textRegular(14.sp, UiKitTheme.colors.primary)
                     )
                 }
 
@@ -268,8 +268,8 @@ fun PaymentInstallmentsDialog(
                         text = stringResource(R.string.uikit_save),
                         textColor = white,
                         textSize = 18.sp,
-                        border = purple300,
-                        background = purple300,
+                        border = UiKitTheme.colors.primary,
+                        background = UiKitTheme.colors.primary,
                         onClick = {
                             val hasEmptyFields = installmentsList.any {
                                 it.date.isNullOrEmpty() || it.amount.isNullOrEmpty() || it.amount == "0.00"
@@ -324,7 +324,7 @@ private fun SimpleInstallmentRow(
             leadingIcon = {
                 Text(
                     text = "S/",
-                    style = Fonts.textRegular(14.sp, purple300),
+                    style = Fonts.textRegular(14.sp, UiKitTheme.colors.primary),
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }

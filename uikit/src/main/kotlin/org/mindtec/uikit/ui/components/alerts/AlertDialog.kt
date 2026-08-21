@@ -43,7 +43,7 @@ fun AlertDialog(
     subDescription: String? = null,
     subDescriptionColor: TextStyle = Fonts.textBold(18.sp, red200, TextAlign.Center),
     image: Painter,
-    imageColor: Color = purple300,
+    imageColor: Color = UiKitTheme.colors.primary,
     onExtraRequest: () -> Unit = {},
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
@@ -136,7 +136,7 @@ private fun ExitAlertConfirmPreview() {
     AlertDialog(
         description = "¿Deseas continuar?",
         image = painterResource(id = R.drawable.uikit_ic_arrow_down),
-        imageColor = purple300,
+        imageColor = UiKitTheme.colors.primary,
         onDismissRequest = {},
         onConfirmation = {},
         showConfirmationButton = true,

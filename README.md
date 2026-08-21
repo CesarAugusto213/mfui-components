@@ -29,6 +29,38 @@ dependencies {
 }
 ```
 
+## Tema
+
+Los componentes usan un solo grupo de colores de marca — `primary` (botones,
+toolbar, bordes activos), `primaryContainer`/`primaryContainerAlt` (fondos
+claros de badges/chips), `secondary` (acentos de texto) y `primaryPressed`
+(estados presionados). El resto de la paleta (grises, colores de estado)
+es fija.
+
+Para adaptarlos a tu marca, envolvé tu contenido en `UiKitTheme`:
+
+```kotlin
+// Un solo color — el resto de los tonos se generan automáticamente
+UiKitTheme(colors = UiKitColors.fromPrimary(Color(0xFF2196F3))) {
+    // tu contenido
+}
+
+// O con control total sobre cada tono
+UiKitTheme(
+    colors = UiKitColors(
+        primary = Color(0xFF2196F3),
+        primaryContainer = Color(0xFFD6EAFB),
+        primaryContainerAlt = Color(0xFFC7E3F9),
+        secondary = Color(0xFF64B5F6),
+        primaryPressed = Color(0xFF1565C0)
+    )
+) {
+    // tu contenido
+}
+```
+
+Sin envolver nada, se ven exactamente igual que antes (`UiKitColors.Default`).
+
 ## Catálogo de componentes
 
 Captura real de cada componente + lo mínimo que necesita para funcionar. Todos viven en `org.mindtec.uikit.ui.components.*` — el import completo es `org.mindtec.uikit.ui.components.<paquete>.<Nombre>`.

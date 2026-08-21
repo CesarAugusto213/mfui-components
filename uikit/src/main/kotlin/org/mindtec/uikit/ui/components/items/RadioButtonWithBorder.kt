@@ -23,7 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import org.mindtec.uikit.ui.theme.purple300
+import org.mindtec.uikit.ui.theme.UiKitTheme
 import org.mindtec.uikit.utils.Fonts
 
 @Composable
@@ -40,7 +40,7 @@ fun RadioButtonWithBorder(
             .clickable(onClick = onClick)
             .border(
                 width = 2.dp,
-                color = if (isSelected) purple300 else Color.LightGray,
+                color = if (isSelected) UiKitTheme.colors.primary else Color.LightGray,
                 shape = RoundedCornerShape(12.dp)
             )
             .background(
@@ -55,7 +55,7 @@ fun RadioButtonWithBorder(
                 .size(24.dp)
                 .border(
                     width = 2.dp,
-                    color = if (isSelected) purple300 else Color.LightGray,
+                    color = if (isSelected) UiKitTheme.colors.primary else Color.LightGray,
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -65,7 +65,7 @@ fun RadioButtonWithBorder(
                     modifier = Modifier
                         .size(12.dp)
                         .background(
-                            color = purple300,
+                            color = UiKitTheme.colors.primary,
                             shape = CircleShape
                         )
                 )
@@ -78,7 +78,7 @@ fun RadioButtonWithBorder(
                 text = label,
                 style = Fonts.textRegular(
                     fontSize = textSize,
-                    color = if (isSelected) purple300 else Color.DarkGray
+                    color = if (isSelected) UiKitTheme.colors.primary else Color.DarkGray
                 )
             )
 
@@ -88,7 +88,7 @@ fun RadioButtonWithBorder(
                     text = it,
                     style = Fonts.textLight(
                         fontSize = 10.sp,
-                        color = if (isSelected) purple300 else Color.DarkGray
+                        color = if (isSelected) UiKitTheme.colors.primary else Color.DarkGray
                     )
                 )
             }

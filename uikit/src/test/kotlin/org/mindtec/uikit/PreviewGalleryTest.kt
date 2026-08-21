@@ -114,6 +114,8 @@ import org.mindtec.uikit.ui.components.text_field.TextFieldWithCenteredImage
 import org.mindtec.uikit.ui.components.toolbar.AppTopBar
 import org.mindtec.uikit.ui.components.toolbar.AppTopBarMenuItem
 import org.mindtec.uikit.ui.components.toolbar.ToolBarMF
+import org.mindtec.uikit.ui.theme.UiKitColors
+import org.mindtec.uikit.ui.theme.UiKitTheme
 import org.mindtec.uikit.ui.theme.white
 import java.math.BigDecimal
 
@@ -1046,5 +1048,38 @@ class PreviewGalleryTest {
             onDismissRequest = {},
             onConfirmation = {}
         )
+    }
+
+    // ==================== Theming — UiKitColors ====================
+
+    @Test
+    fun themedBlue() = snapshot("theme_UiKitColors_blue") {
+        UiKitTheme(colors = UiKitColors.fromPrimary(androidx.compose.ui.graphics.Color(0xFF2196F3))) {
+            WarningDialog(
+                description = "¿Seguro que quieres salir sin guardar?",
+                onDismissRequest = {},
+                onConfirmation = {}
+            )
+        }
+    }
+
+    @Test
+    fun themedGreen() = snapshot("theme_UiKitColors_green") {
+        UiKitTheme(colors = UiKitColors.fromPrimary(androidx.compose.ui.graphics.Color(0xFF2E7D32))) {
+            androidx.compose.foundation.layout.Column(
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
+            ) {
+                SmallIconButton(
+                    icon = painterResource(R.drawable.uikit_ic_arrow_down),
+                    onClick = {}
+                )
+                RadioButtonWithBorder(
+                    modifier = Modifier.fillMaxWidth(),
+                    isSelected = true,
+                    onClick = {},
+                    label = "Opción seleccionada"
+                )
+            }
+        }
     }
 }

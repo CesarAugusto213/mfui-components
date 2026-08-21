@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.mindtec.uikit.R
-import org.mindtec.uikit.ui.theme.purple300
+import org.mindtec.uikit.ui.theme.UiKitTheme
 import org.mindtec.uikit.utils.Fonts
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -113,7 +113,7 @@ fun TextFieldDateTime(
                     painter = icon,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(purple300)
+                    colorFilter = ColorFilter.tint(UiKitTheme.colors.primary)
                 )
             }
         )

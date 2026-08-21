@@ -96,8 +96,8 @@ fun ConfirmDialog(
                         text = stringResource(R.string.uikit_confirm),
                         textColor = white,
                         textSize = 18.sp,
-                        border = purple300,
-                        background = purple300,
+                        border = UiKitTheme.colors.primary,
+                        background = UiKitTheme.colors.primary,
                         onClick = { onConfirmation.invoke(textFieldValue) }
                     )
                 }

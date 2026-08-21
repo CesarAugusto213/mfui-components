@@ -70,7 +70,7 @@ fun SearchButton(
                     painter = painterResource(id = R.drawable.uikit_ic_arrow_right),
                     contentDescription = null,
                     modifier = Modifier.size(25.dp),
-                    colorFilter = ColorFilter.tint(purple300),
+                    colorFilter = ColorFilter.tint(UiKitTheme.colors.primary),
                 )
             }
         }

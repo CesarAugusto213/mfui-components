@@ -34,7 +34,7 @@ import org.mindtec.uikit.utils.Fonts
 fun LoaderDialog(
     icon: Painter = painterResource(id = R.drawable.uikit_ic_loading),
     text: String? = null,
-    imageColor: Color = purple300,
+    imageColor: Color = UiKitTheme.colors.primary,
     onDismissRequest: () -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")

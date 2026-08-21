@@ -383,7 +383,7 @@ private fun LoaderCustom(isLoading: Boolean) {
                     .rotate(rotation),
                 painter = painterResource(R.drawable.uikit_ic_loading),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(purple300)
+                colorFilter = ColorFilter.tint(UiKitTheme.colors.primary)
             )
         }
     }
@@ -408,8 +408,8 @@ private fun TabsSection(
                     .size(40.dp)
                     .background(
                         color = when {
-                            index == selectedIndex -> purple300
-                            hasComments -> purple100
+                            index == selectedIndex -> UiKitTheme.colors.primary
+                            hasComments -> UiKitTheme.colors.primaryContainer
                             else -> lightGrayPlaceholder
                         },
                         shape = CircleShape
@@ -417,8 +417,8 @@ private fun TabsSection(
                     .border(
                         width = if (index == selectedIndex) 2.dp else 1.dp,
                         color = when {
-                            index == selectedIndex -> purple300
-                            hasComments -> purple150
+                            index == selectedIndex -> UiKitTheme.colors.primary
+                            hasComments -> UiKitTheme.colors.primaryContainerAlt
                             else -> neutral300
                         },
                         shape = CircleShape
@@ -432,7 +432,7 @@ private fun TabsSection(
                         14.sp,
                         when {
                             index == selectedIndex -> white
-                            hasComments -> purple400
+                            hasComments -> UiKitTheme.colors.primaryPressed
                             else -> neutral700
                         }
                     ),
@@ -509,7 +509,7 @@ private fun CommentListSection(
                     .offset { IntOffset(0, thumbOffsetPx.toInt()) }
                     .width(4.dp)
                     .height(with(LocalDensity.current) { thumbHeightPx.toDp() })
-                    .background(purple300, RoundedCornerShape(2.dp))
+                    .background(UiKitTheme.colors.primary, RoundedCornerShape(2.dp))
             )
         }
     }

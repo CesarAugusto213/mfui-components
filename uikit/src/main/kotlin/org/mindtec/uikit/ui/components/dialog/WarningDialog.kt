@@ -66,8 +66,8 @@ fun WarningDialog(
                         text = stringResource(R.string.uikit_no),
                         textSize = 18.sp,
                         textColor = white,
-                        border = purple300,
-                        background = purple300,
+                        border = UiKitTheme.colors.primary,
+                        background = UiKitTheme.colors.primary,
                         onClick = { onDismissRequest.invoke() })
 
                     SmallOutlinedButtonMF(modifier = Modifier

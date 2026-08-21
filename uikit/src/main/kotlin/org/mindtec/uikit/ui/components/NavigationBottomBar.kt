@@ -38,8 +38,8 @@ fun NavigationBottomBar(
                 },
                 onClick = { onItemClick(item) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = purple300,
-                    selectedTextColor = purple300,
+                    selectedIconColor = UiKitTheme.colors.primary,
+                    selectedTextColor = UiKitTheme.colors.primary,
                     indicatorColor = Color.Transparent,
                     unselectedIconColor = grayInactive,
                     unselectedTextColor = grayInactive

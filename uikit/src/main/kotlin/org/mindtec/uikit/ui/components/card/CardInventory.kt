@@ -62,7 +62,7 @@ fun CardInventory(
                 Card {
                     Box(
                         modifier = Modifier
-                            .background(purple300)
+                            .background(UiKitTheme.colors.primary)
                             .widthIn(min = 70.dp)
                             .padding(horizontal = 8.dp, vertical = 4.dp),
                         contentAlignment = Alignment.Center

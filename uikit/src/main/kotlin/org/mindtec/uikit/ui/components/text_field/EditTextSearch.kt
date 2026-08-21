@@ -109,7 +109,7 @@ fun EditTextSearch(
                     painter = painterResource(id = R.drawable.uikit_ic_search),
                     contentDescription = null,
                     modifier = Modifier.size(15.dp),
-                    tint = purple300
+                    tint = UiKitTheme.colors.primary
                 )
             }
         },

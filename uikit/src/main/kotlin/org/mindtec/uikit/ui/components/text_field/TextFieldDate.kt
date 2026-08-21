@@ -117,7 +117,7 @@ fun TextFieldDate(
                     painter = icon,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(purple300)
+                    colorFilter = ColorFilter.tint(UiKitTheme.colors.primary)
                 )
             },
             colors = TextFieldDefaults.colors(

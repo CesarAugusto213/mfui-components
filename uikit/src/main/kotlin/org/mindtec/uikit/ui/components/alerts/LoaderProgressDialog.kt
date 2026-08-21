@@ -64,7 +64,7 @@ fun LoaderProgressDialog(
                         CircularProgressIndicator(
                             modifier = Modifier.size(55.dp),
                             progress = { safeProgress },
-                            color = purple300,
+                            color = UiKitTheme.colors.primary,
                             strokeWidth = 8.dp,
                         )
 

@@ -71,7 +71,7 @@ fun TableHeaderRow(headers: List<String>, weights: List<Float>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(purple300)
+            .background(UiKitTheme.colors.primary)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

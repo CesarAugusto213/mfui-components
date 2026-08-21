@@ -77,7 +77,7 @@ fun TableRestaurantDialog(
                             ButtonMF(
                                 modifier = Modifier.height(50.dp),
                                 text = titleButton,
-                                color = purple300,
+                                color = UiKitTheme.colors.primary,
                                 icon = icon,
                                 onClick = {
                                     onClickButton.invoke()
@@ -87,7 +87,7 @@ fun TableRestaurantDialog(
                             ButtonMF(
                                 modifier = Modifier.height(50.dp),
                                 text = stringResource(R.string.uikit_close),
-                                color = purple300,
+                                color = UiKitTheme.colors.primary,
                                 onClick = {
                                     onDismissRequest.invoke()
                                 }

@@ -109,7 +109,7 @@ fun BoxItemsProducts(
                     .offset { IntOffset(0, thumbOffsetPx.toInt()) }
                     .width(4.dp)
                     .height(with(LocalDensity.current) { thumbHeightPx.toDp() })
-                    .background(purple300, RoundedCornerShape(2.dp))
+                    .background(UiKitTheme.colors.primary, RoundedCornerShape(2.dp))
             )
         }
     }

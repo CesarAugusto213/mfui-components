@@ -46,7 +46,7 @@ fun CountSlider(
 
             Text(
                 text = value.toString(),
-                style = Fonts.textRegular(16.sp, purple400)
+                style = Fonts.textRegular(16.sp, UiKitTheme.colors.primaryPressed)
             )
         }
 

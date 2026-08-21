@@ -82,7 +82,7 @@ fun DataClient(
                         Icon(
                             painter = painterResource(id = R.drawable.uikit_ic_edit),
                             contentDescription = "Edit",
-                            tint = purple300
+                            tint = UiKitTheme.colors.primary
                         )
                     }
                 }

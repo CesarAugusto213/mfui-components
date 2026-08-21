@@ -75,7 +75,7 @@ fun ProfileDialog(
                     modifier = Modifier
                         .size(64.dp)
                         .background(grayCard, CircleShape)
-                        .border(2.dp, purple300, CircleShape),
+                        .border(2.dp, UiKitTheme.colors.primary, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     if (logoUri != null) {
@@ -91,7 +91,7 @@ fun ProfileDialog(
                         Image(
                             modifier = Modifier.size(32.dp),
                             painter = painterResource(id = R.drawable.uikit_ic_user),
-                            colorFilter = ColorFilter.tint(purple300),
+                            colorFilter = ColorFilter.tint(UiKitTheme.colors.primary),
                             contentDescription = null
                         )
                     }

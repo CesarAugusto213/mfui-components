@@ -47,7 +47,7 @@ fun ToolBarMF(
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp)
-            .background(purple300),
+            .background(UiKitTheme.colors.primary),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = {

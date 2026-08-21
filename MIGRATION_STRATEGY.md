@@ -276,3 +276,39 @@ MypeFact, no a migrar): `ItemAddProduct`, `CustomLineChart`,
 Con Waves 1–5 y 4a–4b completas, prácticamente todo lo reutilizable de
 `ui/components/` ya está en la librería. Lo único que falta es lo
 explícitamente descartado arriba por ser demasiado específico.
+
+## Post-migración: theming (`UiKitColors`)
+
+Los 5 tonos de morado (`purple100`...`purple400` en `Color.kt`) eran la
+marca de MypeFact hardcodeada en ~90 archivos — cualquier proyecto que
+usara la librería con otro color primario quedaba con botones/toolbar
+morados sin poder cambiarlos. Se resolvió con `ui/theme/UiKitColors.kt`:
+
+- `UiKitColors` agrupa los 5 roles semánticos (`primary`,
+  `primaryContainer`, `primaryContainerAlt`, `secondary`, `primaryPressed`)
+  que antes eran los 5 morados sueltos.
+- `UiKitTheme(colors = ...)` los expone vía `CompositionLocalProvider`;
+  `UiKitTheme.colors.X` es el accessor (mismo patrón que
+  `MaterialTheme.colorScheme` — un `object UiKitTheme` con la propiedad
+  `@Composable @ReadOnlyComposable` conviviendo con la función
+  `@Composable fun UiKitTheme(...)` del mismo nombre; sí compila en Kotlin).
+- `UiKitColors.fromPrimary(color)` genera los otros 4 tonos mezclando con
+  blanco/negro (`ColorUtils.blendARGB`) — funciona para cualquier hue sin
+  ponerse "sucio", a diferencia de manipular luminosidad HSL directo.
+- Los ~87 usos de `purpleXXX` en componentes se reemplazaron por
+  `UiKitTheme.colors.X` vía script; `UiKitColors.Default` referencia los
+  mismos 5 `val` de `Color.kt`, así que sin envolver en `UiKitTheme` el
+  resultado es pixel-idéntico (verificado: 0 diffs en las 76 capturas de
+  Paparazzi tras el reemplazo).
+- El resto de la paleta (grises, `red200`/`green300`/etc. como colores de
+  estado) se dejó fija a propósito — no suele tener sentido temear un gris
+  neutro o un color de error.
+
+**Cuidado al hacer reemplazos masivos con regex sobre identificadores
+Kotlin**: el primer intento rompió 3 imports específicos (no wildcard) tipo
+`import org.mindtec.uikit.ui.theme.purple300`, que quedaron como
+`import org.mindtec.uikit.ui.theme.UiKitTheme.colors.primary` (inválido).
+El regex no distingue "identificador en código" de "identificador dentro de
+un import path" — hay que grepear imports específicos antes de un
+reemplazo masivo, no asumir que todos los archivos usan `import
+org.mindtec.uikit.ui.theme.*`.

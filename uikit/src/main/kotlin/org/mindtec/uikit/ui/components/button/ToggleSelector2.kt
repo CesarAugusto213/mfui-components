@@ -50,7 +50,7 @@ fun <T> ToggleSelector2(
                     modifier = Modifier
                         .weight(1f)
                         .clickable { onOptionSelected(option) }
-                        .background(if (isSelected) purple300 else neutral200)
+                        .background(if (isSelected) UiKitTheme.colors.primary else neutral200)
                         .padding(vertical = 12.dp),
                     color = if (isSelected) white else black,
                     textAlign = TextAlign.Center

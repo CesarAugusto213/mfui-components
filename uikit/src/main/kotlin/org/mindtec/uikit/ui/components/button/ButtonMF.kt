@@ -105,7 +105,7 @@ private fun ButtonWithIconMFPreview() {
     ButtonMF(
         modifier = Modifier.padding(16.dp),
         text = "Agregar producto",
-        color = purple300,
+        color = UiKitTheme.colors.primary,
         icon = painterResource(id = R.drawable.uikit_ic_arrow_down)
     ) {
     }

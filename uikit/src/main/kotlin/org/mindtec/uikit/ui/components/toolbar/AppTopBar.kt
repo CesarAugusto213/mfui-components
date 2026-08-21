@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import org.mindtec.uikit.R
 import org.mindtec.uikit.ui.theme.black
 import org.mindtec.uikit.ui.theme.grayCard
-import org.mindtec.uikit.ui.theme.purple300
+import org.mindtec.uikit.ui.theme.UiKitTheme
 import org.mindtec.uikit.ui.theme.red200
 import org.mindtec.uikit.ui.theme.white
 
@@ -82,7 +82,7 @@ data class AppTopBarMenuItem(
 fun AppTopBar(
     modifier: Modifier = Modifier,
     logo: Painter? = null,
-    backgroundColor: Color = purple300,
+    backgroundColor: Color = UiKitTheme.colors.primary,
     menuItems: List<AppTopBarMenuItem>,
     bottomMenuItems: List<AppTopBarMenuItem> = emptyList(),
     dropdownWidth: Dp = 280.dp,

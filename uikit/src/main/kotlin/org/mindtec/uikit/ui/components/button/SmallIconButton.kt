@@ -27,9 +27,9 @@ fun SmallIconButton(
     enabled: Boolean = true,
     icon: Painter,
     sizeButton: Dp = 55.5.dp,
-    background: Color = purple300,
+    background: Color = UiKitTheme.colors.primary,
     iconColor: Color = white,
-    stroke: Color = purple300,
+    stroke: Color = UiKitTheme.colors.primary,
     alignment: Alignment = Alignment.BottomEnd,
     onClick: () -> Unit,
 ) {
