@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,9 @@ fun IconButtonMF(
             Text(
                 text = text,
                 color = textColor,
-                style = Fonts.textBold(16.sp, textColor)
+                style = Fonts.textBold(16.sp, textColor),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

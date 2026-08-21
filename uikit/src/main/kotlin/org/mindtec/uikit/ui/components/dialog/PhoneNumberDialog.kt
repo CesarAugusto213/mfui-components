@@ -61,7 +61,7 @@ fun PhoneNumberDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(white)
-                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 0.dp),
+                    .padding(20.dp),
             ) {
                 Text(
                     text = title,
