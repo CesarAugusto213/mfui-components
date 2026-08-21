@@ -15,11 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -81,7 +78,6 @@ data class AppTopBarMenuItem(
  * @param onProfileClick Si es no-null, muestra el ícono de perfil a la
  * derecha y lo llama al tocarlo. Si es null, el ícono no se muestra.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
     modifier: Modifier = Modifier,
@@ -101,48 +97,46 @@ fun AppTopBar(
     }
 
     Box(modifier = modifier) {
-        TopAppBar(
+        // Row propia (no el TopAppBar de Material3) para que el contenido
+        // quede centrado verticalmente sin depender de la altura por
+        // defecto que M3 asume internamente — mismo motivo que ToolBarMF.
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor),
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = if (expanded) R.drawable.uikit_ic_clear else R.drawable.uikit_ic_menu),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(white),
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clickable { expanded = !expanded }
-                    )
-                    Spacer(modifier = Modifier.weight(0.5f))
-                    logo?.let {
-                        Image(
-                            modifier = Modifier.size(150.dp),
-                            painter = it,
-                            contentDescription = null
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    if (onProfileClick != null) {
-                        Image(
-                            painter = painterResource(id = R.drawable.uikit_ic_user),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(white),
-                            modifier = Modifier
-                                .size(28.dp)
-                                .clickable { onProfileClick.invoke() }
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                }
+                .height(56.dp)
+                .background(backgroundColor),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = if (expanded) R.drawable.uikit_ic_clear else R.drawable.uikit_ic_menu),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(white),
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { expanded = !expanded }
+            )
+            Spacer(modifier = Modifier.weight(0.5f))
+            logo?.let {
+                Image(
+                    modifier = Modifier.size(150.dp),
+                    painter = it,
+                    contentDescription = null
+                )
             }
-        )
+            Spacer(modifier = Modifier.weight(1f))
+            if (onProfileClick != null) {
+                Image(
+                    painter = painterResource(id = R.drawable.uikit_ic_user),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(white),
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clickable { onProfileClick.invoke() }
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+        }
 
         DropdownMenu(
             expanded = expanded,

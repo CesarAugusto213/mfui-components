@@ -1,13 +1,12 @@
 package org.mindtec.uikit.ui.components.toolbar
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -26,7 +25,6 @@ import org.mindtec.uikit.R
 import org.mindtec.uikit.ui.components.dialog.WarningDialog
 import org.mindtec.uikit.ui.theme.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolBarMF(
     title: String,
@@ -41,51 +39,54 @@ fun ToolBarMF(
     var showDialogChoose by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
-    TopAppBar(
+    // Row propia (en vez del TopAppBar de Material3) para garantizar que el
+    // título quede centrado verticalmente sin importar la altura que se le
+    // pida — el TopAppBar de M3 asume su altura por defecto (64.dp) para
+    // calcular esa posición y con height(52.dp) el texto quedaba recortado.
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(52.dp),
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = purple300),
-        title = {
-            Text(
-                text = title,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = white
-                )
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                if (enabled && !onShowDialog) {
-                    onReturnScreen.invoke()
-                    enabled = false
-                } else if (onShowDialog) {
-                    enabled = false
-                    showDialogChoose = true
-                }
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.uikit_ic_arrow),
-                    contentDescription = null,
-                    tint = white
-                )
+            .height(52.dp)
+            .background(purple300),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = {
+            if (enabled && !onShowDialog) {
+                onReturnScreen.invoke()
+                enabled = false
+            } else if (onShowDialog) {
+                enabled = false
+                showDialogChoose = true
             }
-        },
-        actions = {
-            icon?.let {
-                IconButton(onClick = { onClickIcon.invoke() }) {
-                    Icon(
-                        painter = it,
-                        contentDescription = null,
-                        tint = white,
-                        modifier = Modifier.padding(end = 20.dp)
-                    )
-                }
+        }) {
+            Icon(
+                painter = painterResource(id = R.drawable.uikit_ic_arrow),
+                contentDescription = null,
+                tint = white
+            )
+        }
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = title,
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                color = white
+            )
+        )
+
+        icon?.let {
+            IconButton(onClick = { onClickIcon.invoke() }) {
+                Icon(
+                    painter = it,
+                    contentDescription = null,
+                    tint = white,
+                    modifier = Modifier.padding(end = 20.dp)
+                )
             }
         }
-    )
+    }
 
     BackHandler {
         if (onShowDialog) {
