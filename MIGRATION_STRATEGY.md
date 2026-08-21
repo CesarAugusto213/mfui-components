@@ -72,17 +72,30 @@ y `WarningDialog` (la necesita `ToolBarMF`).
 ### Necesitan modelo genérico antes de migrarse (`data.*` confirmado)
 | Componente | Depende de | Nota |
 |---|---|---|
-| `TableProductList.kt` (incluye `BoxItemsProducts`) | `ProductEntity` | Usado en DeliveryDetail |
-| `FilterDialogMF` | `WarehouseEntity` | Usado en TableManagement, DeliveryDetail — necesita `UiKitWarehouse` genérico |
-| `ItemProductRestaurantList` | `ProductEntity`, `RestaurantNote` (ver abajo) | Item de producto para mesas |
-| `TableRestaurantDialog` | `ProductEntity` | Usado en SearchDishes |
-| `TableRestaurantProductList` | `ProductEntity` | — |
-| `TableDialog` | `ProductEntity` | — |
-| `DialogInputComment` | `ProductEntity`, `RestaurantNoteResponse`, **+ `BaseViewModel`, `InsertCommentsUiState`, `CommentDialogUiState`** | El más acoplado del grupo: mezcla UI de comentarios de cocina con un ViewModel real. Requiere separar en "UI de selección de notas" (genérico) + lógica de guardado (se queda en la app). Contiene también la `data class RestaurantNote` (línea 598) que debe pasar a ser un modelo genérico de la librería (`UiKitComment` o similar). |
+| `TableProductList.kt` (incluye `BoxItemsProducts`) | `ProductEntity` | Usado en DeliveryDetail — **migrado** ✅ |
+| `FilterDialogMF` | `WarehouseEntity` (solo vía `ShowSelectWarehouse`) | El `FilterDialogMF<T>` en sí ya era 100% genérico — **migrado** ✅. `ShowSelectWarehouse` (wrapper de 15 líneas atado a `WarehouseEntity`) NO se migró, es trivial de recrear en la app consumidora. |
+| `ItemProductRestaurantList` | `ProductEntity`, `RestaurantNote` (ver abajo) | Item de producto para mesas — **migrado** ✅ |
+| `TableRestaurantDialog` | `ProductEntity` | Usado en SearchDishes — **migrado** ✅ |
+| `TableRestaurantProductList` | `ProductEntity` | — **migrado** ✅ |
+| `TableDialog` | `ProductEntity` | — **migrado** ✅ |
+| `DialogInputComment` | `ProductEntity`, `RestaurantNoteResponse`, **+ `BaseViewModel`, `InsertCommentsUiState`, `CommentDialogUiState`** | El más acoplado del grupo — **migrado** ✅, rediseñado: recibe todo por parámetro/callback (`availableComments`, `onRequestNewComment`, `onConfirm`) en vez de un `BaseViewModel`. El estado de tabs/selección se quedó interno por ser pura interacción de UI. |
 
-→ **Wave 3 de migración** (7 componentes; empezar por los 4 de solo
-`ProductEntity`, dejar `DialogInputComment` para el final del wave por ser
-el más grande).
+✅ **Wave 3 completa.** Modelo genérico definido en `ui.components.model`:
+`UiKitProduct` (reemplaza `ProductEntity`), `UiKitComment`/`UiKitCommentGroup`
+(reemplazan `RestaurantNote`/`RestaurantNoteResponse`/`ProductCommentGroup`
+— antes eran 3 clases casi idénticas, ahora 2). `RestaurantUtils.expandProductsWithComments`
+se portó a `utils.RestaurantListUtils` — ya no necesita parsear JSON porque
+`UiKitProduct.commentGroups` llega pre-parseado. También se migraron 2
+dependencias que este grupo arrastraba: `ItemProductList` (usa `TableProductList`)
+y `CloseButton` (usa `TableDialog`/`TableRestaurantDialog`).
+
+Bug encontrado y corregido de paso: `TableProductList`/`TableRestaurantProductList`
+emitían la lista y el footer como dos nodos sueltos (sin un `Column` propio),
+así que solo se apilaban bien por casualidad, porque ambos call sites
+reales (`TableDialog`, `TableRestaurantDialog`) ya los envuelven en un
+`Column`. Se envolvieron en su propio `Column` interno para que funcionen
+igual sin importar el contenedor — mismo patrón de fix que
+`TextFieldPhoneNumberByCountry` en Wave 1.
 
 ---
 
@@ -160,11 +173,16 @@ bloque `country_code_picker/` (10 archivos) y sus dependencias de soporte
 `OutlinedButtonMF` y `WarningDialog` como dependencias) están migrados,
 compilando y con captura Paparazzi. Detalle de ambos en el README.
 
-Siguiente: **Wave 3** — componentes de restaurante atados a datos
+✅ **Wave 3 completa** — los 7 componentes de restaurante atados a datos
 (`TableProductList`/`BoxItemsProducts`, `FilterDialogMF`,
 `ItemProductRestaurantList`, `TableRestaurantDialog`,
-`TableRestaurantProductList`, `TableDialog`, `DialogInputComment`).
-Requiere definir primero modelos genéricos (`UiKitProduct`, `UiKitWarehouse`,
-`UiKitComment`) — es el trabajo más pesado del roadmap, empezar por los 4
-componentes que solo dependen de `ProductEntity` antes de tocar
-`DialogInputComment` (el más grande, mezcla UI con un ViewModel real).
+`TableRestaurantProductList`, `TableDialog`, `DialogInputComment`) están
+migrados sobre el modelo genérico `UiKitProduct`/`UiKitComment`/`UiKitCommentGroup`
+(paquete `ui.components.model`), compilando y con captura Paparazzi. No
+hizo falta un `UiKitWarehouse` — `FilterDialogMF<T>` resultó ser ya
+genérico. `DialogInputComment` quedó completamente libre de ViewModel.
+
+Siguiente: **Wave 4** — resto de uso general (`card/` 9 archivos, `alerts/`
+y `dialog/` restantes, `items/` restante) y **Wave 5** — `ToolBarHome`
+(el único caso con Hilt + navegación directos, requiere separarse en un
+`AppTopBar` genérico + lógica de negocio en cada app).

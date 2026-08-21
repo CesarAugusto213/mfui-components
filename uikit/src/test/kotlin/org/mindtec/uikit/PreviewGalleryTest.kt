@@ -23,6 +23,8 @@ import com.android.ide.common.rendering.api.SessionParams
 import org.junit.Rule
 import org.junit.Test
 import org.mindtec.uikit.ui.components.WidgetCounter
+import org.mindtec.uikit.ui.components.TableProductList
+import org.mindtec.uikit.ui.components.TableRestaurantProductList
 import org.mindtec.uikit.ui.components.alerts.AlertDialog
 import org.mindtec.uikit.ui.components.alerts.LoaderDialog
 import org.mindtec.uikit.ui.components.button.ButtonCountProduct
@@ -36,10 +38,17 @@ import org.mindtec.uikit.ui.components.button.ToggleSelector2
 import org.mindtec.uikit.ui.components.country_code_picker.Country
 import org.mindtec.uikit.ui.components.country_code_picker.CountryCodePicker
 import org.mindtec.uikit.ui.components.dialog.ConfirmDialog
+import org.mindtec.uikit.ui.components.dialog.DialogInputComment
+import org.mindtec.uikit.ui.components.dialog.FilterDialogMF
 import org.mindtec.uikit.ui.components.dialog.NullDialog
+import org.mindtec.uikit.ui.components.dialog.TableDialog
+import org.mindtec.uikit.ui.components.dialog.TableRestaurantDialog
 import org.mindtec.uikit.ui.components.dialog.WarningDialog
 import org.mindtec.uikit.ui.components.items.ItemEmptyList
+import org.mindtec.uikit.ui.components.items.ItemProductRestaurantList
 import org.mindtec.uikit.ui.components.items.RadioButtonWithBorder
+import org.mindtec.uikit.ui.components.model.UiKitComment
+import org.mindtec.uikit.ui.components.model.UiKitProduct
 import org.mindtec.uikit.ui.components.select.SearchDropdownMenu
 import org.mindtec.uikit.ui.components.select.SelectDialogMF
 import org.mindtec.uikit.ui.components.select.SelectMF
@@ -448,6 +457,97 @@ class PreviewGalleryTest {
             title = "Productos",
             icon = painterResource(id = R.drawable.uikit_ic_arrow_down),
             onReturnScreen = {}
+        )
+    }
+
+    private val sampleProducts = listOf(
+        UiKitProduct(
+            id = "1",
+            itemTypeId = "1",
+            description = "HAMBURGUESA CLÁSICA",
+            quantity = BigDecimal(2),
+            unitPrice = BigDecimal("18.50")
+        ),
+        UiKitProduct(
+            id = "2",
+            itemTypeId = "2",
+            description = "GASEOSA 500ML",
+            quantity = BigDecimal.ONE,
+            unitPrice = BigDecimal("5.00")
+        )
+    )
+
+    @Test
+    fun tableProductList() = snapshot("TableProductList") {
+        TableProductList(
+            items = sampleProducts,
+            onClickDelete = {}
+        )
+    }
+
+    @Test
+    fun itemProductRestaurantList() = snapshot("items_ItemProductRestaurantList") {
+        ItemProductRestaurantList(
+            item = sampleProducts.first(),
+            comments = listOf(
+                UiKitComment(id = 1, description = "Sin cebolla", categoryId = 1, isSelected = true)
+            ),
+            onClickDelete = { _, _ -> }
+        )
+    }
+
+    @Test
+    fun tableRestaurantProductList() = snapshot("TableRestaurantProductList") {
+        TableRestaurantProductList(
+            items = sampleProducts,
+            onClickDelete = { _, _ -> }
+        )
+    }
+
+    @Test
+    fun tableDialog() = snapshot("dialog_TableDialog") {
+        TableDialog(
+            items = sampleProducts,
+            onClickButton = {},
+            onDismissRequest = {},
+            onClickDelete = {}
+        )
+    }
+
+    @Test
+    fun tableRestaurantDialog() = snapshot("dialog_TableRestaurantDialog") {
+        TableRestaurantDialog(
+            items = sampleProducts,
+            onClickButton = {},
+            onDismissRequest = {},
+            onClickDelete = { _, _ -> }
+        )
+    }
+
+    @Test
+    fun filterDialogMF() = snapshot("dialog_FilterDialogMF") {
+        FilterDialogMF(
+            options = listOf("Almacén Central", "Almacén Norte", "Almacén Sur"),
+            selectedOption = "Almacén Central",
+            setLabel = { it }
+        )
+    }
+
+    @Test
+    fun dialogInputComment() = snapshot("dialog_DialogInputComment") {
+        DialogInputComment(
+            product = sampleProducts.first(),
+            quantity = 2,
+            category = "Hamburguesas",
+            availableComments = listOf(
+                UiKitComment(id = 1, description = "Sin cebolla", categoryId = 1),
+                UiKitComment(id = 2, description = "Sin tomate", categoryId = 1),
+                UiKitComment(id = 3, description = "Extra queso", categoryId = 1),
+                UiKitComment(id = 4, description = "Para llevar", categoryId = 1)
+            ),
+            onDismissRequest = {},
+            onRequestNewComment = { _, _ -> },
+            onConfirm = { _, _ -> }
         )
     }
 }

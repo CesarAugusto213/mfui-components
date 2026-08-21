@@ -12,12 +12,13 @@ reglas de genericidad y el orden de oleadas.
 
 ## Estado actual
 
-**Wave 1 y Wave 2 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
+**Waves 1, 2 y 3 completas** (ver `MIGRATION_STRATEGY.md`). Migrados y compilando:
 
 - Tema base: `Color.kt`, `Fonts.kt`, `UiKitTheme.kt`.
 - `button/`: `SmallOutlinedButtonMF`, `IconButtonMF`, `SmallIconButton`, `ButtonMF`,
   `OutlinedButtonMF`, `ButtonCountProduct`, `ToggleSelector2`, `ButtonOptions`.
-- `items/`: `ItemEmptyList`, `RadioButtonWithBorder`.
+- `items/`: `ItemEmptyList`, `RadioButtonWithBorder`, `ItemProductList`,
+  `ItemProductRestaurantList`.
 - `text_field/`: `TextFieldMF`, `SearchSection`, `EditTextSearch`, `TextFieldDate`,
   `TextFieldDateTime`, `TextFieldMonth`, `TextFieldPlate`, `TextFieldWithCenteredImage`,
   `TextFieldWithButton`, `SwitchMF`, `FieldWidget`, `FieldSearchNumDoc` (rediseñado,
@@ -28,9 +29,15 @@ reglas de genericidad y el orden de oleadas.
 - `alerts/`: `LoaderDialog`, `AlertDialog`.
 - `dialog/`: `WarningDialog`, `ConfirmDialog`, `NullDialog`, `InputTextDialog`
   (extraído solo la parte genérica de `DialogInput.kt`, sin el wrapper atado a
-  `ItemProductsUiState`).
+  `ItemProductsUiState`), `FilterDialogMF`, `TableDialog`, `TableRestaurantDialog`,
+  `DialogInputComment` (rediseñado, sin ViewModel).
 - `toolbar/`: `ToolBarMF`.
-- Soporte: `WidgetCounter`.
+- Soporte: `WidgetCounter`, `TableProductList`, `TableRestaurantProductList`,
+  `CloseButton`.
+- `model/`: `UiKitProduct`, `UiKitComment`, `UiKitCommentGroup`,
+  `ExpandedUiKitProduct` — el modelo genérico que reemplaza a
+  `ProductEntity`/`RestaurantNote`/`ProductCommentGroup` (detalle en el
+  catálogo, sección Restaurante).
 
 Código muerto detectado y **no migrado a propósito** (cero imports en todo
 MypeFact — candidatos a borrar allá): `TextFieldPrefix`, `TextFieldPassword`,
@@ -38,14 +45,12 @@ MypeFact — candidatos a borrar allá): `TextFieldPrefix`, `TextFieldPassword`,
 
 Nuevas dependencias que trajo Wave 1: `io.michaelrocks:libphonenumber-android`
 (validación/formato de teléfono) y `androidx.activity:activity-compose`
-(selector de imagen en `TextFieldWithCenteredImage`). Wave 2 no agregó
-dependencias nuevas.
+(selector de imagen en `TextFieldWithCenteredImage`). Wave 2 y Wave 3 no
+agregaron dependencias nuevas.
 
-Siguiente parada: **Wave 3** — componentes de restaurante que dependen de
-`ProductEntity`/`WarehouseEntity` (`ItemProductRestaurantList`,
-`TableRestaurantDialog`, `TableDialog`, `FilterDialogMF`, `DialogInputComment`)
-— requieren definir primero un modelo genérico de producto/almacén en la
-librería.
+Siguiente parada: **Wave 4** — resto de uso general (`card/`, `alerts/`
+restante, `dialog/` restante, `items/` restante) — y **Wave 5**:
+`ToolBarHome` (el único caso con Hilt + navegación directos).
 
 ## Convención de paquetes (para migrar componentes fácil)
 
@@ -772,6 +777,187 @@ ToolBarMF(
 </td>
 </tr>
 </table>
+
+### Restaurante (`ui.components`, `ui.components.dialog`, `ui.components.items`)
+
+Estos son los componentes atados a datos que se dejaron para el final
+(Wave 3). Ya no dependen de `ProductEntity`/`WarehouseEntity` ni de ningún
+ViewModel — ver el modelo genérico [`UiKitProduct` / `UiKitComment`](#modelo-de-datos-genérico-uikitproduct--uikitcomment)
+más abajo.
+
+<table>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableProductList_tableproductlist.png" width="300"></td>
+<td>
+
+**`TableProductList`**
+
+```kotlin
+TableProductList(
+    items = productos, // List<UiKitProduct>
+    onClickDelete = { index -> }
+)
+```
+
+
+<sub>⚠️ Lista + footer con el total. Borra por índice (así era el original) — para borrar por id real, usa la versión de restaurante.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_itemProductRestaurantList_items_itemproductrestaurantlist.png" width="300"></td>
+<td>
+
+**`ItemProductRestaurantList`**
+
+```kotlin
+ItemProductRestaurantList(
+    item = producto,
+    comments = indicaciones, // List<UiKitComment>
+    onClickDelete = { id, commentIndex -> }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantProductList_tablerestaurantproductlist.png" width="300"></td>
+<td>
+
+**`TableRestaurantProductList`**
+
+```kotlin
+TableRestaurantProductList(
+    items = productos,
+    onClickDelete = { id, commentIndex -> }
+)
+```
+
+
+<sub>⚠️ Expande automáticamente productos con cantidad &gt; 1 en unidades individuales cuando tienen indicaciones distintas (usa <code>RestaurantListUtils.expandProductsWithComments</code>).</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableDialog_dialog_tabledialog.png" width="300"></td>
+<td>
+
+**`TableDialog`**
+
+```kotlin
+TableDialog(
+    items = productos,
+    onClickButton = { /* ir a editar */ },
+    onDismissRequest = { },
+    onClickDelete = { index -> }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_tableRestaurantDialog_dialog_tablerestaurantdialog.png" width="300"></td>
+<td>
+
+**`TableRestaurantDialog`**
+
+```kotlin
+TableRestaurantDialog(
+    items = productos,
+    onClickButton = { /* agregar más productos */ },
+    onDismissRequest = { },
+    onClickDelete = { id, commentIndex -> }
+)
+```
+
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_filterDialogMF_dialog_filterdialogmf.png" width="300"></td>
+<td>
+
+**`FilterDialogMF<T>`**
+
+```kotlin
+FilterDialogMF(
+    options = almacenes,
+    selectedOption = seleccionado,
+    setLabel = { it.nombre },
+    onClick = { seleccionado = it }
+)
+```
+
+
+<sub>⚠️ Ya era 100% genérico en el original — se migró sin cambios de API.</sub>
+</td>
+</tr>
+<tr>
+<td width="300"><img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogInputComment_dialog_dialoginputcomment.png" width="300"></td>
+<td>
+
+**`DialogInputComment`**
+
+```kotlin
+DialogInputComment(
+    product = producto,
+    quantity = 2,
+    category = "Hamburguesas",
+    availableComments = indicacionesDisponibles,
+    onDismissRequest = { },
+    onRequestNewComment = { categoria, texto -> /* guardar y refrescar */ },
+    onConfirm = { producto, gruposDeComentarios -> /* persistir */ }
+)
+```
+
+
+<sub>⚠️ El más rediseñado del kit: el original recibía un <code>BaseViewModel</code> completo y observaba 4 LiveData. Acá todo el estado de red (comentarios disponibles, guardar uno nuevo) se recibe por parámetro/callback; el estado de tabs/selección sigue siendo interno porque es pura interacción de UI.</sub>
+</td>
+</tr>
+</table>
+
+#### Modelo de datos genérico: `UiKitProduct` / `UiKitComment`
+
+Reemplaza a `ProductEntity` (Room), `RestaurantNote`/`RestaurantNoteResponse`
+y `ProductCommentGroup` del proyecto original. Tu app mapea su propia
+entidad a esto antes de pasarlo a cualquier componente de esta sección —
+ahí es donde va la lógica específica de tu proyecto (ej. cómo armar el
+texto de presentación, qué usar como id cuando el producto es local/offline).
+
+```kotlin
+data class UiKitProduct(
+    val id: String,               // antes: if (id == 0) internalId else id.toString()
+    val itemTypeId: String,       // antes: itemId — clave para agrupar unidades del mismo producto
+    val description: String,      // ya resuelto, incluye cualquier sufijo de presentación
+    val quantity: BigDecimal,      // antes: auxQuantity (String)
+    val unitPrice: BigDecimal,     // antes: saleUnitPrice (String)
+    val imageUrl: String? = null,
+    val commentGroups: List<UiKitCommentGroup> = emptyList() // antes: JSON en `comment`
+)
+
+data class UiKitComment(
+    val id: Int,
+    val description: String,
+    val categoryId: Int,
+    val isSelected: Boolean = false
+)
+
+data class UiKitCommentGroup(
+    val itemIndex: Int,
+    val comments: List<UiKitComment> = emptyList()
+)
+```
+
+Ejemplo de mapeo desde una entidad Room propia:
+
+```kotlin
+fun MyProductEntity.toUiKitProduct() = UiKitProduct(
+    id = if (id == 0) internalId else id.toString(),
+    itemTypeId = itemId.toString(),
+    description = description ?: "",
+    quantity = auxQuantity.toBigDecimal(),
+    unitPrice = saleUnitPrice.toBigDecimal(),
+    imageUrl = image,
+    commentGroups = comment?.let { json.decodeFromString(it) } ?: emptyList()
+)
+```
 
 ## Build local
 
