@@ -66,7 +66,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "org.mindtec.uikit"
                 artifactId = "uikit"
-                version = "0.1.0"
+                version = "0.2.0"
             }
         }
     }
