@@ -14,10 +14,8 @@ import org.mindtec.uikit.ui.components.model.UiKitNavItem
 import org.mindtec.uikit.ui.theme.*
 
 /**
- * Barra de navegación inferior. Reemplaza a `NavigationBottomBar`, que traía
- * hardcodeadas las 5 pantallas de MypeFact vía `Utils.navigationItems` +
- * `NavigationBottomBarRouter` — acá la app arma su propia lista de
- * [UiKitNavItem].
+ * Barra de navegación inferior. La app arma su propia lista de
+ * [UiKitNavItem] — no hay pantallas fijas hardcodeadas.
  */
 @Composable
 fun NavigationBottomBar(

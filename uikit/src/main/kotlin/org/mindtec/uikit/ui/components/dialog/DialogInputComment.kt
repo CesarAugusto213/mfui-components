@@ -77,12 +77,11 @@ import org.mindtec.uikit.utils.Fonts
  * Selector de indicaciones de cocina para un producto (ej. "sin cebolla"),
  * con tabs por unidad cuando la cantidad es mayor a 1.
  *
- * A diferencia del original de MypeFact (que recibía un `BaseViewModel` y
- * observaba 4 LiveData distintos), acá todo el estado que dependía de red
- * se recibe por parámetro y sale por callbacks — el "listar comentarios
- * por categoría" y "guardar comentario nuevo" son responsabilidad de la
- * app que usa el componente. El estado de selección/tabs/modo-de-escritura
- * sigue siendo interno porque es pura interacción de UI.
+ * Todo el estado que depende de red (listar comentarios por categoría,
+ * guardar uno nuevo) se recibe por parámetro y sale por callbacks —
+ * responsabilidad de la app que usa el componente. El estado de
+ * selección/tabs/modo-de-escritura es interno, por ser pura interacción
+ * de UI.
  *
  * @param product Producto para el que se están eligiendo indicaciones.
  * @param quantity Cantidad de unidades del producto (define cuántos tabs

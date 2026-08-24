@@ -25,11 +25,10 @@ import org.mindtec.uikit.utils.Fonts
 
 /**
  * Campo numérico para documentos (DNI/RUC/pasaporte/etc.) con una acción
- * opcional a la derecha (ej. un botón de búsqueda). A diferencia del
- * original de MypeFact, no asume qué tipos de documento existen ni sus
- * longitudes (eso era específico de Perú/SUNAT) — el caller decide
- * [requiredLength] y arma su propio [action] (botón, validación y mensajes
- * de error incluidos).
+ * opcional a la derecha (ej. un botón de búsqueda). No asume qué tipos de
+ * documento existen ni sus longitudes — el caller decide [requiredLength]
+ * y arma su propio [action] (botón, validación y mensajes de error
+ * incluidos).
  */
 @Composable
 fun FieldSearchNumDoc(

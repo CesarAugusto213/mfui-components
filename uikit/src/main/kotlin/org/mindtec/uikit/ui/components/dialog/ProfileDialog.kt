@@ -36,9 +36,8 @@ import org.mindtec.uikit.utils.Fonts
 
 /**
  * Popup de perfil que suele abrirse desde el ícono de usuario de
- * [org.mindtec.uikit.ui.components.toolbar.AppTopBar]. Reemplaza al
- * `ProfileDialog` original, que leía el logo desde `Constants.IMAGE_PATH`
- * (una ruta fija de MypeFact) — acá la app pasa su propia [logoUri].
+ * [org.mindtec.uikit.ui.components.toolbar.AppTopBar]. [logoUri] es
+ * opcional — si es `null` se muestra un ícono de usuario por defecto.
  *
  * @param unavailableLabel Texto a mostrar cuando un campo llega `null` o
  * vacío (el original tenía un string fijo `profile_value_unavailable`).

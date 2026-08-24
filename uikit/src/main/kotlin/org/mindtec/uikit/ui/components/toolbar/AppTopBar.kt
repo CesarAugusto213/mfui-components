@@ -58,9 +58,7 @@ data class AppTopBarMenuItem(
  * Toolbar principal de la app: botón de menú hamburguesa que abre un
  * dropdown, logo centrado opcional y acceso a perfil opcional a la derecha.
  *
- * Reemplaza a `ToolBarHome` del proyecto original, que traía `hiltViewModel()`,
- * `NavHostController` y llamadas directas a `Activity`s propias de MypeFact
- * incrustadas. Acá todo eso se hoistea: cada [AppTopBarMenuItem] trae su
+ * Sin ViewModel ni navegación acoplados: cada [AppTopBarMenuItem] trae su
  * propio `onClick`, así que la navegación/lógica de negocio (ir a un
  * `Activity`, chequear Bluetooth, cerrar sesión, etc.) la arma la app al
  * construir la lista de ítems — [AppTopBar] solo dibuja el menú.

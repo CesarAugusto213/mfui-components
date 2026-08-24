@@ -13,9 +13,8 @@ import java.io.FileOutputStream
 
 /**
  * Utilidades de imagen usadas por [org.mindtec.uikit.ui.components.ImagePickerComponent]
- * para optimizar fotos de cámara/galería antes de subirlas (resize + respeto
- * de orientación EXIF). Portado del `FileUtils` original de MypeFact,
- * quitando las partes atadas a ese proyecto (Crashlytics, `Constants`, etc.).
+ * para optimizar fotos de cámara/galería antes de subirlas (resize +
+ * respeto de orientación EXIF).
  */
 object ImageUtils {
 
