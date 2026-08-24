@@ -25,7 +25,7 @@ Y en el `build.gradle.kts` del módulo de la app:
 
 ```kotlin
 dependencies {
-    implementation("com.github.CesarAugusto213:mfui-components:v0.2.0")
+    implementation("com.github.CesarAugusto213:mfui-components:v0.3.0")
 }
 ```
 
