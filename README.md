@@ -644,6 +644,7 @@ ToolBarMF(
 ```kotlin
 AppTopBar(
     logo = painterResource(R.drawable.mi_logo),
+    // title = "Mi Negocio",   // alternativa a logo (ver abajo) — logo tiene prioridad si pasas ambos
     menuItems = listOf(
         AppTopBarMenuItem(
             id = "catalog",
@@ -674,6 +675,23 @@ AppTopBar(
 
 
 <sub>⚠️ Sin ViewModel ni navegación acoplados — cada <code>AppTopBarMenuItem</code> trae su propio <code>onClick</code> (navegación, checks, lo que necesites). Para el diálogo de "¿cerrar sesión?" usa <code>WarningDialog(description = "¿Seguro que quieres cerrar sesión?", ...)</code>. Para el popup de perfil, ver <code>ProfileDialog</code> abajo.</sub>
+
+---
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_appTopBarWithTitle_toolbar_apptopbar_title.png" width="420">
+
+**`AppTopBar` con texto en vez de logo**
+
+```kotlin
+AppTopBar(
+    title = "Mi Negocio",
+    menuItems = listOf( /* ... */ ),
+    onProfileClick = { showProfile = true }
+)
+```
+
+
+<sub>⚠️ <code>title</code> es la alternativa a <code>logo</code> para apps sin logo gráfico — se ignora si pasas <code>logo</code>. El ícono de menú, el contenido central (logo o título) y el ícono de perfil quedan cada uno alineados a su costado/centro de forma independiente, así que el centro siempre queda centrado respecto al ancho total, sin importar el tamaño de los ítems de los costados.</sub>
 
 ---
 

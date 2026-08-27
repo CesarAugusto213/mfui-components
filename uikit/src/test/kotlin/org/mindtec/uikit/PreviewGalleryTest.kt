@@ -875,6 +875,29 @@ class PreviewGalleryTest {
     }
 
     @Test
+    fun appTopBarWithTitle() = snapshot("toolbar_AppTopBar_title") {
+        AppTopBar(
+            title = "Mi Negocio",
+            menuItems = listOf(
+                AppTopBarMenuItem(
+                    id = "catalog",
+                    label = "Catálogo",
+                    icon = painterResource(R.drawable.uikit_ic_image),
+                    isSelected = true,
+                    onClick = {}
+                ),
+                AppTopBarMenuItem(
+                    id = "settings",
+                    label = "Configuración",
+                    icon = painterResource(R.drawable.uikit_ic_edit),
+                    onClick = {}
+                )
+            ),
+            onProfileClick = {}
+        )
+    }
+
+    @Test
     fun profileDialog() = snapshot("dialog_ProfileDialog") {
         ProfileDialog(
             name = "Juan Pérez",

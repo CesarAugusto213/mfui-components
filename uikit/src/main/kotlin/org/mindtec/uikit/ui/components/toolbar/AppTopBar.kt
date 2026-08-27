@@ -3,10 +3,8 @@ package org.mindtec.uikit.ui.components.toolbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,16 +26,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.mindtec.uikit.R
 import org.mindtec.uikit.ui.theme.black
 import org.mindtec.uikit.ui.theme.grayCard
 import org.mindtec.uikit.ui.theme.UiKitTheme
 import org.mindtec.uikit.ui.theme.red200
 import org.mindtec.uikit.ui.theme.white
+import org.mindtec.uikit.utils.Fonts
 
 /**
  * Un ítem del menú desplegable de [AppTopBar].
@@ -68,7 +69,10 @@ data class AppTopBarMenuItem(
  * descripción que quieras. Para el popup de perfil, ver
  * [org.mindtec.uikit.ui.components.dialog.ProfileDialog].
  *
- * @param logo Logo/ícono centrado del toolbar (opcional).
+ * @param logo Logo/ícono centrado del toolbar (opcional). Tiene prioridad
+ * sobre [title] si se pasan ambos.
+ * @param title Texto centrado del toolbar — alternativa a [logo] para apps
+ * sin logo gráfico (opcional). Se ignora si [logo] es no-null.
  * @param menuItems Ítems del menú desplegable, en orden.
  * @param bottomMenuItems Ítems que se muestran separados al fondo del menú
  * (ej. "Sincronizar" / "Cerrar sesión") — solo se separan visualmente si
@@ -80,6 +84,7 @@ data class AppTopBarMenuItem(
 fun AppTopBar(
     modifier: Modifier = Modifier,
     logo: Painter? = null,
+    title: String? = null,
     backgroundColor: Color = UiKitTheme.colors.primary,
     menuItems: List<AppTopBarMenuItem>,
     bottomMenuItems: List<AppTopBarMenuItem> = emptyList(),
@@ -95,45 +100,57 @@ fun AppTopBar(
     }
 
     Box(modifier = modifier) {
-        // Row propia (no el TopAppBar de Material3) para que el contenido
-        // quede centrado verticalmente sin depender de la altura por
-        // defecto que M3 asume internamente — mismo motivo que ToolBarMF.
-        Row(
+        // Box propio (no Row+weight ni el TopAppBar de Material3): con
+        // weight, el ancho del ícono de menú (40.dp) y el de perfil
+        // (28.dp) desbalanceaban el espacio repartido a cada lado del
+        // centro, así que el logo/título nunca quedaba realmente
+        // centrado. Alineando cada ítem por separado (CenterStart/
+        // Center/CenterEnd) dentro del mismo Box, el contenido central
+        // queda centrado respecto al ancho total sin importar el tamaño
+        // de los ítems de los costados.
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .background(backgroundColor),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+                .background(backgroundColor)
+                .padding(horizontal = 16.dp)
         ) {
             Image(
                 painter = painterResource(id = if (expanded) R.drawable.uikit_ic_clear else R.drawable.uikit_ic_menu),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(white),
                 modifier = Modifier
+                    .align(Alignment.CenterStart)
                     .size(40.dp)
                     .clickable { expanded = !expanded }
             )
-            Spacer(modifier = Modifier.weight(0.5f))
-            logo?.let {
-                Image(
-                    modifier = Modifier.size(150.dp),
-                    painter = it,
+            when {
+                logo != null -> Image(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(150.dp),
+                    painter = logo,
                     contentDescription = null
                 )
+                title != null -> Text(
+                    text = title,
+                    modifier = Modifier.align(Alignment.Center),
+                    style = Fonts.textSemiBold(fontSize = 18.sp, color = white),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-            Spacer(modifier = Modifier.weight(1f))
             if (onProfileClick != null) {
                 Image(
                     painter = painterResource(id = R.drawable.uikit_ic_user),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(white),
                     modifier = Modifier
+                        .align(Alignment.CenterEnd)
                         .size(28.dp)
                         .clickable { onProfileClick.invoke() }
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
         }
 
         DropdownMenu(
