@@ -80,9 +80,11 @@ import org.mindtec.uikit.ui.components.items.ItemReportDashboard
 import org.mindtec.uikit.ui.components.items.RadioButtonWithBorder
 import org.mindtec.uikit.ui.components.items.SelectableCard
 import org.mindtec.uikit.ui.components.model.UiKitCashPayment
+import org.mindtec.uikit.ui.components.model.UiKitAccessory
 import org.mindtec.uikit.ui.components.model.UiKitCatalogProduct
 import org.mindtec.uikit.ui.components.model.UiKitCircleReportItem
 import org.mindtec.uikit.ui.components.model.UiKitComment
+import org.mindtec.uikit.ui.components.model.UiKitCommentGroup
 import org.mindtec.uikit.ui.components.model.UiKitDashboardCard
 import org.mindtec.uikit.ui.components.model.UiKitInstallment
 import org.mindtec.uikit.ui.components.model.UiKitLotGroup
@@ -593,6 +595,29 @@ class PreviewGalleryTest {
                 UiKitComment(id = 2, description = "Sin tomate", categoryId = 1),
                 UiKitComment(id = 3, description = "Extra queso", categoryId = 1),
                 UiKitComment(id = 4, description = "Para llevar", categoryId = 1)
+            ),
+            onDismissRequest = {},
+            onRequestNewComment = { _, _ -> },
+            onConfirm = { _, _ -> }
+        )
+    }
+
+    @Test
+    fun dialogInputCommentWithAccessories() = snapshot("dialog_DialogInputComment_accessories") {
+        val extraCheese = UiKitAccessory(id = 1, name = "Extra queso", price = BigDecimal("2.00"))
+        DialogInputComment(
+            product = sampleProducts.first().copy(
+                commentGroups = listOf(UiKitCommentGroup(itemIndex = 1, accessories = listOf(extraCheese)))
+            ),
+            quantity = 2,
+            category = "Hamburguesas",
+            availableComments = listOf(
+                UiKitComment(id = 1, description = "Sin cebolla", categoryId = 1),
+                UiKitComment(id = 2, description = "Sin tomate", categoryId = 1)
+            ),
+            availableAccessories = listOf(
+                extraCheese,
+                UiKitAccessory(id = 2, name = "Papas fritas", price = BigDecimal("5.50"))
             ),
             onDismissRequest = {},
             onRequestNewComment = { _, _ -> },

@@ -3,6 +3,7 @@ package org.mindtec.uikit.utils
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mindtec.uikit.ui.components.model.UiKitAccessory
 import org.mindtec.uikit.ui.components.model.UiKitComment
 import org.mindtec.uikit.ui.components.model.UiKitCommentGroup
 import org.mindtec.uikit.ui.components.model.UiKitProduct
@@ -72,6 +73,26 @@ class RestaurantListUtilsTest {
 
         assertEquals(1, result.size)
         assertEquals(BigDecimal(2), result.first().product.quantity)
+    }
+
+    @Test
+    fun `unit with only accessories is split out and keeps them`() {
+        val extraCheese = UiKitAccessory(id = 1, name = "Extra queso", price = BigDecimal("2.00"))
+        val product = UiKitProduct(
+            id = "1",
+            itemTypeId = "10",
+            description = "HAMBURGUESA",
+            quantity = BigDecimal(2),
+            unitPrice = BigDecimal("15.00"),
+            commentGroups = listOf(UiKitCommentGroup(itemIndex = 2, accessories = listOf(extraCheese)))
+        )
+
+        val result = RestaurantListUtils.expandProductsWithComments(listOf(product))
+
+        val individual = result.single { it.isIndividualItem }
+        assertEquals(2, individual.itemIndex)
+        assertEquals(listOf(extraCheese), individual.accessories)
+        assertEquals(BigDecimal.ONE, result.single { !it.isIndividualItem }.product.quantity)
     }
 
     @Test

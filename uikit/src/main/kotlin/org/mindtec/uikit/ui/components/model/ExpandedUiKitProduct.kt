@@ -10,5 +10,7 @@ data class ExpandedUiKitProduct(
     val product: UiKitProduct,
     val itemIndex: Int,
     val comments: List<UiKitComment> = emptyList(),
-    val isIndividualItem: Boolean = true
+    val isIndividualItem: Boolean = true,
+    /** Complementos de esta unidad (solo en items individuales). */
+    val accessories: List<UiKitAccessory> = emptyList()
 )

@@ -25,7 +25,7 @@ Y en el `build.gradle.kts` del módulo de la app:
 
 ```kotlin
 dependencies {
-    implementation("com.github.CesarAugusto213:mfui-components:v0.4.0")
+    implementation("com.github.CesarAugusto213:mfui-components:v0.5.0")
 }
 ```
 
@@ -827,6 +827,24 @@ DialogInputComment(
 
 
 <sub>⚠️ Todo el estado de red (comentarios disponibles, guardar uno nuevo) se recibe por parámetro/callback; el estado de tabs/selección es interno, por ser pura interacción de UI.</sub>
+
+<img src="uikit/src/test/snapshots/images/org.mindtec.uikit_PreviewGalleryTest_dialogInputCommentWithAccessories_dialog_dialoginputcomment_accessories.png" width="420">
+
+**`DialogInputComment` con complementos** — si se pasa `availableAccessories`, aparecen las secciones Notas / Complementos, el precio de cada complemento y un resumen con el total. Con más de una unidad, "Aplicar a todas" copia lo elegido en la unidad actual al resto. Lo elegido sale en `UiKitCommentGroup.accessories`.
+
+```kotlin
+DialogInputComment(
+    product = producto,
+    quantity = 2,
+    category = "Hamburguesas",
+    availableComments = indicacionesDisponibles,
+    availableAccessories = listOf(UiKitAccessory(id = 1, name = "Extra queso", price = BigDecimal("2.00"))),
+    currencySymbol = "S/",
+    onDismissRequest = { },
+    onRequestNewComment = { categoria, texto -> /* guardar y refrescar */ },
+    onConfirm = { producto, grupos -> /* grupos[i].comments y grupos[i].accessories */ }
+)
+```
 
 
 #### Modelo de datos genérico: `UiKitProduct` / `UiKitComment`

@@ -19,5 +19,16 @@ data class UiKitComment(
  */
 data class UiKitCommentGroup(
     val itemIndex: Int,
-    val comments: List<UiKitComment> = emptyList()
+    val comments: List<UiKitComment> = emptyList(),
+    /** Complementos (con precio) elegidos para esta unidad. */
+    val accessories: List<UiKitAccessory> = emptyList()
+) {
+    val hasSelection: Boolean get() = comments.isNotEmpty() || accessories.isNotEmpty()
+}
+
+/** Complemento con precio que se puede sumar a una unidad (ej. "Extra queso + S/ 2.00"). */
+data class UiKitAccessory(
+    val id: Int,
+    val name: String,
+    val price: java.math.BigDecimal
 )

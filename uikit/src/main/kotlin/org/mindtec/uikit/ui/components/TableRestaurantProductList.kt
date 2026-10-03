@@ -40,7 +40,11 @@ fun TableRestaurantProductList(
     val expandedItems = expandProductsWithComments(items)
 
     // Calcular total basado en los productos originales (para mantener la lógica actual)
-    val calculatedTotal = items.sumOf { it.unitPrice.multiply(it.quantity) }
+    val calculatedTotal = items.sumOf { item ->
+        item.unitPrice.multiply(item.quantity) + item.commentGroups.sumOf { group ->
+            group.accessories.fold(BigDecimal.ZERO) { acc, accessory -> acc + accessory.price }
+        }
+    }
 
     // Envuelto en su propio Column por la misma razón que TableProductList:
     // que la lista + el footer se apilen sin depender de que el caller ya
@@ -82,12 +86,13 @@ private fun BoxItemsRestaurant(
                 .padding(end = if (!isAllContentDisplay) 6.dp else 0.dp)
         ) {
             expandedItems.forEach { expandedItem ->
-                val commentIndex = if (expandedItem.comments.isNotEmpty())
-                    expandedItem.itemIndex else null
+                // Unidad individual (con notas o complementos): se borra esa unidad exacta.
+                val commentIndex = if (expandedItem.isIndividualItem) expandedItem.itemIndex else null
 
                 ItemProductRestaurantList(
                     item = expandedItem.product,
                     comments = expandedItem.comments,
+                    accessories = expandedItem.accessories,
                     showQuantity = !expandedItem.isIndividualItem,
                     commentIndex = commentIndex,
                     onClickDelete = onClickDelete

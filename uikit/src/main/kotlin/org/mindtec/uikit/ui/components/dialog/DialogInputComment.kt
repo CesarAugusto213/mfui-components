@@ -67,11 +67,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.mindtec.uikit.R
 import org.mindtec.uikit.ui.components.button.SmallOutlinedButtonMF
+import org.mindtec.uikit.ui.components.model.UiKitAccessory
 import org.mindtec.uikit.ui.components.model.UiKitComment
 import org.mindtec.uikit.ui.components.model.UiKitCommentGroup
 import org.mindtec.uikit.ui.components.model.UiKitProduct
 import org.mindtec.uikit.ui.theme.*
 import org.mindtec.uikit.utils.Fonts
+import org.mindtec.uikit.utils.restrictDigits
+import java.math.BigDecimal
 
 /**
  * Selector de indicaciones de cocina para un producto (ej. "sin cebolla"),
@@ -97,8 +100,14 @@ import org.mindtec.uikit.utils.Fonts
  * (igual que hacía el original al completar el guardado).
  * @param onRequestNewComment La app crea la indicación (llamada de red) y
  * la refleja en [availableComments] / [lastSavedComment].
- * @param onConfirm Se llama al aceptar, con el producto y las indicaciones
- * elegidas por unidad — la app decide cómo persistirlas.
+ * @param availableAccessories Complementos con precio que se pueden sumar
+ * por unidad. Si viene vacío, el diálogo solo muestra notas (igual que antes).
+ * @param currencySymbol Símbolo para los precios de complementos y el resumen.
+ * @param onConfirm Se llama al aceptar, con el producto y lo elegido por
+ * unidad (notas y complementos en cada [UiKitCommentGroup]).
+ *
+ * Con más de una unidad aparece "Aplicar a todas": copia lo elegido en la
+ * unidad actual (de la sección visible) al resto de unidades.
  */
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -111,6 +120,8 @@ fun DialogInputComment(
     isLoading: Boolean = false,
     saveErrorMessage: String? = null,
     lastSavedComment: UiKitComment? = null,
+    availableAccessories: List<UiKitAccessory> = emptyList(),
+    currencySymbol: String = "S/",
     onDismissRequest: () -> Unit,
     onRequestNewComment: (category: String, text: String) -> Unit,
     onConfirm: (product: UiKitProduct, commentGroups: List<UiKitCommentGroup>) -> Unit
@@ -119,6 +130,8 @@ fun DialogInputComment(
     var selectedItemIndex by remember { mutableIntStateOf(0) }
 
     var showInputMode by remember { mutableStateOf(false) }
+    var showAccessories by remember { mutableStateOf(false) }
+    val hasAccessories = availableAccessories.isNotEmpty()
     var newComment by remember { mutableStateOf("") }
 
     val annotatedText = buildAnnotatedString {
@@ -202,7 +215,8 @@ fun DialogInputComment(
 
                     isLoading -> LoaderCustom(true)
 
-                    availableComments.isEmpty() -> CommentEmptyState(onNewComment = {
+                    // Sin complementos y sin notas: mismo estado vacío de siempre.
+                    !hasAccessories && availableComments.isEmpty() -> CommentEmptyState(onNewComment = {
                         showInputMode = true
                     })
 
@@ -212,6 +226,15 @@ fun DialogInputComment(
                             style = Fonts.textRegular(14.sp)
                         )
 
+                        if (hasAccessories) {
+                            SectionSwitch(
+                                showAccessories = showAccessories,
+                                notesCount = commentGroups.sumOf { it.comments.size },
+                                accessoriesCount = commentGroups.sumOf { it.accessories.size },
+                                onSelect = { showAccessories = it }
+                            )
+                        }
+
                         TabsSection(
                             quantity = quantity,
                             selectedIndex = selectedItemIndex,
@@ -219,29 +242,79 @@ fun DialogInputComment(
                             onTabSelected = { selectedItemIndex = it }
                         )
 
-                        CommentListSection(
-                            availableComments = availableComments,
-                            selectedComments = commentGroups.getOrNull(selectedItemIndex)?.comments
-                                ?: emptyList(),
-                            annotatedText = annotatedText,
-                            onNewComment = { showInputMode = true },
-                            onToggleSelection = { comment, isChecked ->
-                                val currentGroup = commentGroups[selectedItemIndex]
-                                val updatedComments = if (isChecked) {
-                                    currentGroup.comments + comment.copy(isSelected = true)
-                                } else {
-                                    currentGroup.comments.filter { it.id != comment.id }
-                                }
-
-                                commentGroups = commentGroups.mapIndexed { index, group ->
-                                    if (index == selectedItemIndex) {
-                                        group.copy(comments = updatedComments)
-                                    } else {
-                                        group
+                        val currentGroup = commentGroups.getOrNull(selectedItemIndex)
+                        val currentHasSelection = if (showAccessories) {
+                            currentGroup?.accessories?.isNotEmpty() == true
+                        } else {
+                            currentGroup?.comments?.isNotEmpty() == true
+                        }
+                        if (quantity > 1 && currentHasSelection) {
+                            SmallOutlinedButtonMF(
+                                modifier = Modifier.align(Alignment.End),
+                                text = stringResource(R.string.uikit_apply_to_all),
+                                textColor = UiKitTheme.colors.primary,
+                                border = UiKitTheme.colors.primary,
+                                onClick = {
+                                    val source = currentGroup ?: return@SmallOutlinedButtonMF
+                                    commentGroups = commentGroups.map { group ->
+                                        if (showAccessories) group.copy(accessories = source.accessories)
+                                        else group.copy(comments = source.comments)
                                     }
                                 }
-                            }
-                        )
+                            )
+                        }
+
+                        when {
+                            showAccessories -> AccessoryListSection(
+                                availableAccessories = availableAccessories,
+                                selectedAccessories = currentGroup?.accessories.orEmpty(),
+                                currencySymbol = currencySymbol,
+                                onToggleSelection = { accessory, isChecked ->
+                                    commentGroups = commentGroups.mapIndexed { index, group ->
+                                        if (index != selectedItemIndex) group
+                                        else if (isChecked) group.copy(accessories = group.accessories + accessory)
+                                        else group.copy(accessories = group.accessories.filter { it.id != accessory.id })
+                                    }
+                                }
+                            )
+
+                            availableComments.isEmpty() -> CommentEmptyState(onNewComment = {
+                                showInputMode = true
+                            })
+
+                            else -> CommentListSection(
+                                availableComments = availableComments,
+                                selectedComments = currentGroup?.comments ?: emptyList(),
+                                annotatedText = annotatedText,
+                                onNewComment = { showInputMode = true },
+                                onToggleSelection = { comment, isChecked ->
+                                    val updatedComments = if (isChecked) {
+                                        currentGroup?.comments.orEmpty() + comment.copy(isSelected = true)
+                                    } else {
+                                        currentGroup?.comments.orEmpty().filter { it.id != comment.id }
+                                    }
+
+                                    commentGroups = commentGroups.mapIndexed { index, group ->
+                                        if (index == selectedItemIndex) {
+                                            group.copy(comments = updatedComments)
+                                        } else {
+                                            group
+                                        }
+                                    }
+                                }
+                            )
+                        }
+
+                        if (hasAccessories) {
+                            PriceSummary(
+                                unitPrice = product.unitPrice,
+                                quantity = quantity,
+                                accessoriesTotal = commentGroups.sumOf { group ->
+                                    group.accessories.fold(BigDecimal.ZERO) { acc, item -> acc + item.price }
+                                },
+                                currencySymbol = currencySymbol
+                            )
+                        }
                     }
                 }
 
@@ -400,7 +473,7 @@ private fun TabsSection(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(quantity) { index ->
-            val hasComments = commentGroups.getOrNull(index)?.comments?.isNotEmpty() == true
+            val hasComments = commentGroups.getOrNull(index)?.hasSelection == true
 
             Box(
                 modifier = Modifier
@@ -553,6 +626,150 @@ private fun CommentItem(
             text = comment.description,
             overflow = TextOverflow.Ellipsis,
             style = Fonts.textRegular(12.sp)
+        )
+    }
+}
+
+@Composable
+private fun SectionSwitch(
+    showAccessories: Boolean,
+    notesCount: Int,
+    accessoriesCount: Int,
+    onSelect: (showAccessories: Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        listOf(
+            false to stringResource(R.string.uikit_tab_with_count, stringResource(R.string.uikit_notes_tab), notesCount),
+            true to stringResource(R.string.uikit_tab_with_count, stringResource(R.string.uikit_accessories_tab), accessoriesCount)
+        ).forEach { (isAccessories, label) ->
+            val selected = showAccessories == isAccessories
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(40.dp)
+                    .background(if (selected) UiKitTheme.colors.primary else white, RoundedCornerShape(8.dp))
+                    .border(1.dp, if (selected) UiKitTheme.colors.primary else neutral300, RoundedCornerShape(8.dp))
+                    .clickable { onSelect(isAccessories) },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = label,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = Fonts.textSemiBold(13.sp, if (selected) white else neutral700)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccessoryListSection(
+    availableAccessories: List<UiKitAccessory>,
+    selectedAccessories: List<UiKitAccessory>,
+    currencySymbol: String,
+    onToggleSelection: (UiKitAccessory, Boolean) -> Unit
+) {
+    Text(
+        modifier = Modifier.padding(vertical = 8.dp),
+        text = stringResource(R.string.uikit_accessories_select_option),
+        style = Fonts.textRegular(14.sp)
+    )
+    if (availableAccessories.isEmpty()) {
+        Text(
+            text = stringResource(R.string.uikit_accessories_empty),
+            style = Fonts.textRegular(14.sp, grayIndicator)
+        )
+        return
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 200.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        availableAccessories.forEach { accessory ->
+            val isSelected = selectedAccessories.any { it.id == accessory.id }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onToggleSelection(accessory, !isSelected) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    modifier = Modifier.size(20.dp),
+                    checked = isSelected,
+                    onCheckedChange = { onToggleSelection(accessory, it) },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = blue300,
+                        uncheckedColor = grayIndicator,
+                        checkmarkColor = white
+                    )
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = accessory.name,
+                    overflow = TextOverflow.Ellipsis,
+                    style = Fonts.textRegular(12.sp)
+                )
+                Text(
+                    text = stringResource(R.string.uikit_amount_added, currencySymbol, accessory.price.restrictDigits().toPlainString()),
+                    style = Fonts.textSemiBold(12.sp, neutral700)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PriceSummary(
+    unitPrice: BigDecimal,
+    quantity: Int,
+    accessoriesTotal: BigDecimal,
+    currencySymbol: String
+) {
+    val productTotal = unitPrice.multiply(quantity.toBigDecimal())
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(lightGrayPlaceholder, RoundedCornerShape(8.dp))
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        SummaryRow(
+            label = stringResource(R.string.uikit_summary_product, quantity),
+            value = stringResource(R.string.uikit_amount, currencySymbol, productTotal.restrictDigits().toPlainString())
+        )
+        if (accessoriesTotal > BigDecimal.ZERO) {
+            SummaryRow(
+                label = stringResource(R.string.uikit_summary_accessories),
+                value = stringResource(R.string.uikit_amount_added, currencySymbol, accessoriesTotal.restrictDigits().toPlainString())
+            )
+        }
+        SummaryRow(
+            label = stringResource(R.string.uikit_summary_total),
+            value = stringResource(R.string.uikit_amount, currencySymbol, productTotal.add(accessoriesTotal).restrictDigits().toPlainString()),
+            bold = true
+        )
+    }
+}
+
+@Composable
+private fun SummaryRow(label: String, value: String, bold: Boolean = false) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = label,
+            style = if (bold) Fonts.textSemiBold(13.sp, neutral900) else Fonts.textRegular(13.sp, neutral700)
+        )
+        Text(
+            text = value,
+            style = if (bold) Fonts.textSemiBold(13.sp, neutral900) else Fonts.textRegular(13.sp, neutral700)
         )
     }
 }

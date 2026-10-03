@@ -21,11 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import org.mindtec.uikit.R
+import org.mindtec.uikit.ui.components.model.UiKitAccessory
 import org.mindtec.uikit.ui.components.model.UiKitComment
 import org.mindtec.uikit.ui.components.model.UiKitProduct
 import org.mindtec.uikit.ui.theme.*
@@ -37,12 +39,15 @@ import java.math.BigDecimal
 fun ItemProductRestaurantList(
     item: UiKitProduct,
     comments: List<UiKitComment> = emptyList(),
+    /** Complementos de la unidad: se muestran y su precio se suma al subtotal. */
+    accessories: List<UiKitAccessory> = emptyList(),
     showQuantity: Boolean = true,
     commentIndex: Int? = null, // Índice del comentario (null si no hay comentarios)
     onClickDelete: (String, Int?) -> Unit // itemId, commentIndex
 ) {
     val quantity = if (showQuantity) item.quantity else BigDecimal.ONE
-    val subtotal = item.unitPrice.multiply(quantity)
+    val subtotal = item.unitPrice.multiply(quantity) +
+        accessories.fold(BigDecimal.ZERO) { acc, accessory -> acc + accessory.price }
 
     Column(
         modifier = Modifier
@@ -114,6 +119,17 @@ fun ItemProductRestaurantList(
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = "Indicaciones: $commentsText",
+                style = Fonts.textRegular(12.sp, neutral400)
+            )
+        }
+
+        if (accessories.isNotEmpty()) {
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                text = stringResource(
+                    R.string.uikit_accessories_line,
+                    accessories.joinToString { "${it.name} (+${it.price.restrictDigits()})" }
+                ),
                 style = Fonts.textRegular(12.sp, neutral400)
             )
         }

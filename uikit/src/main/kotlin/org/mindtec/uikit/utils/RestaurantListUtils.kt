@@ -14,8 +14,8 @@ object RestaurantListUtils {
 
     /**
      * Expande una lista de productos según su cantidad y comentarios.
-     * Si un producto tiene cantidad N y comentarios, lo divide en N items
-     * individuales. Los items sin comentarios se agrupan al final. Los
+     * Si un producto tiene cantidad N y comentarios o complementos, lo divide en
+     * N items individuales. Los items sin comentarios se agrupan al final. Los
      * productos del mismo tipo (`itemTypeId`) se muestran consecutivamente.
      */
     fun expandProductsWithComments(products: List<UiKitProduct>): List<ExpandedUiKitProduct> {
@@ -35,10 +35,9 @@ object RestaurantListUtils {
 
                 repeat(quantity) { index ->
                     val itemIndex = index + 1
-                    val commentsForThisItem =
-                        commentGroups.find { it.itemIndex == itemIndex }?.comments ?: emptyList()
+                    val groupForThisItem = commentGroups.find { it.itemIndex == itemIndex }
 
-                    if (commentsForThisItem.isNotEmpty()) {
+                    if (groupForThisItem?.hasSelection == true) {
                         val individualProduct = product.copy(
                             quantity = BigDecimal.ONE,
                             commentGroups = emptyList()
@@ -48,8 +47,9 @@ object RestaurantListUtils {
                             ExpandedUiKitProduct(
                                 product = individualProduct,
                                 itemIndex = itemIndex,
-                                comments = commentsForThisItem,
-                                isIndividualItem = true
+                                comments = groupForThisItem.comments,
+                                isIndividualItem = true,
+                                accessories = groupForThisItem.accessories
                             )
                         )
                     } else {
