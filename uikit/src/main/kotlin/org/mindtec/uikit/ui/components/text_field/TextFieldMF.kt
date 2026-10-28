@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +41,12 @@ fun TextFieldMF(
     isDoneButton: Boolean = false,
     showError: Boolean = false,
     disabled: Boolean = false,
+    /** Hint shown while the field is empty (e.g. "0.00" for amounts). */
+    placeholder: String? = null,
+    /** Numeric keyboard with a decimal separator (amounts); only used with [isNumericKeyboard]. */
+    isDecimal: Boolean = false,
+    /** Field fill; transparent by default — pass white when the field sits on a tinted surface. */
+    containerColor: Color = Color.Transparent,
     onDone: () -> Unit = {}
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -69,21 +77,28 @@ fun TextFieldMF(
             onValueChange = { newValue ->
                 if (!disabled) {
                     if (isNumericKeyboard) {
-                        if (newValue.all { it.isDigit() || it == '.' } && newValue.count { it == '.' } <= 1) {
-                            onChangeValue.invoke(newValue)
+                        // Some locales' decimal keyboards only offer a comma.
+                        val normalized = if (isDecimal) newValue.replace(',', '.') else newValue
+                        if (normalized.all { it.isDigit() || it == '.' } && normalized.count { it == '.' } <= 1) {
+                            onChangeValue.invoke(normalized)
                         }
                     } else {
                         onChangeValue.invoke(newValue)
                     }
                 }
             },
+            placeholder = placeholder?.let { { Text(text = it, style = Fonts.textRegular(16.sp, grayPlaceholder)) } },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = containerColor,
+                unfocusedContainerColor = containerColor
+            ),
             minLines = lines,
             maxLines = lines,
             singleLine = lines == 1,
             enabled = enabled && !disabled,
             readOnly = readOnly || disabled,
             keyboardOptions = if (isNumericKeyboard) {
-                KeyboardOptions(keyboardType = KeyboardType.Number)
+                KeyboardOptions(keyboardType = if (isDecimal) KeyboardType.Decimal else KeyboardType.Number)
             } else if (isDoneButton) {
                 KeyboardOptions(
                     imeAction = ImeAction.Done

@@ -25,7 +25,7 @@ Y en el `build.gradle.kts` del módulo de la app:
 
 ```kotlin
 dependencies {
-    implementation("com.github.CesarAugusto213:mfui-components:v0.5.0")
+    implementation("com.github.CesarAugusto213:mfui-components:v0.5.1")
 }
 ```
 
@@ -196,6 +196,10 @@ TextFieldMF(
     onChangeValue = { nombre = it }
 )
 ```
+
+Montos: `isNumericKeyboard = true` + `isDecimal = true` (teclado decimal, la coma se convierte en punto) y
+`placeholder = "0.00"`. Sobre una superficie con color, `containerColor = Color.White` evita que el campo
+se vea transparente.
 
 ---
 
